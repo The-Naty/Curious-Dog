@@ -1,8 +1,11 @@
 {
   "name": "node-ts-new-project",
   "scripts": {
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "start": "node build/index.js",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:create": "prisma migrate dev --create-only",
+    "db:generate": "prisma generate",
     "watch:compile": "env-cmd nodemon src/index.ts",
     "watch:typing": "tsc --noEmit --watch",
     "watch": "run-p watch:compile watch:typing",
