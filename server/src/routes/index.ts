@@ -1,12 +1,12 @@
-import  express  from 'express';
+import express from "express";
 
-const routes = express.Router()
+const routes = express.Router();
 
-routes.get('/',(req:express.Request, res:express.Response)=>{
-    return res.json("ask.FM_clone API!")
-})
+routes.get("/", (req: express.Request, res: express.Response) => {
+  return res.json("ask.FM_clone API!");
+});
 
-// adding new routes 
+// adding new routes
 // routes.use('/', routeObjAfterBeingImported)
 
-export default routes
+export default routes;
