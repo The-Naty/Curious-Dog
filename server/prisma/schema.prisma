@@ -11,30 +11,37 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  createdAt DateTime   @default(now())
-  email     String     @unique
-  password  String
-  username  String     @unique
-  Question  Question[]
+  id                Int        @id @default(autoincrement())
+  createdAt         DateTime   @default(now())
+  email             String     @unique
+  password          String
+  username          String     @unique
+  profilePicture String?
+  askedQuestions    Question[] @relation("asker")
+  recipentQuestions Question[] @relation("responder")
 
   @@map("users")
 }
 
 model Question {
-  id           Int      @id @default(autoincrement())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  body         String   @db.VarChar(600)
-  answer       String?  @db.VarChar(600)
-  Like         Int      @default(0)
-  questionerId Int
-  questioner   User     @relation(fields: [questionerId], references: [id])
-  answererId   Int
-  answerer     User     @relation(fields: [answererId], references: [id])
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  body        String   @db.VarChar(600)
+  answer      String?  @db.VarChar(600)
+  Like        Int      @default(0)
+  authorId    Int?
+  author      User?    @relation("asker", fields: [authorId], references: [id])
+  recipeintId Int
+  recipeint   User     @relation("responder", fields: [recipeintId], references: [id])
 
   @@map("questions")
 }
 
-model QuestionLike {
+model Question_Like {
+  questionId Int
+  userId Int
+  // composite key
+  @@id([questionId, userId])
+
 }
