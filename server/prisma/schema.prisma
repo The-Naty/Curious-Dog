@@ -12,36 +12,46 @@ datasource db {
 
 model User {
   id                Int        @id @default(autoincrement())
-  createdAt         DateTime   @default(now())
   email             String     @unique
   password          String
   username          String     @unique
-  profilePicture String?
-  askedQuestions    Question[] @relation("asker")
-  recipentQuestions Question[] @relation("responder")
+  profilePicture    String?    @map("profile_picture")
+  askedQuestions    Question[] @relation("AskedQuestions")
+  receivedQuestions Question[] @relation("ReceivedQuestions")
+  likedQuestions QuestionLike[]
+
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime        @updatedAt @map("updated_at") @db.Timestamptz
 
   @@map("users")
 }
 
 model Question {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  body        String   @db.VarChar(600)
-  answer      String?  @db.VarChar(600)
-  Like        Int      @default(0)
-  authorId    Int?
-  author      User?    @relation("asker", fields: [authorId], references: [id])
-  recipeintId Int
-  recipeint   User     @relation("responder", fields: [recipeintId], references: [id])
+  id            Int             @id @default(autoincrement())
+  body          String          @db.VarChar(600)
+  answer        String?         @db.VarChar(600)
+  isAnonymous     Boolean         @default(true)@map("is_anonymous")
+  askerId       Int?            @map("asker_id")
+  asker         User?           @relation("AskedQuestions", fields: [askerId], references: [id])
+  receiverId   Int             @map("receiver_id")
+  receiver     User            @relation("ReceivedQuestions", fields: [receiverId], references: [id])
+  likes QuestionLike[]
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
   @@map("questions")
 }
 
-model Question_Like {
-  questionId Int
-  userId Int
+model QuestionLike {
+  questionId Int      @map("question_id")
+  question   Question @relation(fields: [questionId], references: [id])
+  userId     Int      @map("user_id")
+  user       User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   // composite key
   @@id([questionId, userId])
+  @@map("question_likes")
 
 }
