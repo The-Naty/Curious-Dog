@@ -6,7 +6,7 @@ const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  return res.status(500).json({ msg: "somthing went wrong!" });
+  return res.status(500).json({ msg: "Internal Server Error" });
 };
 
 export default errorHandlerMiddleware;

@@ -22,7 +22,7 @@ server.listen(process.env.PORT, () => {
 
 //Fetching all users from database
 
-// const testConnection = (async () => {
+// const getAllUsers = (async () => {
 //   const allUsers = await prisma.user.findMany();
 //   console.log("All Users", allUsers);
 // })();
