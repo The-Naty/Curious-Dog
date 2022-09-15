@@ -1,13 +1,16 @@
-import express from "express";
-import routes from "./routes";
+import "dotenv/config";
+import "./common/utils/handleRunErrors";
+import App from "./app";
 
-import cors from "cors";
-import errorHandlerMiddleware from "./middleware/error.handler";
+import IndexRoute from "./api/routes/index.route";
+import UsersRoute from "./api/routes/users.route";
 
-const server = express();
+import validateEnv from "./common/utils/validateEnv";
 
-server.use(cors());
-server.use("/", routes);
-server.use(errorHandlerMiddleware);
+(async () => {
+  validateEnv();
 
-export default server;
+  const app = new App([new IndexRoute(), new UsersRoute(), new AuthRoute()]);
+  await app.initializeApp();
+  app.listen();
+})();
