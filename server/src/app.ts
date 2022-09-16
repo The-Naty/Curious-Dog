@@ -1,8 +1,6 @@
 import express from "express";
-// import routes from "./routes";
 import Routes from "./common/interfaces/routes.interface";
 import cors from "cors";
-// import { prisma } from "./database"; test connection
 
 class App {
   public app: express.Application;
@@ -24,11 +22,6 @@ class App {
       console.log(`App listening on the port ${this.port}`);
     });
   }
-  // For Testing
-
-  // public getServer() {
-  //   return this.app;
-  // }
 
   private initializeMiddlewares() {
     this.app.use(cors({ origin: true, credentials: true }));
@@ -41,29 +34,6 @@ class App {
       this.app.use("/api/", route.router);
     });
   }
-
-  // private initializeErrorHandling() {
-  // }
 }
 
 export default App;
-//Test Connection
-
-//Adding user to database
-
-// const addUser = (async () => {
-//   const user = await prisma.user.create({
-//     data: {
-//       email: "tazy@prisma.io",
-//       password: "12121234",
-//       username: "tazy",
-//     },
-//   });
-// })();
-
-//Fetching all users from database
-
-// const getAllUsers = (async () => {
-//   const allUsers = await prisma.user.findMany();
-//   console.log("All Users", allUsers);
-// })();
