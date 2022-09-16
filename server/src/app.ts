@@ -2,33 +2,33 @@ import express from "express";
 // import routes from "./routes";
 import Routes from "./common/interfaces/routes.interface";
 import cors from "cors";
-import errorHandlerMiddleware from "./middleware/error.handler";
-import { prisma } from "./database";
+// import { prisma } from "./database"; test connection
 
 class App {
   public app: express.Application;
   public port: string | number;
   public routes: Routes[];
+
   constructor(routes: Routes[]) {
     this.app = express();
-    this.port = process.env.PORT || 3000;
+    this.port = process.env.PORT || 4000;
     this.routes = routes;
   }
 
   public async initializeApp() {
     this.initializeMiddlewares();
     this.initializeRoutes(this.routes);
-    this.initializeErrorHandling();
   }
   public listen() {
     this.app.listen(this.port, () => {
       console.log(`App listening on the port ${this.port}`);
     });
   }
+  // For Testing
 
-  public getServer() {
-    return this.app;
-  }
+  // public getServer() {
+  //   return this.app;
+  // }
 
   private initializeMiddlewares() {
     this.app.use(cors({ origin: true, credentials: true }));
@@ -42,9 +42,8 @@ class App {
     });
   }
 
-  private initializeErrorHandling() {
-    this.app.use(errorHandlerMiddleware);
-  }
+  // private initializeErrorHandling() {
+  // }
 }
 
 export default App;

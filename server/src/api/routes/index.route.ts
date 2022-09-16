@@ -1,12 +1,19 @@
-import express from "express";
+import { Router } from "express";
+import IndexController from "../../controllers/index.controller";
+import Route from "../../common/interfaces/routes.interface";
 
-const routes = express.Router();
+class IndexRoute implements Route {
+  public path = "/";
+  public router = Router();
+  public indexController = new IndexController();
 
-routes.get("/", (req: express.Request, res: express.Response) => {
-  return res.json("ask.FM_clone API!");
-});
+  constructor() {
+    this.initializeRoutes();
+  }
 
-// adding new routes
-// routes.use('/', routeObjAfterBeingImported)
+  private initializeRoutes() {
+    this.router.get(`${this.path}`, this.indexController.index);
+  }
+}
 
-export default routes;
+export default IndexRoute;
