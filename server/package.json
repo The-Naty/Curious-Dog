@@ -2,11 +2,11 @@
   "name": "node-ts-new-project",
   "scripts": {
     "build": "prisma generate && tsc",
-    "start": "node build/index.js",
+    "start": "node build/server.js",
     "db:migrate": "prisma migrate dev",
     "db:migrate:create": "prisma migrate dev --create-only",
     "db:generate": "prisma generate",
-    "watch:compile": "env-cmd nodemon src/index.ts",
+    "watch:compile": "env-cmd nodemon src/server.ts",
     "watch:typing": "tsc --noEmit --watch",
     "watch": "run-p watch:compile watch:typing",
     "lint": "eslint --ext .js,.ts ."
@@ -14,7 +14,7 @@
   "engines": {
     "node": "16"
   },
-  "main": "build/index.js",
+  "main": "build/server.js",
   "dependencies": {
     "@google-cloud/storage": "^6.2.2",
     "@prisma/client": "^4.3.1",

@@ -1,13 +1,8 @@
-import express from "express";
-import routes from "./routes";
+import App from "./app";
+import IndexRoute from "./api/routes/index.route";
 
-import cors from "cors";
-import errorHandlerMiddleware from "./middleware/error.handler";
-
-const server = express();
-
-server.use(cors());
-server.use("/", routes);
-server.use(errorHandlerMiddleware);
-
-export default server;
+(async () => {
+  const app = new App([new IndexRoute()]);
+  await app.initializeApp();
+  app.listen();
+})();
