@@ -1,13 +1,15 @@
 import { Router } from "express";
-import IndexController from "../../controllers/index.controller";
-import Route from "../../common/interfaces/routes.interface";
+import {IndexController} from "../../controllers/index.controller";
+import { IIndexController } from "../../controllers/index.controller";
+import {Route} from "../../common/interfaces/routes.interface";
+
 
 class IndexRoute implements Route {
   public path = "/";
   public router = Router();
-  public indexController = new IndexController();
+  
 
-  constructor() {
+  constructor(private  indexController: IIndexController = new IndexController()) {
     this.initializeRoutes();
   }
 
@@ -16,4 +18,4 @@ class IndexRoute implements Route {
   }
 }
 
-export default IndexRoute;
+export  {IndexRoute};

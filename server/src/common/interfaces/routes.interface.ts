@@ -5,4 +5,4 @@ interface Route {
   router: Router;
 }
 
-export default Route;
+export { Route };

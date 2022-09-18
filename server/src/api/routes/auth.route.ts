@@ -1,19 +1,22 @@
 import { Router } from "express";
-import AuthController from "../../controllers/auth.controller";
-import Route from "../../common/interfaces/routes.interface";
+import {AuthController} from "../../controllers/auth.controller";
+import {Route} from "../../common/interfaces/routes.interface";
+import {IAuthController} from '../../controllers/auth.controller'
 
 class AuthRoute implements Route {
   public path = "/auth";
   public router = Router();
-  public authController = new AuthController();
 
-  constructor() {
+  constructor(private authController: IAuthController = new AuthController()){
     this.initializeRoutes();
+
   }
+
+
 
   private initializeRoutes() {
     this.router.post(`${this.path}/register`, this.authController.register);
   }
 }
 
-export default AuthRoute;
+export { AuthRoute };
