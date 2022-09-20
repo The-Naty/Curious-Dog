@@ -15,12 +15,15 @@ class AuthController implements IAuthController {
     next: NextFunction
   ): Promise<void> => {
     const { username, password, email } = req.body;
-    const newUser = await this.authService.registerUser({
+    const response = await this.authService.registerUser({
       username: username,
       password: password,
       email: email,
     });
-    res.status(201).json(newUser);
+    res
+      .status(201)
+      .header("Authorization", response)
+      .send(`${username} is successfully registered`);
   };
 }
 export { AuthController };

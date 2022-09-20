@@ -1,13 +1,14 @@
 import { User } from "@prisma/client";
 import { prisma } from "../database";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export interface IAuthService {
-  registerUser(userData: Partial<User>): Promise<User>;
+  registerUser(userData: Partial<User>): Promise<string>;
 }
 
 export class AuthService implements IAuthService {
-  public async registerUser(userData: Partial<User>): Promise<User> {
+  public async registerUser(userData: Partial<User>): Promise<string> {
     const { email, password, username, profilePicture } = userData;
     const hashedPassword = await this.hashPassword(password as string);
     const newUser = await prisma.user.create({
@@ -19,7 +20,15 @@ export class AuthService implements IAuthService {
       } as User,
     });
 
-    return newUser;
+    const token = jwt.sign(
+      { _id: newUser.id.toString() },
+      process.env.SECRET_KEY as string,
+      {
+        expiresIn: "7 days",
+      }
+    );
+
+    return token;
   }
   private async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
