@@ -1,17 +1,11 @@
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken'
-import { Request, Response, NextFunction } from 'express'
+import { Response, NextFunction } from 'express'
 import { prisma } from '../database'
-import { User } from '@prisma/client'
-
+import {RequestWithUserPayload} from '../common/interfaces/requestWithUserPayload.interface'
 export const secret: Secret = process.env.SECRET_KEY as string
 
-export interface AuthenticationCustomRequest extends Request {
-    // token: string | JwtPayload
-    user?: User
-}
-
 export const auth = async (
-    req: AuthenticationCustomRequest,
+    req: RequestWithUserPayload,
     res: Response,
     next: NextFunction
 ) => {
@@ -29,6 +23,6 @@ export const auth = async (
     } catch (err) {
         console.log(err)
 
-        res.status(401).send('Unautorized. Invalid user data')
+        res.status(401).send('Unautorized. Invalid Credentials')
     }
 }

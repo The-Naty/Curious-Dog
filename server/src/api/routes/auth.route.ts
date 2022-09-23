@@ -4,7 +4,6 @@ import { Route } from '../../common/interfaces/routes.interface'
 import { IAuthController } from '../../controllers/auth.controller'
 import { validate } from '../../middleware/request-validator.middleware'
 import { registerUserReqSchema } from '../../validations/user-validation.schema'
-import { auth } from '../../middleware/authenticate-token.middleware'
 
 class AuthRoute implements Route {
     public path = '/auth'
@@ -19,8 +18,7 @@ class AuthRoute implements Route {
     private initializeRoutes() {
         this.router.post(
             `${this.path}/register`,
-            auth,
-            // validate(registerUserReqSchema),
+            validate(registerUserReqSchema),
             this.authController.register
         )
     }
