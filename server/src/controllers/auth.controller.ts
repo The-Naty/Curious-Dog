@@ -1,13 +1,14 @@
-import { NextFunction, Request, Response } from "express";
-import { AuthService } from "../services/auth.service";
-import { IAuthService } from "../services/auth.service";
+import { NextFunction, Request, Response } from 'express'
+import { AuthService } from '../services/auth.service'
+import { IAuthService } from '../services/auth.service'
 
 export interface IAuthController {
-  register(req: Request, res: Response, next: NextFunction): Promise<void>;
+    register(req: Request, res: Response, next: NextFunction): Promise<void>
 }
 
 class AuthController implements IAuthController {
-  constructor(private authService: IAuthService = new AuthService()) {}
+    constructor(private authService: IAuthService = new AuthService()) {}
+
 
   public register = async (
     req: Request,
@@ -26,4 +27,4 @@ class AuthController implements IAuthController {
       .send(`${username} is successfully registered`);
   };
 }
-export { AuthController };
+export { AuthController }

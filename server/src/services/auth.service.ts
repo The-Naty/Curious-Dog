@@ -1,9 +1,10 @@
-import { User } from "@prisma/client";
-import { prisma } from "../database";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { User } from '@prisma/client'
+import { prisma } from '../database'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 export interface IAuthService {
+
   registerUserAndSignToken(userData: Partial<User>): Promise<string>;
 }
 
@@ -22,20 +23,21 @@ export class AuthService implements IAuthService {
       } as User,
     });
 
-    const token = jwt.sign(
-      { _id: newUser.id.toString() },
-      process.env.SECRET_KEY as string,
-      {
-        expiresIn: "7 days",
-      }
-    );
 
-    return token;
-  }
-  private async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+        const token = jwt.sign(
+            { _id: newUser.id.toString() },
+            process.env.SECRET_KEY as string,
+            {
+                expiresIn: '7 days',
+            }
+        )
 
-    return hashedPassword;
-  }
+        return token
+    }
+    private async hashPassword(password: string): Promise<string> {
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        return hashedPassword
+    }
 }
