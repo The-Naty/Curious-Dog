@@ -2,8 +2,8 @@ import { Router } from "express";
 import { AuthController } from "../../controllers/auth.controller";
 import { Route } from "../../common/interfaces/routes.interface";
 import { IAuthController } from "../../controllers/auth.controller";
-import { validate } from "../../middleware/requestValidator";
-import * as userValidator from "../../validations/userValidator";
+import { validate } from "../../middleware/request-validator.middleware";
+import { registerUserReqSchema } from "../../validations/user-validation.schema";
 import { auth } from "../../middleware/auth";
 
 class AuthRoute implements Route {
@@ -17,7 +17,7 @@ class AuthRoute implements Route {
   private initializeRoutes() {
     this.router.post(
       `${this.path}/register`,
-      validate(userValidator.createUserValidator),
+      validate(registerUserReqSchema),
       this.authController.register
     );
   }
