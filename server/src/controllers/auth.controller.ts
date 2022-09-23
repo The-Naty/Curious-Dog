@@ -15,14 +15,14 @@ class AuthController implements IAuthController {
     next: NextFunction
   ): Promise<void> => {
     const { username, password, email } = req.body;
-    const response = await this.authService.registerUser({
+    const token = await this.authService.registerUserAndSignToken({
       username: username,
       password: password,
       email: email,
     });
     res
       .status(201)
-      .cookie("auth", response, { httpOnly: true })
+      .cookie("auth", token, { httpOnly: true })
       .send(`${username} is successfully registered`);
   };
 }

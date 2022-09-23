@@ -4,11 +4,13 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export interface IAuthService {
-  registerUser(userData: Partial<User>): Promise<string>;
+  registerUserAndSignToken(userData: Partial<User>): Promise<string>;
 }
 
 export class AuthService implements IAuthService {
-  public async registerUser(userData: Partial<User>): Promise<string> {
+  public async registerUserAndSignToken(
+    userData: Partial<User>
+  ): Promise<string> {
     const { email, password, username, profilePicture } = userData;
     const hashedPassword = await this.hashPassword(password as string);
     const newUser = await prisma.user.create({

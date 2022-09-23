@@ -12,13 +12,8 @@ export const validate = (schema: Record<string, Joi.Schema>) => {
       };
 
       if (schema && !_.isEmpty(schema)) {
-        const validationPromises = [
-          "headers",
-          "params",
-          "query",
-          "files",
-          "body",
-        ].map((key) => {
+        const keys: string[] = ["headers", "params", "query", "files", "body"];
+        const validationPromises = keys.map((key) => {
           const schemaObject = schema[key];
           const value = req[key as keyof Request];
 
