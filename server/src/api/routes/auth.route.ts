@@ -2,6 +2,8 @@ import { Router } from "express";
 import { AuthController } from "../../controllers/auth.controller";
 import { Route } from "../../common/interfaces/routes.interface";
 import { IAuthController } from "../../controllers/auth.controller";
+import { validate } from "../../middleware/requestValidator";
+import * as userValidator from "../../validations/userValidator";
 
 class AuthRoute implements Route {
   public path = "/auth";
@@ -12,7 +14,11 @@ class AuthRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/register`, this.authController.register);
+    this.router.post(
+      `${this.path}/register`,
+      validate(userValidator.createUserValidator),
+      this.authController.register
+    );
   }
 }
 
