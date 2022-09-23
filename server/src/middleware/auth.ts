@@ -9,8 +9,7 @@ export interface CustomRequest extends Request {
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
-
+    const token = req.cookies["auth"];
     if (!token) {
       throw new Error();
     }

@@ -22,7 +22,7 @@ class AuthController implements IAuthController {
     });
     res
       .status(201)
-      .header("Authorization", response)
+      .cookie("auth", response, { httpOnly: true })
       .send(`${username} is successfully registered`);
   };
 }

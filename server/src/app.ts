@@ -1,6 +1,7 @@
 import express from "express";
-import {Route} from "./common/interfaces/routes.interface";
+import { Route } from "./common/interfaces/routes.interface";
 import cors from "cors";
+import cookie from "cookie-parser";
 
 class App {
   public app: express.Application;
@@ -27,6 +28,7 @@ class App {
     this.app.use(cors({ origin: true, credentials: true }));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(cookie());
   }
 
   private initializeRoutes(routes: Route[]) {

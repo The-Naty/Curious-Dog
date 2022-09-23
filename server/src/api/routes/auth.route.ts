@@ -4,6 +4,7 @@ import { Route } from "../../common/interfaces/routes.interface";
 import { IAuthController } from "../../controllers/auth.controller";
 import { validate } from "../../middleware/requestValidator";
 import * as userValidator from "../../validations/userValidator";
+import { auth } from "../../middleware/auth";
 
 class AuthRoute implements Route {
   public path = "/auth";
