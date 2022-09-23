@@ -1,7 +1,7 @@
-import Joi from "joi";
-import {  Response, NextFunction, Express } from "express";
-import { RequestWithUserPayload } from "../common/interfaces/requestWithUserPayload.interface";
-import _ from "lodash";
+import Joi from 'joi';
+import { Response, NextFunction, Express } from 'express';
+import { RequestWithUserPayload } from '../common/interfaces/requestWithUserPayload.interface';
+import _ from 'lodash';
 
 export const validate = (schema: Record<string, Joi.Schema>) => {
   return async (req: RequestWithUserPayload, res: Response, next: NextFunction) => {
@@ -13,14 +13,12 @@ export const validate = (schema: Record<string, Joi.Schema>) => {
       };
 
       if (schema && !_.isEmpty(schema)) {
-        const keys = ["headers", "params", "query", "files", "body"];
-        const validationPromises = keys.map((key) => {
+        const keys = ['headers', 'params', 'query', 'files', 'body'];
+        const validationPromises = keys.map(key => {
           const schemaObject = schema[key];
           const value = req[key as keyof RequestWithUserPayload];
 
-          return schemaObject
-            ? schemaObject.validateAsync(value, options)
-            : Promise.resolve();
+          return schemaObject ? schemaObject.validateAsync(value, options) : Promise.resolve();
         });
 
         await Promise.all(validationPromises);
@@ -29,7 +27,7 @@ export const validate = (schema: Record<string, Joi.Schema>) => {
         return next();
       }
     } catch (error: any) {
-      const message = error.details[0].message.replace(/['"]/g, "");
+      const message = error.details[0].message.replace(/['"]/g, '');
       return res.status(400).json({
         error: message,
       });
