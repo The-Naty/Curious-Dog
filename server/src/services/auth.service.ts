@@ -27,11 +27,11 @@ export class AuthService implements IAuthService {
 
   private async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
+    return bcrypt.hash(password, salt);
   }
 
   private async generateSignedUserToken(id: number): Promise<string> {
-    return jwt.sign({ id: id.toString() }, process.env.SECRET_KEY as string, {
+    return jwt.sign({ id }, process.env.SECRET_KEY as string, {
       expiresIn: this.AUTH_TOKEN_EXPIRY,
     });
   }

@@ -1,5 +1,5 @@
-import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { prisma } from '../database';
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +10,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     }
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY as string) as JwtPayload;
     const user = await prisma.user.findUniqueOrThrow({
-      where: { id: parseInt(decodedToken.id) },
+      where: { id: decodedToken.id },
     });
     req.user = user
     next();
