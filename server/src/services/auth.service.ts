@@ -8,6 +8,8 @@ export interface IAuthService {
 }
 
 export class AuthService implements IAuthService {
+  private AUTH_TOKEN_EXPIRY = '7d';
+
   public async registerUserAndSignToken(userData: Partial<User>): Promise<string> {
     const { email, password, username, profilePicture } = userData;
     const hashedPassword = await this.hashPassword(password as string);
@@ -20,16 +22,17 @@ export class AuthService implements IAuthService {
       } as User,
     });
 
-    const token = jwt.sign({ _id: newUser.id.toString() }, process.env.SECRET_KEY as string, {
-      expiresIn: '7 days',
-    });
-
-    return token;
+    return this.generateSignedUserToken(newUser.id);
   }
+
   private async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    return bcrypt.hash(password, salt);
+  }
 
-    return hashedPassword;
+  private async generateSignedUserToken(id: number): Promise<string> {
+    return jwt.sign({ id }, process.env.SECRET_KEY as string, {
+      expiresIn: this.AUTH_TOKEN_EXPIRY,
+    });
   }
 }
