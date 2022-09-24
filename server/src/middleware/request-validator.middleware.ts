@@ -1,10 +1,9 @@
 import Joi from 'joi';
-import { Response, NextFunction, Express } from 'express';
-import { RequestWithUserPayload } from '../common/interfaces/requestWithUserPayload.interface';
+import { Request, Response, NextFunction, Express } from 'express';
 import _ from 'lodash';
 
 export const validate = (schema: Record<string, Joi.Schema>) => {
-  return async (req: RequestWithUserPayload, res: Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const options: Joi.AsyncValidationOptions = {
         abortEarly: true,
@@ -16,7 +15,7 @@ export const validate = (schema: Record<string, Joi.Schema>) => {
         const keys = ['headers', 'params', 'query', 'files', 'body'];
         const validationPromises = keys.map(key => {
           const schemaObject = schema[key];
-          const value = req[key as keyof RequestWithUserPayload];
+          const value = req[key as keyof Request];
 
           return schemaObject ? schemaObject.validateAsync(value, options) : Promise.resolve();
         });
