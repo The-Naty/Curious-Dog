@@ -8,11 +8,11 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     if (!token) {
       throw new Error();
     }
+
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY as string) as JwtPayload;
-    const user = await prisma.user.findUniqueOrThrow({
-      where: { id: decodedToken.id },
-    });
-    req.user = user
+    const user = await prisma.user.findUniqueOrThrow({ where: { id: decodedToken.id } });
+
+    req.user = user;
     next();
   } catch (err) {
     res.status(401).send('Unauthorized. Invalid Credentials');
