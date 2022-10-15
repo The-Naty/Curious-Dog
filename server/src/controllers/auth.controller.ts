@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { AuthService, IAuthService } from '../services/auth.service';
-
+import { UniqueConstraintViolation } from '../common/errors';
 export interface IAuthController {
   register(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
@@ -10,11 +10,15 @@ export class AuthController implements IAuthController {
 
   public register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { username, password, email } = req.body;
-    const token = await this.authService.registerUserAndSignToken({
-      username: username,
-      password: password,
-      email: email,
-    });
-    res.status(201).cookie('auth', token, { httpOnly: true }).send(`${username} is successfully registered`);
+    try {
+      const token = await this.authService.registerUserAndSignToken({
+        username: username,
+        password: password,
+        email: email,
+      });
+      res.status(201).cookie('auth', token, { httpOnly: true }).send(`${username} is successfully registered`);
+    } catch (err) {
+      next(err);
+    }
   };
 }

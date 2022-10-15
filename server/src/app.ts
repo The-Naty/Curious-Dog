@@ -2,6 +2,7 @@ import express from 'express';
 import { Route } from './common/interfaces/routes.interface';
 import cors from 'cors';
 import cookie from 'cookie-parser';
+import { errorMiddleware } from './middleware/error-handler.middleware';
 
 class App {
   public app: express.Application;
@@ -17,6 +18,7 @@ class App {
   public async initializeApp() {
     this.initializeMiddlewares();
     this.initializeRoutes(this.routes);
+    this.initializeErrorHandling();
   }
   public listen() {
     this.app.listen(this.port, () => {
@@ -35,6 +37,10 @@ class App {
     routes.forEach(route => {
       this.app.use('/api', route.router);
     });
+  }
+
+  private initializeErrorHandling() {
+    this.app.use(errorMiddleware);
   }
 }
 
