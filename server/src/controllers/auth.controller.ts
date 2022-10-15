@@ -17,12 +17,8 @@ export class AuthController implements IAuthController {
         email: email,
       });
       res.status(201).cookie('auth', token, { httpOnly: true }).send(`${username} is successfully registered`);
-    } catch (err: any | unknown) {
-      if (err?.code === 'P2002') {
-        next(new UniqueConstraintViolation(`${err.meta['target']} already registered`));
-      } else {
-        next(err);
-      }
+    } catch (err) {
+      next(err);
     }
   };
 }

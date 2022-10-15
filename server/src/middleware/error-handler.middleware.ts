@@ -3,13 +3,17 @@ import Boom, { isBoom } from '@hapi/boom';
 import { NotFoundError } from '@prisma/client/runtime';
 import { EmailVerificationError, InvalidCredentialsError } from '../common/errors';
 
-const mapError = (error: Error) => {
+const mapError = (error: Error & { code?: string; meta?: Record<string, unknown> }) => {
   if (error instanceof NotFoundError) {
     return Boom.notFound(error.message);
   }
 
   if (error instanceof EmailVerificationError || error instanceof InvalidCredentialsError) {
     return Boom.unauthorized(error.message);
+  }
+
+  if (error.code === 'P2002') {
+    return Boom.conflict(`${error.meta!.target} already exists`);
   }
 
   return error;
