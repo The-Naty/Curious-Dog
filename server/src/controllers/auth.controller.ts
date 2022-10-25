@@ -4,6 +4,7 @@ import { UniqueConstraintViolation } from '../common/errors';
 export interface IAuthController {
   register(req: Request, res: Response, next: NextFunction): Promise<void>;
   login(req: Request, res: Response, next: NextFunction): Promise<void>;
+  logout(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 
 export class AuthController implements IAuthController {
@@ -42,5 +43,9 @@ export class AuthController implements IAuthController {
     } catch (err) {
       next(err);
     }
+  };
+
+  public logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    res.status(200).clearCookie('auth').send('user logged out');
   };
 }
