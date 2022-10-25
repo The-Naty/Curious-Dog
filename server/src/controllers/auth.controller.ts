@@ -11,12 +11,14 @@ export class AuthController implements IAuthController {
 
   public register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { username, password, email } = req.body;
+
     try {
       const token = await this.authService.registerUserAndSignToken({
         username: username,
         password: password,
         email: email,
       });
+
       res.status(201).cookie('auth', token, { httpOnly: true }).send(`${username} is successfully registered`);
     } catch (err) {
       next(err);
@@ -25,21 +27,20 @@ export class AuthController implements IAuthController {
 
   public login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { username, password, email } = req.body;
+
     try {
       const data = await this.authService.loginUserAndSignToken({
         username: username,
         password: password,
         email: email,
       });
+
       res
         .status(200)
         .cookie('auth', data.token, { httpOnly: true })
-        .json({ username: data.user?.username, email: data.user?.email, profile_picture: data.user?.profilePicture });
+        .json({ username: data.user.username, email: data.user.email, profile_picture: data.user.profilePicture });
     } catch (err) {
-      console.log(err);
       next(err);
     }
-
-    // res.status(200).send('tazy was here');
   };
 }

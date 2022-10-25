@@ -23,5 +23,6 @@ export const loginUserReqSchema = {
       email: joi.string().email(),
       password: joiPassword.string().min(8).max(16).minOfSpecialCharacters(1).minOfLowercase(1).minOfUppercase(1).required(),
     })
+    .xor('username', 'email')
     .required(),
 };
