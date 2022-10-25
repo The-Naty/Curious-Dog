@@ -6,7 +6,7 @@ import { InvalidCredentialsError } from '../common/errors';
 
 export interface IAuthService {
   registerUserAndSignToken(userData: Partial<User>): Promise<string>;
-  loginUserAndSignToken(userData: Partial<User>): Promise<{ user: User; token: string }>;
+  loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: User; token: string }>;
 }
 
 export class AuthService implements IAuthService {
@@ -27,12 +27,12 @@ export class AuthService implements IAuthService {
     return this.generateSignedUserToken(newUser.id);
   }
 
-  public async loginUserAndSignToken(userData: Partial<User>): Promise<{ user: User; token: string }> {
+  public async loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: User; token: string }> {
     const { email, password, username } = userData;
 
     const user = await prisma.user.findUniqueOrThrow({ where: { username, email } });
 
-    const isPasswordValid = await this.decryptPassword(password as string, user.password);
+    const isPasswordValid = await this.comparePassword(password as string, user.password);
 
     if (!isPasswordValid) {
       throw new InvalidCredentialsError('Invalid credentials');
@@ -47,7 +47,7 @@ export class AuthService implements IAuthService {
     return bcrypt.hash(password, salt);
   }
 
-  private async decryptPassword(password: string, passwordDB: string): Promise<boolean> {
+  private async comparePassword(password: string, passwordDB: string): Promise<boolean> {
     return bcrypt.compare(password, passwordDB);
   }
 
