@@ -14,3 +14,14 @@ export const registerUserReqSchema = {
     })
     .required(),
 };
+
+export const loginUserReqSchema = {
+  body: joi
+    .object()
+    .keys({
+      username: joi.string().min(4).max(20),
+      email: joi.string().email(),
+      password: joiPassword.string().min(8).max(16).minOfSpecialCharacters(1).minOfLowercase(1).minOfUppercase(1).required(),
+    })
+    .required(),
+};
