@@ -2,9 +2,11 @@ import { User } from '@prisma/client';
 import { prisma } from '../database';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { InvalidCredentialsError } from '../common/errors';
 
 export interface IAuthService {
   registerUserAndSignToken(userData: Partial<User>): Promise<string>;
+  loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: User; token: string }>;
 }
 
 export class AuthService implements IAuthService {
@@ -25,9 +27,28 @@ export class AuthService implements IAuthService {
     return this.generateSignedUserToken(newUser.id);
   }
 
+  public async loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: User; token: string }> {
+    const { email, password, username } = userData;
+
+    const user = await prisma.user.findUniqueOrThrow({ where: { username, email } });
+
+    const isPasswordValid = await this.comparePassword(password as string, user.password);
+
+    if (!isPasswordValid) {
+      throw new InvalidCredentialsError('Invalid credentials');
+    }
+    const token = await this.generateSignedUserToken(user.id);
+
+    return { user, token };
+  }
+
   private async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salt);
+  }
+
+  private async comparePassword(password: string, passwordDB: string): Promise<boolean> {
+    return bcrypt.compare(password, passwordDB);
   }
 
   private async generateSignedUserToken(id: number): Promise<string> {

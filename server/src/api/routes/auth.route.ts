@@ -3,7 +3,8 @@ import { AuthController } from '../../controllers/auth.controller';
 import { Route } from '../../common/interfaces/routes.interface';
 import { IAuthController } from '../../controllers/auth.controller';
 import { validate } from '../../middleware/request-validator.middleware';
-import { registerUserReqSchema } from '../../validations/user-validation.schema';
+import { auth } from '../../middleware/authenticate-token.middleware';
+import { registerUserReqSchema, loginUserReqSchema } from '../../validations/user-validation.schema';
 
 class AuthRoute implements Route {
   public path = '/auth';
@@ -15,6 +16,8 @@ class AuthRoute implements Route {
 
   private initializeRoutes() {
     this.router.post(`${this.path}/register`, validate(registerUserReqSchema), this.authController.register);
+    this.router.post(`${this.path}/login`, validate(loginUserReqSchema), this.authController.login);
+    this.router.post(`${this.path}/logout`, auth, this.authController.logout);
   }
 }
 
