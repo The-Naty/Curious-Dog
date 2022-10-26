@@ -27,14 +27,3 @@ export const loginUserReqSchema = {
     .xor('username', 'email')
     .required(),
 };
-
-export const logoutUserReqSchema = {
-  body: joi
-    .object()
-    .keys({
-      username: joi.string().min(4).max(20),
-      email: joi.string().email(),
-    })
-    .xor('username', 'email')
-    .required(),
-};
