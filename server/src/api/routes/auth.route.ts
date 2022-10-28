@@ -4,7 +4,7 @@ import { Route } from '../../common/interfaces/routes.interface';
 import { IAuthController } from '../../controllers/auth.controller';
 import { validate } from '../../middleware/request-validator.middleware';
 import { auth } from '../../middleware/authenticate-token.middleware';
-import { registerUserReqSchema, loginUserReqSchema } from '../../validations/user-validation.schema';
+import { registerUserReqSchema, loginUserReqSchema } from '../../validations/user.validation.schema';
 
 class AuthRoute implements Route {
   public path = '/auth';
