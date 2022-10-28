@@ -10,7 +10,8 @@ export class QuestionService implements IQuestionService {
     const { body, isAnonymous, receiverUsername, askerId } = questionData;
 
     const receiverId = await this.getUserIdByUsername(receiverUsername);
-    const newQuestion = await prisma.question.create({
+
+    await prisma.question.create({
       data: {
         body,
         isAnonymous,
