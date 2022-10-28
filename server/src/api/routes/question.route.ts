@@ -7,7 +7,6 @@ import { validate } from '../../middleware/request-validator.middleware';
 import { createQuestionReqSchema } from '../../validations/question.validation.schema';
 
 export class QuestionRoute implements Route {
-  public path = '/question';
   public router = Router();
 
   constructor(private questionController: IQuestionController = new QuestionController()) {
@@ -15,6 +14,6 @@ export class QuestionRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/create`, auth, validate(createQuestionReqSchema), this.questionController.createQuestion);
+    this.router.post(`users/:userId/questions`, auth, validate(createQuestionReqSchema), this.questionController.createQuestion);
   }
 }
