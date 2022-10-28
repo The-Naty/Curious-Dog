@@ -2,6 +2,9 @@ import { Router } from 'express';
 import { QuestionController } from '../../controllers/question.controller';
 import { IQuestionController } from '../../controllers/question.controller';
 import { Route } from '../../common/interfaces/routes.interface';
+import { auth } from '../../middleware/authenticate-token.middleware';
+import { validate } from '../../middleware/request-validator.middleware';
+import { createQuestionReqSchema } from '../../validations/question.validation.schema';
 
 export class QuestionRoute implements Route {
   public path = '/question';
@@ -12,6 +15,6 @@ export class QuestionRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/create`, this.questionController.createQuestion);
+    this.router.post(`${this.path}/create`, auth, validate(createQuestionReqSchema), this.questionController.createQuestion);
   }
 }
