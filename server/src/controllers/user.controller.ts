@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { QuestionService, IQuestionService } from '../services/question.service';
+
 export interface IQuestionController {
   createQuestion(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
