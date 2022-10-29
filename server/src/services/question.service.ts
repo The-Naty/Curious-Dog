@@ -2,13 +2,12 @@ import { Question, User } from '@prisma/client';
 import { prisma } from '../database';
 
 export interface IQuestionService {
-  createQuestion(questionData: { body: string; isAnonymous: boolean; receiverIdString: string; askerId: number }): Promise<Question>;
+  createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
 }
 
 export class QuestionService implements IQuestionService {
-  public async createQuestion(questionData: { body: string; isAnonymous: boolean; receiverIdString: string; askerId: number }): Promise<Question> {
-    const { body, isAnonymous, receiverIdString, askerId } = questionData;
-    const receiverId = parseInt(receiverIdString);
+  public async createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question> {
+    const { body, isAnonymous, receiverId, askerId } = questionData;
 
     return await prisma.question.create({
       data: {

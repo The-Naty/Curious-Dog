@@ -10,10 +10,10 @@ export class QuestionController implements IQuestionController {
 
   public createQuestion = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { body, isAnonymous } = req.body;
-    const receiverIdString = req.params.userId;
+    const receiverId = parseInt(req.params.userId);
     const askerId = req.user.id;
     try {
-      const questionBody = await this.questionService.createQuestion({ body, isAnonymous, receiverIdString, askerId });
+      const questionBody = await this.questionService.createQuestion({ body, isAnonymous, receiverId, askerId });
       res.status(201).send(questionBody);
     } catch (err) {
       next(err);
