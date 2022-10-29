@@ -1,6 +1,12 @@
 import joi from 'joi';
 
 export const createQuestionReqSchema = {
+  params: joi
+    .object()
+    .keys({
+      userId: joi.number().min(1).required(),
+    })
+    .required(),
   body: joi
     .object()
     .keys({

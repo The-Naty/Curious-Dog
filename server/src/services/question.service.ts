@@ -19,9 +19,4 @@ export class QuestionService implements IQuestionService {
       } as Question,
     });
   }
-
-  private getUserIdByUsername = async (userName: string): Promise<number> => {
-    const user = await prisma.user.findUniqueOrThrow({ where: { username: userName } });
-    return user.id;
-  };
 }
