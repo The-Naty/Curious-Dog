@@ -12,8 +12,8 @@ export class QuestionController implements IQuestionController {
     const receiverIdString = req.params.userId;
     const askerId = req.user.id;
     try {
-      await this.questionService.createQuestion({ body, isAnonymous, receiverIdString, askerId });
-      res.status(201).send('Question Submitted');
+      const questionBody = await this.questionService.createQuestion({ body, isAnonymous, receiverIdString, askerId });
+      res.status(201).send(questionBody);
     } catch (err) {
       next(err);
     }
