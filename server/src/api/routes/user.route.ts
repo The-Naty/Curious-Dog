@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { QuestionController } from '../../controllers/question.controller';
-import { IQuestionController } from '../../controllers/question.controller';
+import { QuestionController } from '../../controllers/user.controller';
+import { IQuestionController } from '../../controllers/user.controller';
 import { Route } from '../../common/interfaces/routes.interface';
 import { auth } from '../../middleware/authenticate-token.middleware';
 import { validate } from '../../middleware/request-validator.middleware';
