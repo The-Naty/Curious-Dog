@@ -2,7 +2,7 @@ import { User } from '@prisma/client';
 import { prisma } from '../database';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { InvalidCredentialsError } from '../common/errors';
+import { UnauthorizedError } from '../common/errors';
 
 export interface IAuthService {
   registerUserAndSignToken(userData: Partial<User>): Promise<string>;
@@ -35,7 +35,7 @@ export class AuthService implements IAuthService {
     const isPasswordValid = await this.comparePassword(password as string, user.password);
 
     if (!isPasswordValid) {
-      throw new InvalidCredentialsError('Invalid credentials');
+      throw new UnauthorizedError('Invalid credentials');
     }
     const token = await this.generateSignedUserToken(user.id);
 

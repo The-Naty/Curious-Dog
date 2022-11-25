@@ -15,6 +15,6 @@ export class QuestionRoute implements Route {
 
   private initializeRoutes() {
     this.router.post(`/users/:userId/questions`, auth, validate(createQuestionReqSchema), this.questionController.createQuestion);
-    this.router.post(`/users/:questionId/answers`, auth, validate(answerQuestionReqSchema), this.questionController.answerQuestion);
+    this.router.post(`/questions/:questionId/answers`, auth, validate(answerQuestionReqSchema), this.questionController.answerQuestion);
   }
 }

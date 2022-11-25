@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import Boom, { isBoom } from '@hapi/boom';
 import { NotFoundError } from '@prisma/client/runtime';
-import { EmailVerificationError, InvalidCredentialsError } from '../common/errors';
+import { EmailVerificationError, UnauthorizedError } from '../common/errors';
 
 const mapError = (error: Error & { code?: string; meta?: Record<string, unknown> }) => {
   if (error instanceof NotFoundError) {
     return Boom.notFound(error.message);
   }
 
-  if (error instanceof EmailVerificationError || error instanceof InvalidCredentialsError) {
+  if (error instanceof EmailVerificationError || error instanceof UnauthorizedError) {
     return Boom.unauthorized(error.message);
   }
 

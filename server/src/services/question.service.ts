@@ -1,6 +1,6 @@
 import { Question, User } from '@prisma/client';
 import { prisma } from '../database';
-import { InvalidCredentialsError } from '../common/errors';
+import { UnauthorizedError } from '../common/errors';
 
 export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
@@ -11,7 +11,7 @@ export class QuestionService implements IQuestionService {
   public async createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question> {
     const { body, isAnonymous, receiverId, askerId } = questionData;
 
-    return await prisma.question.create({
+    return prisma.question.create({
       data: {
         body,
         isAnonymous,
@@ -26,9 +26,9 @@ export class QuestionService implements IQuestionService {
 
     const question = await prisma.question.findUniqueOrThrow({ where: { id: questionId } });
     if (question.receiverId !== receiverId) {
-      throw new InvalidCredentialsError('User not allowed to answer this');
+      throw new UnauthorizedError('User not allowed to answer this');
     }
-    return await prisma.question.update({
+    return prisma.question.update({
       where: {
         id: questionId,
       },
