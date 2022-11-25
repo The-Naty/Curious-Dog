@@ -3,6 +3,7 @@ import { QuestionService, IQuestionService } from '../services/question.service'
 
 export interface IQuestionController {
   createQuestion(req: Request, res: Response, next: NextFunction): Promise<void>;
+  answerQuestion(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 
 export class QuestionController implements IQuestionController {
@@ -13,8 +14,21 @@ export class QuestionController implements IQuestionController {
     const receiverId = parseInt(req.params.userId);
     const askerId = req.user.id;
     try {
-      const questionBody = await this.questionService.createQuestion({ body, isAnonymous, receiverId, askerId });
-      res.status(201).send(questionBody);
+      const question = await this.questionService.createQuestion({ body, isAnonymous, receiverId, askerId });
+      res.status(201).send(question);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  public answerQuestion = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { answer } = req.body;
+    const questionId = parseInt(req.params.questionId);
+    const receiverId = req.user.id;
+
+    try {
+      const question = await this.questionService.answerQuestion({ answer, questionId, receiverId });
+      res.status(200).send(question);
     } catch (err) {
       next(err);
     }

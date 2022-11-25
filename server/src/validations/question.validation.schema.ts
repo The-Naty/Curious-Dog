@@ -15,3 +15,18 @@ export const createQuestionReqSchema = {
     })
     .required(),
 };
+
+export const answerQuestionReqSchema = {
+  params: joi
+    .object()
+    .keys({
+      questionId: joi.number().min(1).required(),
+    })
+    .required(),
+  body: joi
+    .object()
+    .keys({
+      answer: joi.string().min(1).max(600).required(),
+    })
+    .required(),
+};
