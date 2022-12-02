@@ -5,6 +5,8 @@ import { UnauthorizedError } from '../common/errors';
 export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
   answerQuestion(questionData: { answer: string; questionId: number; receiverId: number }): Promise<Question>;
+  getQuestions(): Promise<Partial<Question>[]>;
+  getMyQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]>;
 }
 
 export class QuestionService implements IQuestionService {
@@ -36,5 +38,30 @@ export class QuestionService implements IQuestionService {
         answer,
       } as Question,
     });
+  }
+
+  public async getQuestions(): Promise<Partial<Question>[]> {
+    const questions = await prisma.question.findMany();
+    questions.forEach(q => {
+      if (q.isAnonymous === true) {
+        q.askerId = null;
+      }
+    });
+    return questions;
+  }
+
+  public async getMyQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]> {
+    let questions;
+    if (asked === 'true') {
+      questions = await prisma.question.findMany({ where: { OR: [{ receiverId }, { askerId: receiverId }] } });
+    } else {
+      questions = await prisma.question.findMany({ where: { receiverId: receiverId } });
+    }
+    questions.forEach(q => {
+      if (q.isAnonymous === true) {
+        q.askerId = null;
+      }
+    });
+    return questions;
   }
 }
