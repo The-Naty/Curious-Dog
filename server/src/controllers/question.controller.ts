@@ -5,7 +5,7 @@ export interface IQuestionController {
   createQuestion(req: Request, res: Response, next: NextFunction): Promise<void>;
   answerQuestion(req: Request, res: Response, next: NextFunction): Promise<void>;
   fetchAllQuestions(req: Request, res: Response, next: NextFunction): Promise<void>;
-  fetchQuestions(req: Request, res: Response, next: NextFunction): Promise<void>;
+  fetchCurrentUserQuestions(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 
 export class QuestionController implements IQuestionController {
@@ -37,19 +37,21 @@ export class QuestionController implements IQuestionController {
   };
 
   public fetchAllQuestions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { limit, page } = req.query;
+
     try {
-      const questions = await this.questionService.getQuestions();
+      const questions = await this.questionService.getQuestions(parseInt(limit as unknown as string), parseInt(page as unknown as string));
       res.status(200).send(questions);
     } catch (err) {
       next(err);
     }
   };
 
-  public fetchQuestions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public fetchCurrentUserQuestions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const receiverId = req.user.id;
     const { asked } = req.query;
     try {
-      const questions = await this.questionService.getMyQuestions(receiverId, asked as unknown as string);
+      const questions = await this.questionService.gethCurrentUserQuestions(receiverId, asked as unknown as string);
       res.status(200).send(questions);
     } catch (err) {
       next(err);

@@ -5,8 +5,8 @@ import { UnauthorizedError } from '../common/errors';
 export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
   answerQuestion(questionData: { answer: string; questionId: number; receiverId: number }): Promise<Question>;
-  getQuestions(): Promise<Partial<Question>[]>;
-  getMyQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]>;
+  getQuestions(limit: number, page: number): Promise<{}>;
+  gethCurrentUserQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]>;
 }
 
 export class QuestionService implements IQuestionService {
@@ -40,28 +40,26 @@ export class QuestionService implements IQuestionService {
     });
   }
 
-  public async getQuestions(): Promise<Partial<Question>[]> {
-    const questions = await prisma.question.findMany();
-    questions.forEach(q => {
-      if (q.isAnonymous === true) {
-        q.askerId = null;
-      }
-    });
-    return questions;
+  public async getQuestions(limit: number, page: number): Promise<{}> {
+    let offset = limit * (page - 1);
+    let totalQuestions = await prisma.question.count();
+    const questions = await prisma.question.findMany({ take: limit, skip: offset });
+
+    return { limit, page, totalQuestions, questions: questions.map(this.toDomain) };
   }
 
-  public async getMyQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]> {
+  public async gethCurrentUserQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]> {
     let questions;
     if (asked === 'true') {
       questions = await prisma.question.findMany({ where: { OR: [{ receiverId }, { askerId: receiverId }] } });
     } else {
       questions = await prisma.question.findMany({ where: { receiverId: receiverId } });
     }
-    questions.forEach(q => {
-      if (q.isAnonymous === true) {
-        q.askerId = null;
-      }
-    });
-    return questions;
+
+    return questions.map(this.toDomain);
+  }
+
+  private toDomain(question: Question): Question {
+    return question.isAnonymous ? { ...question, askerId: null } : question;
   }
 }
