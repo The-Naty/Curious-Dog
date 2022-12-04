@@ -42,10 +42,9 @@ export class QuestionService implements IQuestionService {
 
   public async getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number }> {
     const offset = limit * (page - 1);
+    const [count, questions] = await Promise.all([prisma.question.count(), prisma.question.findMany({ take: limit, skip: offset })]);
 
-    return await Promise.all([prisma.question.count(), prisma.question.findMany({ take: limit, skip: offset })]).then(([count, questions]) => {
-      return { questions: questions.map(this.toDomain), count };
-    });
+    return { questions: questions.map(this.toDomain), count };
   }
 
   public async gethCurrentUserQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]> {
