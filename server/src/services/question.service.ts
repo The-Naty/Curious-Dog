@@ -5,6 +5,8 @@ import { UnauthorizedError } from '../common/errors';
 export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
   answerQuestion(questionData: { answer: string; questionId: number; receiverId: number }): Promise<Question>;
+  getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number }>;
+  gethCurrentUserQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]>;
 }
 
 export class QuestionService implements IQuestionService {
@@ -36,5 +38,27 @@ export class QuestionService implements IQuestionService {
         answer,
       } as Question,
     });
+  }
+
+  public async getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number }> {
+    const offset = limit * (page - 1);
+    const [count, questions] = await Promise.all([prisma.question.count(), prisma.question.findMany({ take: limit, skip: offset })]);
+
+    return { questions: questions.map(this.toDomain), count };
+  }
+
+  public async gethCurrentUserQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]> {
+    let questions;
+    if (asked === 'true') {
+      questions = await prisma.question.findMany({ where: { OR: [{ receiverId }, { askerId: receiverId }] } });
+    } else {
+      questions = await prisma.question.findMany({ where: { receiverId: receiverId } });
+    }
+
+    return questions.map(this.toDomain);
+  }
+
+  private toDomain(question: Question): Question {
+    return question.isAnonymous ? { ...question, askerId: null } : question;
   }
 }

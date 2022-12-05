@@ -4,6 +4,8 @@ import { QuestionService, IQuestionService } from '../services/question.service'
 export interface IQuestionController {
   createQuestion(req: Request, res: Response, next: NextFunction): Promise<void>;
   answerQuestion(req: Request, res: Response, next: NextFunction): Promise<void>;
+  fetchAllQuestions(req: Request, res: Response, next: NextFunction): Promise<void>;
+  fetchCurrentUserQuestions(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 
 export class QuestionController implements IQuestionController {
@@ -29,6 +31,28 @@ export class QuestionController implements IQuestionController {
     try {
       const question = await this.questionService.answerQuestion({ answer, questionId, receiverId });
       res.status(200).send(question);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  public fetchAllQuestions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { limit, page } = req.query;
+
+    try {
+      const questions = await this.questionService.getQuestions(parseInt(limit as unknown as string), parseInt(page as unknown as string));
+      res.status(200).send(questions);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  public fetchCurrentUserQuestions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const receiverId = req.user.id;
+    const { asked } = req.query;
+    try {
+      const questions = await this.questionService.gethCurrentUserQuestions(receiverId, asked as unknown as string);
+      res.status(200).send(questions);
     } catch (err) {
       next(err);
     }
