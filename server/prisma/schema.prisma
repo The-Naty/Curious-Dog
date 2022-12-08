@@ -20,6 +20,9 @@ model User {
   receivedQuestions Question[]     @relation("ReceivedQuestions")
   likedQuestions    QuestionLike[]
 
+  followers Follows[] @relation("follower")
+  following Follows[] @relation("following")
+
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
@@ -54,4 +57,17 @@ model QuestionLike {
   // composite key
   @@id([questionId, userId])
   @@map("question_likes")
+}
+
+model Follows {
+  follower   User @relation("follower", fields: [followerId], references: [id])
+  followerId Int
+
+  folllowing  User @relation("following", fields: [followingId], references: [id])
+  followingId Int
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  // composite key
+  @@id([followerId, followingId])
+  @@map("follows")
 }
