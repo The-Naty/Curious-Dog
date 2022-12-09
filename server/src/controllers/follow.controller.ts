@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { FollowService, IFollowService } from '../services/follow.service';
 
 export interface IFollowController {
-  followNewUser(req: Request, res: Response, next: NextFunction): Promise<void>;
+  followUser(req: Request, res: Response, next: NextFunction): Promise<void>;
   unfollowUser(req: Request, res: Response, next: NextFunction): Promise<void>;
   fetchFollowers(req: Request, res: Response, next: NextFunction): Promise<void>;
   fetchFollowing(req: Request, res: Response, next: NextFunction): Promise<void>;
@@ -11,7 +11,7 @@ export interface IFollowController {
 export class FollowController implements IFollowController {
   constructor(private followService: IFollowService = new FollowService()) {}
 
-  public followNewUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public followUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const toBeFollowedId = parseInt(req.params.toBeFollowedId);
     const followerId = req.user.id;
     try {
@@ -34,8 +34,10 @@ export class FollowController implements IFollowController {
 
   public fetchFollowers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const userId = req.user.id;
+    const { limit, page } = req.query;
+
     try {
-      const followers = await this.followService.getFollowers(userId);
+      const followers = await this.followService.getFollowers(userId, parseInt(limit as unknown as string), parseInt(page as unknown as string));
       res.status(200).send(followers);
     } catch (err) {
       next(err);
@@ -44,8 +46,10 @@ export class FollowController implements IFollowController {
 
   public fetchFollowing = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const userId = req.user.id;
+    const { limit, page } = req.query;
+
     try {
-      const following = await this.followService.getFollowing(userId);
+      const following = await this.followService.getFollowing(userId, parseInt(limit as unknown as string), parseInt(page as unknown as string));
       res.status(200).send(following);
     } catch (err) {
       next(err);
