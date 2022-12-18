@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import { AuthController } from '../../controllers/auth.controller';
 import { Route } from '../../common/interfaces/routes.interface';
-import { IAuthController } from '../../controllers/auth.controller';
-import { validate } from '../../middleware/request-validator.middleware';
+import { AuthController, IAuthController } from '../../controllers/auth.controller';
 import { auth } from '../../middleware/authenticate-token.middleware';
-import { registerUserReqSchema, loginUserReqSchema } from '../../validations/user.validation.schema';
+import { validate } from '../../middleware/request-validator.middleware';
+import { loginUserReqSchema, registerUserReqSchema } from '../../validations/user.validation.schema';
 
 class AuthRoute implements Route {
   public path = '/auth';

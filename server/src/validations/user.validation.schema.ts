@@ -27,3 +27,12 @@ export const loginUserReqSchema = {
     .xor('username', 'email')
     .required(),
 };
+
+export const uploadProfilePictureReqSchema = {
+  body: joi
+    .object()
+    .keys({
+      profilePicture: joi.string(),
+    })
+    .required(),
+};
