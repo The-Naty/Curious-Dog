@@ -1,10 +1,8 @@
 import { Router } from 'express';
 import { Route } from '../../common/interfaces/routes.interface';
-import { validate } from '../../middleware/request-validator.middleware';
-import { auth } from '../../middleware/authenticate-token.middleware';
-import { uploadProfilePictureReqSchema } from '../../validations/user.validation.schema';
-import { upload } from '../../middleware/upload-file.middleware';
 import { IUserController, UserController } from '../../controllers/user.controller';
+import { auth } from '../../middleware/authenticate-token.middleware';
+import { upload } from '../../middleware/upload-file.middleware';
 
 class UserRoute implements Route {
   public path = '/user';
@@ -15,13 +13,7 @@ class UserRoute implements Route {
   }
 
   private initializeRoutes() {
-    this.router.post(
-      `${this.path}/uploadProfilePicture`,
-      auth,
-      validate(uploadProfilePictureReqSchema),
-      upload.single('profilePicture'),
-      this.userController.uploadPicture,
-    );
+    this.router.put(`${this.path}/profile-picture`, auth, upload.single('profilePicture'), this.userController.uploadPicture);
   }
 }
 

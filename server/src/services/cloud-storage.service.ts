@@ -1,14 +1,14 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getStorage } from 'firebase-admin/storage';
 import uuid from 'short-uuid';
-import serviceAccount from '../../../../firebaseServiceAccount.json';
+import serviceAccount from '../../../server/firebaseServiceAccount.json';
 import { Bucket } from '@google-cloud/storage';
 
 export interface ICloudStorage {
   uploadFile: (file: Express.Multer.File) => Promise<string>;
 }
 
-export class CloudStorage implements ICloudStorage {
+class CloudStorage implements ICloudStorage {
   private readonly bucket: Bucket;
 
   constructor() {
@@ -22,7 +22,7 @@ export class CloudStorage implements ICloudStorage {
 
   public async uploadFile(file: Express.Multer.File) {
     const uploadableFile = this.bucket.file(file.originalname);
-    uploadableFile.save(file.buffer, {
+    await uploadableFile.save(file.buffer, {
       contentType: file.mimetype,
       predefinedAcl: 'publicRead',
       metadata: { firebaseStorageDownloadTokens: uuid.generate() },
@@ -30,3 +30,6 @@ export class CloudStorage implements ICloudStorage {
     return uploadableFile.publicUrl();
   }
 }
+
+const cloudStorageInstance = new CloudStorage();
+export { cloudStorageInstance };
