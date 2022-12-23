@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.2.1",
+    "jotai": "^1.12.0",
     "next": "13.0.7",
     "node-sass": "^7.0.3",
     "react": "18.2.0",

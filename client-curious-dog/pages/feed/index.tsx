@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import Header from '../../components/shared/Header';
 import { userDataAtom } from '../../components/userData/userState';
 
-const Profile: NextPage = () => {
+const Feed: NextPage = () => {
   const [userData, setUserData] = useAtom(userDataAtom);
   const router = useRouter();
 
@@ -14,14 +14,15 @@ const Profile: NextPage = () => {
       router.push('/');
     }
   }, [userData, router]);
+
   return (
     <div className="flex flex-col items-center">
-      <Header page="me" />
+      <Header page={'feed'} />
       {userData ? (
         <div className="flex items-center justify-center w-full">
           <div className="grid grid-rows-1 grid-cols-12 w-full ">
             <div className="col-start-4 col-end-10 mb-4 mt-8 mx-auto">
-              <p> me</p>
+              <p>Fed\ed</p>
             </div>
           </div>
         </div>
@@ -30,4 +31,4 @@ const Profile: NextPage = () => {
   );
 };
 
-export default Profile;
+export default Feed;

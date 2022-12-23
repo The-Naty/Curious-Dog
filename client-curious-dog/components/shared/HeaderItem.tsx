@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 interface headerItemProps {
@@ -12,10 +13,10 @@ const listItemStyle = 'mt-2 px-3 mx-1 text-basis hover:cursor-pointer';
 const HeaderItem = ({ IconComp, text, active, url }: headerItemProps) => {
   return (
     <li className={`${listItemStyle} ${active ? 'border-b-4 border-indigo-400 text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>
-      <a href={url} className="flex flex-col items-center">
+      <Link href={url} className="flex flex-col items-center">
         {IconComp}
         <span>{text}</span>
-      </a>
+      </Link>
     </li>
   );
 };
