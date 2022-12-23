@@ -19,7 +19,7 @@ const Header = () => {
             <FaBars style={{ fontSize: "2.2rem" }} />
           </label>
           <input type="checkbox" id="collpase-btn-check" />
-          <ul className="header md:flex justify-center 		 md:space-x-11">
+          <ul className="header md:flex justify-center md:space-x-11">
             <HeaderItem
               IconComp={<MdFeed style={{ fontSize: "2rem" }} />}
               text="Feed"
