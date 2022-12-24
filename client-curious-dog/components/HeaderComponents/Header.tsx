@@ -6,6 +6,7 @@ import { VscAccount } from 'react-icons/vsc';
 import { userDataAtom } from '../userData/userState';
 import HeaderItem from './HeaderItem';
 import Link from 'next/link';
+import { SiDatadog } from 'react-icons/si';
 
 interface headerProps {
   page: string;
@@ -17,7 +18,11 @@ const Header = ({ page }: headerProps) => {
     <div className="w-full bg-zinc-200 h-18 lg:px-16">
       <div className="flex justify-between lg:px-16 lg:mx-16 mx-10">
         <Link href={userData ? '/feed' : '/'}>
-          <h1 className="text-5xl mt-3 mb-2">CuriousDog</h1>
+          <h1 className="text-5xl mt-3 mb-2">
+            Curious
+            <SiDatadog style={{ fontSize: '2.2rem', display: 'inline-block' }} />
+            Dog
+          </h1>
         </Link>
 
         {!!userData ? (
