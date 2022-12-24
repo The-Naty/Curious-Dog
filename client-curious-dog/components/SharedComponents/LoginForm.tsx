@@ -1,6 +1,4 @@
 import React from 'react';
-import { useQuery } from 'react-query';
-import { getUser } from '../../pages/api/userApi';
 import { userDataAtom } from '../userData/userState';
 import { useAtom } from 'jotai';
 import * as yup from 'yup';
@@ -8,12 +6,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { emailValidationObj, passwordValidationObj } from '../validation/sharedValidation';
 import ValidationError from './ValidationError';
+import { logInUser } from '../../pages/api/userApi';
+import { setAuthToken } from '../../util/token-storage';
 
-interface registrationFormProps {
-  changeDis: any;
+interface LoginFormProps {
+  changeDis: (dis: string) => void;
 }
 
-const LoginForm = ({ changeDis }: registrationFormProps) => {
+const LoginForm = ({ changeDis }: LoginFormProps) => {
   const [userData, setUserData] = useAtom(userDataAtom);
   const schema = yup.object().shape({
     email: emailValidationObj,
@@ -33,16 +33,18 @@ const LoginForm = ({ changeDis }: registrationFormProps) => {
     },
   });
 
-  const LoginHandler = (formData: { email: string; password: string }) => {
-    const { data, isLoading, isFetching, refetch } = useQuery(['user', userData], () => getUser(formData.email, formData.password), {
-      initialData: { userData: null },
-      refetchInterval: 0,
-      refetchOnWindowFocus: false,
-    });
+  const loginHandler = async (formData: { email: string; password: string }): Promise<void> => {
+    try {
+      const { token, ...resData } = await logInUser(formData.email, formData.password);
+      console.log(token, resData);
+      setUserData(resData);
+      console.log('seeting the token here with value', token);
+      setAuthToken(token);
+    } catch (err) {}
   };
 
   const onSubmit = (data: { email: string; password: string }) => {
-    LoginHandler(data);
+    loginHandler(data);
   };
 
   return (
@@ -59,7 +61,7 @@ const LoginForm = ({ changeDis }: registrationFormProps) => {
                 <input
                   id="email"
                   type="text"
-                  className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
+                  className="peer text-sm placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
                   placeholder="Email address"
                   {...register('email')}
                 />
@@ -91,35 +93,15 @@ const LoginForm = ({ changeDis }: registrationFormProps) => {
               <div className="relative">
                 <button
                   type="submit"
-                  className="w-full
-                  px-6
-                  py-2.5
-                  bg-purple-100
-                  text-black
-                  font-medium
-                  text-xs
-                  leading-tight
-                  rounded
-                  shadow-md
-                  hover:bg-purple-300 hover:shadow-lg
-                  focus:bg-purple-300 focus:shadow-lg focus:outline-none focus:ring-0
-                  active:bg-purple-400 active:shadow-lg
-                  transition
-                  duration-150
-                  ease-in-out"
+                  className="w-full px-6 py-2.5 bg-purple-100 text-black font-medium text-xs leading-tight rounded shadow-md hover:bg-purple-300 hover:shadow-lg focus:bg-purple-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-400 active:shadow-lg transition duration-150 ease-in-out"
                 >
                   Log in
                 </button>
               </div>
               <p className="text-center text-sm">
                 Not a member
-                <span
-                  className="underline hover:text-purple-700 hover:shadow-lg hover:cursor-pointer
-"
-                  onClick={() => changeDis('reg')}
-                >
-                  {' '}
-                  Register{' '}
+                <span className="underline hover:text-purple-700 hover:shadow-lg hover:cursor-pointer ml-1" onClick={() => changeDis('reg')}>
+                  Register
                 </span>
               </p>
             </form>

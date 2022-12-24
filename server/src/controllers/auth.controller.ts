@@ -38,7 +38,7 @@ export class AuthController implements IAuthController {
       res
         .status(200)
         .cookie('auth', data.token, { httpOnly: true })
-        .json({ username: data.user.username, email: data.user.email, profilePicture: data.user.profilePicture });
+        .json({ username: data.user.username, email: data.user.email, profilePicture: data.user.profilePicture, token: data.token });
     } catch (err) {
       next(err);
     }

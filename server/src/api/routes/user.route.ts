@@ -14,6 +14,7 @@ class UserRoute implements Route {
 
   private initializeRoutes() {
     this.router.put(`${this.path}/profile-picture`, auth, upload.single('profilePicture'), this.userController.uploadPicture);
+    this.router.get(`${this.path}/:userId`, this.userController.fetchUser);
   }
 }
 
