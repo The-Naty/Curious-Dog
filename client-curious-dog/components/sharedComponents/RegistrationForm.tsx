@@ -1,19 +1,19 @@
 import React from 'react';
-import { userDataAtom } from '../userData/userState';
+import { userAtom } from '../../atoms/user.atom';
 import { useAtom } from 'jotai';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { emailValidationObj, passwordValidationObj } from '../validation/sharedValidation';
+import { emailValidationObj, passwordValidationObj } from '../validation/shared-validation';
 import ValidationError from './ValidationError';
-import { logInUser } from '../../pages/api/userApi';
+import { logInUser } from '../../pages/api/user.api';
 
-interface RegistrationFormProps {
-  changeDis: (dis: string) => void;
+interface Props {
+  openLoginForm: () => void;
 }
 
-const LoginForm = ({ changeDis }: RegistrationFormProps) => {
-  const [userData, setUserData] = useAtom(userDataAtom);
+const LoginForm = ({ openLoginForm }: Props) => {
+  const [user, setUser] = useAtom(userAtom);
   const schema = yup.object().shape({
     email: emailValidationObj,
     password: passwordValidationObj,
@@ -33,10 +33,8 @@ const LoginForm = ({ changeDis }: RegistrationFormProps) => {
   });
 
   const loginHandler = async (formData: { email: string; password: string }): Promise<void> => {
-    try {
-      const resData = await logInUser(formData.email, formData.password);
-      setUserData(resData);
-    } catch (err) {}
+    const resData = await logInUser(formData.email, formData.password);
+    setUser(resData);
   };
 
   const onSubmit = (data: { email: string; password: string }) => {
@@ -96,7 +94,7 @@ const LoginForm = ({ changeDis }: RegistrationFormProps) => {
               </div>
               <p className="text-center text-sm">
                 Already a member
-                <span className="underline hover:text-purple-700 hover:shadow-lg hover:cursor-pointer ml-1" onClick={() => changeDis('log')}>
+                <span className="underline hover:text-purple-700 hover:shadow-lg hover:cursor-pointer ml-1" onClick={openLoginForm}>
                   log in
                 </span>
               </p>

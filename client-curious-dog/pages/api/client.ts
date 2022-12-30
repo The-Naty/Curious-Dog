@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const client = axios.create({ baseURL: process.env.CURIOUS_DOG_DEV_BASE_URL });
+const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_BASE_URL });
 
 client.interceptors.response.use(
   response => response,

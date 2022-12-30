@@ -1,20 +1,21 @@
 import React from 'react';
-import { userDataAtom } from '../userData/userState';
+import { userAtom } from '../../atoms/user.atom';
 import { useAtom } from 'jotai';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { emailValidationObj, passwordValidationObj } from '../validation/sharedValidation';
+import { emailValidationObj, passwordValidationObj } from '../validation/shared-validation';
 import ValidationError from './ValidationError';
-import { logInUser } from '../../pages/api/userApi';
+import { logInUser } from '../../pages/api/user.api';
 import { setAuthToken } from '../../util/token-storage';
 
-interface LoginFormProps {
-  changeDis: (dis: string) => void;
+interface Props {
+  openRegisterationForm: () => void;
 }
 
-const LoginForm = ({ changeDis }: LoginFormProps) => {
-  const [userData, setUserData] = useAtom(userDataAtom);
+const LoginForm = ({ openRegisterationForm }: Props) => {
+  const [user, setUser] = useAtom(userAtom);
+
   const schema = yup.object().shape({
     email: emailValidationObj,
     password: passwordValidationObj,
@@ -34,17 +35,9 @@ const LoginForm = ({ changeDis }: LoginFormProps) => {
   });
 
   const loginHandler = async (formData: { email: string; password: string }): Promise<void> => {
-    try {
-      const { token, ...resData } = await logInUser(formData.email, formData.password);
-      console.log(token, resData);
-      setUserData(resData);
-      console.log('seeting the token here with value', token);
-      setAuthToken(token);
-    } catch (err) {}
-  };
-
-  const onSubmit = (data: { email: string; password: string }) => {
-    loginHandler(data);
+    const { token, ...resData } = await logInUser(formData.email, formData.password);
+    setUser(resData);
+    setAuthToken(token);
   };
 
   return (
@@ -53,10 +46,10 @@ const LoginForm = ({ changeDis }: LoginFormProps) => {
       <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
         <div className="max-w mx-auto">
           <div>
-            <h1 className="text-2xl font-semibold text-center">Welcom Back</h1>
+            <h1 className="text-2xl font-semibold text-center">Welcome Back</h1>
           </div>
           <div className="divide-y divide-gray-200">
-            <form className="py-8 text-sm  w-full space-y-6 text-gray-700 sm:text-lg sm:leading-10 " onSubmit={handleSubmit(onSubmit)}>
+            <form className="py-8 text-sm  w-full space-y-6 text-gray-700 sm:text-lg sm:leading-10 " onSubmit={handleSubmit(loginHandler)}>
               <div className="relative">
                 <input
                   id="email"
@@ -100,7 +93,7 @@ const LoginForm = ({ changeDis }: LoginFormProps) => {
               </div>
               <p className="text-center text-sm">
                 Not a member
-                <span className="underline hover:text-purple-700 hover:shadow-lg hover:cursor-pointer ml-1" onClick={() => changeDis('reg')}>
+                <span className="underline hover:text-purple-700 hover:shadow-lg hover:cursor-pointer ml-1" onClick={openRegisterationForm}>
                   Register
                 </span>
               </p>

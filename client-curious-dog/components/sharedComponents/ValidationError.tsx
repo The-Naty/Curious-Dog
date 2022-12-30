@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface ValidationErrorProps {
-  msg: string | undefined;
+interface Props {
+  msg?: string;
 }
 
-const ValidationError = ({ msg }: ValidationErrorProps) => {
+const ValidationError = ({ msg }: Props) => {
   return (
     <div className="flex p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
       <svg aria-hidden="true" className="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

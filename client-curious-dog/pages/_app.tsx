@@ -4,32 +4,29 @@ import { useAtom } from 'jotai';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import { clearAuthToken, getAuthToken } from '../util/token-storage';
-import { userDataAtom } from '../components/userData/userState';
-import { fetchUser } from './api/userApi';
+import { userAtom } from '../atoms/user.atom';
+import { fetchUser } from './api/user.api';
 import '../styles/globals.scss';
 import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: AppProps) {
-  const [userData, setUserData] = useAtom(userDataAtom);
+  const [user, setUser] = useAtom(userAtom);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!userData) {
+      if (!user) {
         try {
           const token = getAuthToken();
           if (token) {
             const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-            console.log(tokenPayload);
             const { id } = tokenPayload;
             const data = await fetchUser(id);
-            setUserData(data);
+            setUser(data);
           }
         } catch (err) {
           console.log(err);
           clearAuthToken();
-        } finally {
-          // setLoadingUser(false);
         }
       }
     };

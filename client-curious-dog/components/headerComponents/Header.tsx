@@ -3,21 +3,21 @@ import { BiWorld } from 'react-icons/bi';
 import { FaBars } from 'react-icons/fa';
 import { MdFeed } from 'react-icons/md';
 import { VscAccount } from 'react-icons/vsc';
-import { userDataAtom } from '../userData/userState';
+import { userAtom } from '../../atoms/user.atom';
 import HeaderItem from './HeaderItem';
 import Link from 'next/link';
 import { SiDatadog } from 'react-icons/si';
 
-interface headerProps {
+interface Props {
   page: string;
 }
-const Header = ({ page }: headerProps) => {
-  const [userData, setUserData] = useAtom(userDataAtom);
+const Header = ({ page }: Props) => {
+  const [user, setUser] = useAtom(userAtom);
 
   return (
     <div className="w-full bg-zinc-200 h-18 lg:px-16">
       <div className="flex justify-between lg:px-16 lg:mx-16 mx-10">
-        <Link href={userData ? '/feed' : '/'}>
+        <Link href={user ? '/feed' : '/'}>
           <h1 className="text-5xl mt-3 mb-2">
             Curious
             <SiDatadog style={{ fontSize: '2.2rem', display: 'inline-block' }} />
@@ -25,7 +25,7 @@ const Header = ({ page }: headerProps) => {
           </h1>
         </Link>
 
-        {!!userData ? (
+        {!!user ? (
           <nav>
             <label htmlFor="collpase-btn-check" className="collpase-btn mt-6 mb-2">
               <FaBars style={{ fontSize: '2.2rem' }} />
