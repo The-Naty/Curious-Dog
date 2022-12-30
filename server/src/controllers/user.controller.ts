@@ -19,15 +19,10 @@ export class UserController implements IUserController {
   };
 
   public fetchUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const userId = parseInt(req.params.userId);
-    try {
-      const user = await this.userService.getUser(userId);
-      if (user) {
-        res.status(200).json({ username: user.username, email: user.email, profilePicture: user.profilePicture });
-      }
-      res.status(200).send('user data not avialble');
-    } catch (err) {
-      next(err);
+    const { user } = req;
+    if (user) {
+      res.status(200).json({ username: user.username, email: user.email, profilePicture: user.profilePicture });
     }
+    res.status(200).send('user data not avialble');
   };
 }

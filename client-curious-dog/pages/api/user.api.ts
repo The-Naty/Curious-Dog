@@ -8,7 +8,7 @@ export const logInUser = async (email: string, password: string) => {
   return response.data;
 };
 
-export const fetchUser = async (id: number) => {
-  const response = await client.get(`user/${id}`);
+export const fetchUser = async () => {
+  const response = await client.get(`user/`);
   return response.data;
 };

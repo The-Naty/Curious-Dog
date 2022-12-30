@@ -19,19 +19,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         try {
           const token = getAuthToken();
           if (token) {
-            const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-            const { id } = tokenPayload;
-            const data = await fetchUser(id);
+            const data = await fetchUser();
             setUser(data);
           }
         } catch (err) {
-          console.log(err);
           clearAuthToken();
         }
       }
     };
     fetchUserData();
-  });
+  }, [user]);
   return (
     <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />
