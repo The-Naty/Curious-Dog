@@ -3,7 +3,7 @@ import { BiWorld } from 'react-icons/bi';
 import { FaBars } from 'react-icons/fa';
 import { MdFeed } from 'react-icons/md';
 import { VscAccount } from 'react-icons/vsc';
-import { userAtom } from '../../atoms/user.atom';
+import { userAtom } from '../../lib/atoms/user.atom';
 import HeaderItem from './HeaderItem';
 import Link from 'next/link';
 import { SiDatadog } from 'react-icons/si';

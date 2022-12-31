@@ -4,8 +4,8 @@ import { useAtom } from 'jotai';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import { clearAuthToken, getAuthToken } from '../util/token-storage';
-import { userAtom } from '../atoms/user.atom';
-import { fetchUser } from './api/user.api';
+import { userAtom } from '../lib/atoms/user.atom';
+import { fetchUser } from '../lib/api/user.api';
 import '../styles/globals.scss';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -29,6 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
     fetchUserData();
   }, [user]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />

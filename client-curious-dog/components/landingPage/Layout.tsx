@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import LoginForm from '../sharedComponents/LoginForm';
-import RegistrationForm from '../sharedComponents/RegistrationForm';
+import LoginForm from '../shared-components/LoginForm';
+import RegistrationForm from '../shared-components/RegistrationForm';
 
 const HomeLayout = () => {
   const [formDisplay, setFormDisplay] = useState<'login' | 'register'>('login');

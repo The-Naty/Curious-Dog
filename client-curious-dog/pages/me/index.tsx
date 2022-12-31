@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
-import Header from '../../components/headerComponents/Header';
-import AuthGuard from '../../components/sharedComponents/AuthGuard';
-import { userAtom } from '../../atoms/user.atom';
+import Header from '../../components/header-components/Header';
+import AuthGuard from '../../components/shared-components/AuthGuard';
+import { userAtom } from '../../lib/atoms/user.atom';
 import { useAtom } from 'jotai';
 
 const Profile: NextPage = () => {

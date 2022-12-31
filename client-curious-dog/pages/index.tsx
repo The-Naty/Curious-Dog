@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
-import Header from '../components/headerComponents/Header';
+import Header from '../components/header-components/Header';
 import LandingLayout from '../components/landingPage/Layout';
-import AuthGuard from '../components/sharedComponents/AuthGuard';
+import AuthGuard from '../components/shared-components/AuthGuard';
 import { useAtom } from 'jotai';
-import { userAtom } from '../atoms/user.atom';
+import { userAtom } from '../lib/atoms/user.atom';
 
 const Home: NextPage = () => {
   const [user, setUser] = useAtom(userAtom);

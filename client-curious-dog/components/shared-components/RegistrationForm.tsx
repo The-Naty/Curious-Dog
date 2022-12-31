@@ -1,12 +1,12 @@
 import React from 'react';
-import { userAtom } from '../../atoms/user.atom';
+import { userAtom } from '../../lib/atoms/user.atom';
 import { useAtom } from 'jotai';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { emailValidationObj, passwordValidationObj } from '../validation/shared-validation';
+import { emailValidationObj, passwordValidationObj } from '../../lib/validation/shared-validation';
 import ValidationError from './ValidationError';
-import { logInUser } from '../../pages/api/user.api';
+import { logInUser } from '../../lib/api/user.api';
 
 interface Props {
   openLoginForm: () => void;

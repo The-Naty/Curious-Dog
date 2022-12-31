@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
-import { userAtom } from '../../atoms/user.atom';
+import { userAtom } from '../../lib/atoms/user.atom';
 
 interface Props {
   loggedInRedirectUrl?: string;

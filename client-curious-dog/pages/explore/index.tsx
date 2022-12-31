@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
-import Header from '../../components/headerComponents/Header';
-import AuthGuard from '../../components/sharedComponents/AuthGuard';
+import Header from '../../components/header-components/Header';
+import AuthGuard from '../../components/shared-components/AuthGuard';
 import { useAtom } from 'jotai';
-import { userAtom } from '../../atoms/user.atom';
+import { userAtom } from '../../lib/atoms/user.atom';
 
 const Explore: NextPage = () => {
   const [user, setUser] = useAtom(userAtom);

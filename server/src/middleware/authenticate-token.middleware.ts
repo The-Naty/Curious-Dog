@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { prisma } from '../database';
+import Boom from '@hapi/boom';
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.cookies['auth'] || req.headers['authorization']?.split(' ')[1];
-    console.log(token);
     if (!token) {
-      throw new Error();
+      throw Boom.unauthorized('authintication token is missing');
     }
 
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY as string) as JwtPayload;
