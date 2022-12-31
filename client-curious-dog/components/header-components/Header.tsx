@@ -11,6 +11,7 @@ import { SiDatadog } from 'react-icons/si';
 interface Props {
   page: string;
 }
+
 const Header = ({ page }: Props) => {
   const [user, setUser] = useAtom(userAtom);
 

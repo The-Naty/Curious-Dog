@@ -8,6 +8,7 @@ interface Props {
   loggedOutRedirectUrl?: string;
   children: JSX.Element | null;
 }
+
 const AuthGuard = ({ loggedInRedirectUrl, loggedOutRedirectUrl, children }: Props): JSX.Element | null => {
   const [user, setUser] = useAtom(userAtom);
   const router = useRouter();
