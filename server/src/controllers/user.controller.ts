@@ -1,7 +1,8 @@
+import { NotFoundError } from '@prisma/client/runtime';
 import { NextFunction, Request, Response } from 'express';
 import { FileService, IFileService } from '../services/file.service';
-import { UserService, IUserService } from '../services/user.service';
-import Boom from '@hapi/boom';
+import { IUserService, UserService } from '../services/user.service';
+
 export interface IUserController {
   uploadPicture(req: Request, res: Response, next: NextFunction): Promise<void>;
   fetchUser(req: Request, res: Response, next: NextFunction): Promise<void>;
@@ -21,9 +22,9 @@ export class UserController implements IUserController {
 
   public fetchUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { user } = req;
-    if (user) {
-      res.status(200).json({ username: user.username, email: user.email, profilePicture: user.profilePicture });
+    if (!user) {
+      throw NotFoundError;
     }
-    throw Boom.notFound('user not found');
+    res.status(200).json({ username: user.username, email: user.email, profilePicture: user.profilePicture });
   };
 }
