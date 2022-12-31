@@ -1,8 +1,41 @@
-import '../styles/globals.scss'
-import type { AppProps } from 'next/app'
+import { AppProps } from 'next/app';
+import { useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ToastContainer } from 'react-toastify';
+import { clearAuthToken, getAuthToken } from '../util/token-storage';
+import { userAtom } from '../lib/atoms/user.atom';
+import { fetchUser } from '../lib/api/user.api';
+import '../styles/globals.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
+const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  const [user, setUser] = useAtom(userAtom);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) {
+        try {
+          const token = getAuthToken();
+          if (token) {
+            const data = await fetchUser();
+            setUser(data);
+          }
+        } catch (err) {
+          clearAuthToken();
+        }
+      }
+    };
+    fetchUserData();
+  }, [user]);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Component {...pageProps} />
+      <ToastContainer />
+    </QueryClientProvider>
+  );
 }
 
-export default MyApp
+export default MyApp;

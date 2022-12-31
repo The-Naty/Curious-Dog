@@ -5,7 +5,7 @@ import { auth } from '../../middleware/authenticate-token.middleware';
 import { upload } from '../../middleware/upload-file.middleware';
 
 class UserRoute implements Route {
-  public path = '/user';
+  public path = '/users';
   public router = Router();
 
   constructor(private userController: IUserController = new UserController()) {
@@ -14,6 +14,7 @@ class UserRoute implements Route {
 
   private initializeRoutes() {
     this.router.put(`${this.path}/profile-picture`, auth, upload.single('profilePicture'), this.userController.uploadPicture);
+    this.router.get('/user', auth, this.userController.fetchUser);
   }
 }
 

@@ -9,13 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.9.10",
     "axios": "^1.2.1",
+    "dotenv": "^16.0.3",
+    "jotai": "^1.12.0",
     "next": "13.0.7",
     "node-sass": "^7.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.41.1",
     "react-icons": "^4.7.1",
-    "react-query": "^3.39.2"
+    "react-query": "^3.39.2",
+    "react-toastify": "^9.1.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "18.11.17",
