@@ -15,4 +15,10 @@ const emailValidationObj = yup
   .required('Email is required.')
   .email('Invalid email format.');
 
-export { passwordValidationObj, emailValidationObj };
+const userNameValidationObj = yup
+  .string()
+  .required('Password is required.')
+  .min(4, 'Minimum username length must be 4 (up to 20).')
+  .max(20, "username length can't exceed 20 charecthers.");
+
+export { passwordValidationObj, emailValidationObj, userNameValidationObj };

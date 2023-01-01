@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import Header from '../components/header-components/Header';
-import LandingLayout from '../components/landingPage/Layout';
+import LandingLayout from '../components/landing-page/Layout';
 import AuthGuard from '../components/shared-components/AuthGuard';
 import { useAtom } from 'jotai';
 import { userAtom } from '../lib/atoms/user.atom';

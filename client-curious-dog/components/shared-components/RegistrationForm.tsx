@@ -1,12 +1,14 @@
-import React from 'react';
-import { userAtom } from '../../lib/atoms/user.atom';
-import { useAtom } from 'jotai';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { emailValidationObj, passwordValidationObj } from '../../lib/validation/shared-validation';
+import * as yup from 'yup';
+import { registerUser } from '../../lib/api/user.api';
+import { userAtom } from '../../lib/atoms/user.atom';
+import { emailValidationObj, passwordValidationObj, userNameValidationObj } from '../../lib/validation/shared-validation';
+import { setAuthToken } from '../../util/token-storage';
 import ValidationError from './ValidationError';
-import { logInUser } from '../../lib/api/user.api';
 
 interface Props {
   openLoginForm: () => void;
@@ -14,7 +16,10 @@ interface Props {
 
 const LoginForm = ({ openLoginForm }: Props) => {
   const [user, setUser] = useAtom(userAtom);
+  const router = useRouter();
+
   const schema = yup.object().shape({
+    username: userNameValidationObj,
     email: emailValidationObj,
     password: passwordValidationObj,
   });
@@ -27,19 +32,23 @@ const LoginForm = ({ openLoginForm }: Props) => {
     shouldFocusError: false,
     resolver: yupResolver(schema),
     defaultValues: {
+      username: '',
       email: '',
       password: '',
     },
   });
 
-  const loginHandler = async (formData: { email: string; password: string }): Promise<void> => {
-    const resData = await logInUser(formData.email, formData.password);
+  const registerHandler = async (formData: { email: string; password: string; username: string }): Promise<void> => {
+    const resData = await registerUser(formData.email, formData.password, formData.username);
+    setAuthToken(resData.token);
     setUser(resData);
   };
 
-  const onSubmit = (data: { email: string; password: string }) => {
-    loginHandler(data);
-  };
+  useEffect(() => {
+    if (user) {
+      router.push('/feed');
+    }
+  }, [router, user]);
 
   return (
     <div className="relative py-3 sm:max-w-xl sm:mx-auto">
@@ -50,7 +59,24 @@ const LoginForm = ({ openLoginForm }: Props) => {
             <h1 className="text-2xl font-semibold text-center">Welcom Aboard</h1>
           </div>
           <div className="divide-y divide-gray-200">
-            <form className="py-8 text-sm  w-full space-y-6 text-gray-700 sm:text-lg sm:leading-10 " onSubmit={handleSubmit(onSubmit)}>
+            <form className="py-8 text-sm  w-full space-y-6 text-gray-700 sm:text-lg sm:leading-10 " onSubmit={handleSubmit(registerHandler)}>
+              <div className="relative">
+                <input
+                  id="username"
+                  type="text"
+                  className="peer text-sm placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
+                  placeholder="User Name"
+                  {...register('username')}
+                />
+                <label
+                  htmlFor="username"
+                  className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
+                >
+                  User Name
+                </label>
+              </div>
+              {errors.username ? <ValidationError msg={errors.username.message} /> : null}
+
               <div className="relative">
                 <input
                   id="email"
@@ -89,7 +115,7 @@ const LoginForm = ({ openLoginForm }: Props) => {
                   type="submit"
                   className="w-full px-6 py-2.5 bg-purple-100 text-black font-medium text-xs leading-tight rounded shadow-md hover:bg-purple-300 hover:shadow-lg focus:bg-purple-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-400 active:shadow-lg transition duration-150 ease-in-out"
                 >
-                  Log in
+                  Register
                 </button>
               </div>
               <p className="text-center text-sm">

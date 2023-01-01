@@ -1,13 +1,11 @@
-import React from 'react';
-import { userAtom } from '../../lib/atoms/user.atom';
-import { useAtom } from 'jotai';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAtom } from 'jotai';
 import { useForm } from 'react-hook-form';
-import { emailValidationObj, passwordValidationObj } from '../../lib/validation/shared-validation';
-import ValidationError from './ValidationError';
+import * as yup from 'yup';
 import { logInUser } from '../../lib/api/user.api';
+import { userAtom } from '../../lib/atoms/user.atom';
 import { setAuthToken } from '../../util/token-storage';
+import ValidationError from './ValidationError';
 
 interface Props {
   openRegisterationForm: () => void;
@@ -17,8 +15,8 @@ const LoginForm = ({ openRegisterationForm }: Props) => {
   const [user, setUser] = useAtom(userAtom);
 
   const schema = yup.object().shape({
-    email: emailValidationObj,
-    password: passwordValidationObj,
+    email: yup.string().required('email is required.'),
+    password: yup.string().required('Password is required.'),
   });
 
   const {
