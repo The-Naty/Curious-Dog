@@ -13,13 +13,16 @@ export class AuthController implements IAuthController {
     const { username, password, email } = req.body;
 
     try {
-      const token = await this.authService.registerUserAndSignToken({
+      const data = await this.authService.registerUserAndSignToken({
         username: username,
         password: password,
         email: email,
       });
 
-      res.status(201).cookie('auth', token, { httpOnly: true }).send(`${username} is successfully registered`);
+      res
+        .status(201)
+        .cookie('auth', data.token, { httpOnly: true })
+        .json({ username: data.newUser.username, email: data.newUser.email, profilePicture: data.newUser.profilePicture, token: data.token });
     } catch (err) {
       next(err);
     }

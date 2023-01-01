@@ -5,14 +5,14 @@ import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from '../common/errors';
 
 export interface IAuthService {
-  registerUserAndSignToken(userData: Partial<User>): Promise<string>;
+  registerUserAndSignToken(userData: Partial<User>): Promise<{ token: string; newUser: User }>;
   loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: User; token: string }>;
 }
 
 export class AuthService implements IAuthService {
   private AUTH_TOKEN_EXPIRY = '7d';
 
-  public async registerUserAndSignToken(userData: Partial<User>): Promise<string> {
+  public async registerUserAndSignToken(userData: Partial<User>): Promise<{ token: string; newUser: User }> {
     const { email, password, username, profilePicture } = userData;
     const hashedPassword = await this.hashPassword(password as string);
     const newUser = await prisma.user.create({
@@ -24,7 +24,9 @@ export class AuthService implements IAuthService {
       } as User,
     });
 
-    return this.generateSignedUserToken(newUser.id);
+    const token = await this.generateSignedUserToken(newUser.id);
+
+    return { token, newUser };
   }
 
   public async loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: User; token: string }> {
