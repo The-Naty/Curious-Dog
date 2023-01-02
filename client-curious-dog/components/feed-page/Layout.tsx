@@ -1,17 +1,13 @@
-import React from 'react';
-import { useQuery } from 'react-query';
-import { fetchQuestions } from '../../lib/api/questions.api';
-import { Question } from '../../lib/interfaces/question.interface';
-import useQuestions from '../../lib/custom-hooks/react-query/uesQuestions';
+import { useQuestions } from '../../lib/hooks/question.hooks';
 
 const Layout = () => {
-  const { data: questionsData, isLoading: questionLoading } = useQuestions(false);
+  const { data: questionsData, isLoading: questionLoading } = useQuestions({ asked: false, limit: 1, page: 1 });
 
   return (
     <div>
       feed Layout
       <div>
-        {questionsData?.map(q => {
+        {questionsData?.questions?.map(q => {
           return <span key={q.id}> {q.body}</span>;
         })}
       </div>

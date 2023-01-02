@@ -1,3 +1,4 @@
+import { Question } from '../interfaces/question.interface';
 import { User } from '../interfaces/user.interface';
 import client from './client';
 
@@ -20,5 +21,10 @@ export const registerUser = async (email: string, password: string, username: st
 
 export const fetchUser = async (): Promise<User> => {
   const response = await client.get<User>(`user/`);
+  return response.data;
+};
+
+export const fetchUserQuestions = async (params?: { asked: boolean; limit: number; page: number }): Promise<{ count: number; questions: Question[] }> => {
+  const response = await client.get<{ count: number; questions: Question[] }>(`users/user/questions`, { params });
   return response.data;
 };

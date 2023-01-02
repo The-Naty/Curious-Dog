@@ -6,7 +6,7 @@ export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
   answerQuestion(questionData: { answer: string; questionId: number; receiverId: number }): Promise<Question>;
   getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number }>;
-  gethCurrentUserQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]>;
+  gethCurrentUserQuestions(receiverId: number, asked: string, limit: number, page: number): Promise<{ questions: Partial<Question>[]; count: number }>;
 }
 
 export class QuestionService implements IQuestionService {
@@ -47,15 +47,28 @@ export class QuestionService implements IQuestionService {
     return { questions: questions.map(this.toDomain), count };
   }
 
-  public async gethCurrentUserQuestions(receiverId: number, asked: string): Promise<Partial<Question>[]> {
+  public async gethCurrentUserQuestions(
+    receiverId: number,
+    asked: string,
+    limit: number,
+    page: number,
+  ): Promise<{ questions: Partial<Question>[]; count: number }> {
+    const offset = limit * (page - 1);
     let questions;
+    let count;
     if (asked === 'true') {
-      questions = await prisma.question.findMany({ where: { OR: [{ receiverId }, { askerId: receiverId }] } });
+      [count, questions] = await Promise.all([
+        prisma.question.count({ where: { OR: [{ receiverId }, { askerId: receiverId }] } }),
+        prisma.question.findMany({ where: { OR: [{ receiverId }, { askerId: receiverId }] }, take: limit, skip: offset }),
+      ]);
     } else {
-      questions = await prisma.question.findMany({ where: { receiverId: receiverId } });
+      [count, questions] = await Promise.all([
+        prisma.question.count({ where: { receiverId: receiverId } }),
+        prisma.question.findMany({ where: { receiverId: receiverId }, take: limit, skip: offset }),
+      ]);
     }
 
-    return questions.map(this.toDomain);
+    return { questions: questions.map(this.toDomain), count };
   }
 
   private toDomain(question: Question): Question {
