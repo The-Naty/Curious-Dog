@@ -25,6 +25,6 @@ export const fetchUser = async (): Promise<User> => {
 };
 
 export const fetchUserQuestions = async (params?: { asked: boolean; limit: number; page: number }): Promise<{ count: number; questions: Question[] }> => {
-  const response = await client.get<{ count: number; questions: Question[] }>(`users/user/questions`, { params });
+  const response = await client.get<{ count: number; questions: Question[] }>(`user/questions`, { params });
   return response.data;
 };

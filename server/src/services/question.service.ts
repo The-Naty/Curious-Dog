@@ -6,7 +6,12 @@ export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
   answerQuestion(questionData: { answer: string; questionId: number; receiverId: number }): Promise<Question>;
   getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number }>;
-  gethCurrentUserQuestions(receiverId: number, asked: string, limit: number, page: number): Promise<{ questions: Partial<Question>[]; count: number }>;
+  getCurrentUserQuestions(params: {
+    receiverId: number;
+    asked: string;
+    limit: number;
+    page: number;
+  }): Promise<{ questions: Partial<Question>[]; count: number }>;
 }
 
 export class QuestionService implements IQuestionService {
@@ -47,12 +52,13 @@ export class QuestionService implements IQuestionService {
     return { questions: questions.map(this.toDomain), count };
   }
 
-  public async gethCurrentUserQuestions(
-    receiverId: number,
-    asked: string,
-    limit: number,
-    page: number,
-  ): Promise<{ questions: Partial<Question>[]; count: number }> {
+  public async getCurrentUserQuestions(params: {
+    receiverId: number;
+    asked: string;
+    limit: number;
+    page: number;
+  }): Promise<{ questions: Partial<Question>[]; count: number }> {
+    const { limit, page, asked, receiverId } = params;
     const offset = limit * (page - 1);
     let questions;
     let count;

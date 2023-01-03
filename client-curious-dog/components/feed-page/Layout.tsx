@@ -1,7 +1,7 @@
 import { useQuestions } from '../../lib/hooks/question.hooks';
 
 const Layout = () => {
-  const { data: questionsData, isLoading: questionLoading } = useQuestions({ asked: false, limit: 1, page: 1 });
+  const { data: questionsData, isLoading: questionLoading } = useQuestions({ asked: false, limit: 3, page: 1 });
 
   return (
     <div>
