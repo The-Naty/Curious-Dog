@@ -5,14 +5,14 @@ import QuestionCardPlaceholder from '../shared-components/placeholders/QuestionC
 
 const Layout = () => {
   const limit = 13;
-  const { data: questionsData, isLoading: questionLoading } = useQuestions({ asked: false, limit: limit, page: 1 });
+  const { data: questionsData, isLoading: questionLoading, refetch: questionsRefetch } = useQuestions({ asked: false, limit: limit, page: 1 });
 
   return (
     <>
       {questionLoading
         ? renderPlaceholders(limit, <QuestionCardPlaceholder />)
         : questionsData?.questions?.map(question => {
-            return <QuestionCard key={question.id} question={question} />;
+            return <QuestionCard key={question.id} question={question} refetch={questionsRefetch} />;
           })}
     </>
   );

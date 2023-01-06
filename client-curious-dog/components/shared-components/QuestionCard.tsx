@@ -3,16 +3,40 @@ import { Question } from '../../lib/interfaces/question.interface';
 import { User } from '../../lib/interfaces/user.interface';
 import { useAtom } from 'jotai';
 import { userAtom } from '../../lib/atoms/user.atom';
+import LoadingSpinner from './LoadingSpinner';
+import { answerQuestion } from '../../lib/api/questions.api';
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from 'react-query';
 
 interface Props {
   question: Question & { asker: User | null };
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<
+    QueryObserverResult<
+      {
+        count: number;
+        questions: (Question & {})[];
+      },
+      unknown
+    >
+  >;
 }
 
-const QuestionCard = ({ question }: Props) => {
-  const [showReplyForm, setShowReplyForm] = useState<boolean>(false);
+const QuestionCard = ({ question, refetch }: Props) => {
   const [user, setUser] = useAtom(userAtom);
+  const [showReplyForm, setShowReplyForm] = useState<boolean>(false);
+  const [replyText, setReplyText] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const submitAnswerHandler = () => {};
+  const typeAnserHandler = (e: React.ChangeEvent<EventTarget>) => {
+    setReplyText((e.target as HTMLInputElement).value);
+  };
+  const submitAnswerHandler = async (e: React.MouseEvent<EventTarget>) => {
+    setLoading(true);
+    await answerQuestion({ id: question.id, answer: replyText });
+    refetch();
+    setLoading(false);
+  };
 
   return (
     <div className="flex justify-center my-4">
@@ -90,7 +114,7 @@ const QuestionCard = ({ question }: Props) => {
               </button>
             </div>
           )}
-          {showReplyForm ? (
+          {showReplyForm && !question.answer ? (
             <>
               <div className="mt-3 w-full">
                 <div className="mb-3">
@@ -99,13 +123,17 @@ const QuestionCard = ({ question }: Props) => {
                     id={`Reply text ${question.id}`}
                     rows={4}
                     placeholder="Your answer"
-                  ></textarea>
+                    onChange={e => typeAnserHandler(e)}
+                  />
                 </div>
                 <button
-                  className="bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded text-xs w-full"
-                  onClick={submitAnswerHandler}
+                  className={`bg-transparent enabled:hover:bg-indigo-500 text-indigo-700 font-semibold enabled:hover:text-white py-2 px-4 border border-indigo-500 enabled:hover:border-transparent rounded text-xs w-full ${
+                    loading ? '' : 'disabled:opacity-25'
+                  }`}
+                  onClick={e => submitAnswerHandler(e)}
+                  disabled={replyText.length + 1 < 2 || loading}
                 >
-                  Submit your answer
+                  {loading ? <LoadingSpinner /> : 'Submit your reply'}
                 </button>
               </div>
             </>
