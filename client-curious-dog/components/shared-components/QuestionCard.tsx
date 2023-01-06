@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Question } from '../../lib/interfaces/question.interface';
 import { User } from '../../lib/interfaces/user.interface';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../lib/atoms/user.atom';
 
 interface Props {
   question: Question & { asker: User | null };
@@ -8,6 +10,7 @@ interface Props {
 
 const QuestionCard = ({ question }: Props) => {
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false);
+  const [user, setUser] = useAtom(userAtom);
 
   const submitAnswerHandler = () => {};
 
@@ -23,8 +26,8 @@ const QuestionCard = ({ question }: Props) => {
                     className="rounded-full"
                     src={`${question.asker.profilePicture ? question.asker.profilePicture : '/static/placeholder.jpeg'}`}
                     style={{ objectFit: 'contain' }}
-                    width={100}
-                    height={100}
+                    width={50}
+                    height={50}
                   />
                 </div>
                 <div className="flex flex-col ml-2 justify-end h-full">
@@ -33,7 +36,7 @@ const QuestionCard = ({ question }: Props) => {
                 </div>
               </div>
               <div className="flex flex-col">
-                {question.askerId === question.receiverId ? (
+                {question.askerId === user.id ? (
                   <div>
                     <span className="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-gray-200 text-gray-700 rounded-full">
                       Asked by you
@@ -62,8 +65,8 @@ const QuestionCard = ({ question }: Props) => {
                   className="rounded-full"
                   src={'/static/curious_dog_temp.jpg'}
                   style={{ objectFit: 'contain' }}
-                  width={100}
-                  height={100}
+                  width={50}
+                  height={50}
                   alt="ananomys temp"
                 />
               </div>
@@ -94,7 +97,7 @@ const QuestionCard = ({ question }: Props) => {
                   <textarea
                     className="w-full px-3 py-1.5 text-base font-normal text-gray-700 border border-solid border-gray-300 rounded m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none"
                     id={`Reply text ${question.id}`}
-                    rows={3}
+                    rows={4}
                     placeholder="Your answer"
                   ></textarea>
                 </div>

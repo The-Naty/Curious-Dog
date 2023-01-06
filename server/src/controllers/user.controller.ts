@@ -25,6 +25,6 @@ export class UserController implements IUserController {
     if (!user) {
       throw NotFoundError;
     }
-    res.status(200).json({ username: user.username, email: user.email, profilePicture: user.profilePicture });
+    res.status(200).json({ id: user.id, username: user.username, email: user.email, profilePicture: user.profilePicture });
   };
 }

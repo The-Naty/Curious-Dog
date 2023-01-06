@@ -19,10 +19,13 @@ export class AuthController implements IAuthController {
         email: email,
       });
 
-      res
-        .status(201)
-        .cookie('auth', data.token, { httpOnly: true })
-        .json({ username: data.newUser.username, email: data.newUser.email, profilePicture: data.newUser.profilePicture, token: data.token });
+      res.status(201).cookie('auth', data.token, { httpOnly: true }).json({
+        id: data.newUser.id,
+        username: data.newUser.username,
+        email: data.newUser.email,
+        profilePicture: data.newUser.profilePicture,
+        token: data.token,
+      });
     } catch (err) {
       next(err);
     }
@@ -41,7 +44,7 @@ export class AuthController implements IAuthController {
       res
         .status(200)
         .cookie('auth', data.token, { httpOnly: true })
-        .json({ username: data.user.username, email: data.user.email, profilePicture: data.user.profilePicture, token: data.token });
+        .json({ id: data.user.id, username: data.user.username, email: data.user.email, profilePicture: data.user.profilePicture, token: data.token });
     } catch (err) {
       next(err);
     }
