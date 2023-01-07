@@ -1,40 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Question } from '../../lib/interfaces/question.interface';
-import { User } from '../../lib/interfaces/user.interface';
 import { useAtom } from 'jotai';
-import { userAtom } from '../../lib/atoms/user.atom';
-import LoadingSpinner from './LoadingSpinner';
-import { answerQuestion } from '../../lib/api/questions.api';
+import React, { useState } from 'react';
 import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from 'react-query';
+import { answerQuestion } from '../../lib/api/questions.api';
+import { userAtom } from '../../lib/atoms/user.atom';
+import { Question } from '../../lib/interfaces/question.interface';
+import { QuestionWithAsker } from '../../lib/types/question-with-user.type';
+import LoadingSpinner from './LoadingSpinner';
 
 interface Props {
-  question: Question & { asker: User | null };
-  refetch: <TPageData>(
-    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
-  ) => Promise<
-    QueryObserverResult<
-      {
-        count: number;
-        questions: (Question & {})[];
-      },
-      unknown
-    >
-  >;
+  question: QuestionWithAsker;
+  onQuestionAnswered: (question: Question) => void;
 }
 
-const QuestionCard = ({ question, refetch }: Props) => {
+const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
   const [user, setUser] = useAtom(userAtom);
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false);
   const [replyText, setReplyText] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const typeAnserHandler = (e: React.ChangeEvent<EventTarget>) => {
+  const typeAnswerHandler = (e: React.ChangeEvent<EventTarget>) => {
     setReplyText((e.target as HTMLInputElement).value);
   };
+
   const submitAnswerHandler = async (e: React.MouseEvent<EventTarget>) => {
     setLoading(true);
-    await answerQuestion({ id: question.id, answer: replyText });
-    refetch();
+    const answeredQuestion = await answerQuestion({ id: question.id, answer: replyText });
+    onQuestionAnswered(answeredQuestion);
     setLoading(false);
   };
 
@@ -123,14 +114,14 @@ const QuestionCard = ({ question, refetch }: Props) => {
                     id={`Reply text ${question.id}`}
                     rows={4}
                     placeholder="Your answer"
-                    onChange={e => typeAnserHandler(e)}
+                    onChange={typeAnswerHandler}
                   />
                 </div>
                 <button
                   className={`bg-transparent enabled:hover:bg-indigo-500 text-indigo-700 font-semibold enabled:hover:text-white py-2 px-4 border border-indigo-500 enabled:hover:border-transparent rounded text-xs w-full ${
                     loading ? '' : 'disabled:opacity-25'
                   }`}
-                  onClick={e => submitAnswerHandler(e)}
+                  onClick={submitAnswerHandler}
                   disabled={replyText.length + 1 < 2 || loading}
                 >
                   {loading ? <LoadingSpinner /> : 'Submit your reply'}

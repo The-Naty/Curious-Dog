@@ -11,7 +11,7 @@ export interface IQuestionService {
     asked: string;
     limit: number;
     page: number;
-  }): Promise<{ questions: Partial<Question & { asker: User | null }>[]; count: number }>;
+  }): Promise<{ questions: Partial<Question & { asker: User | null }>[]; count: number; limit: number }>;
 }
 
 export class QuestionService implements IQuestionService {
@@ -57,7 +57,7 @@ export class QuestionService implements IQuestionService {
     asked: string;
     limit: number;
     page: number;
-  }): Promise<{ questions: Partial<Question & { asker: User | null }>[]; count: number }> {
+  }): Promise<{ questions: Partial<Question & { asker: User | null }>[]; count: number; limit: number }> {
     const { limit, page, asked, receiverId } = params;
     const offset = limit * (page - 1);
     let questions;
@@ -74,7 +74,7 @@ export class QuestionService implements IQuestionService {
       ]);
     }
 
-    return { questions: questions.map(this.toDomain), count };
+    return { questions: questions.map(this.toDomain), count, limit };
   }
 
   private toDomain(question: Question & { asker: User | null }): Question & { asker: User | null } {

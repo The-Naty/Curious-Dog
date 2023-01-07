@@ -50,7 +50,7 @@ export class QuestionController implements IQuestionController {
   public fetchCurrentUserQuestions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const receiverId = req.user.id;
     const asked = req.query.asked as unknown as string;
-    const page = parseInt(req.query.page as unknown as string);
+    const page = parseInt(req.query.PageParams as unknown as string);
     const limit = parseInt(req.query.limit as unknown as string);
 
     try {

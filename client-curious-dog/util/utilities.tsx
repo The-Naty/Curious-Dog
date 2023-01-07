@@ -1,5 +1,5 @@
-const renderPlaceholders = (limit: number, placeholder_component: React.ReactNode) => {
-  return Array(limit).fill(placeholder_component);
+const renderPlaceholders = (limit: number, placeholderComponent: React.ReactNode) => {
+  return Array(limit).fill(placeholderComponent);
 };
 
 export { renderPlaceholders };
