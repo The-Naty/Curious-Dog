@@ -51,7 +51,7 @@ const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
                 </div>
               </div>
               <div className="flex flex-col">
-                {question.askerId === user.id ? (
+                {question.askerId === user?.id ? (
                   <div>
                     <span className="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-gray-200 text-gray-700 rounded-full">
                       Asked by you
