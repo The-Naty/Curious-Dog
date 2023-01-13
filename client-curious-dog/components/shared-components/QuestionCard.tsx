@@ -14,7 +14,7 @@ interface Props {
 
 const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false);
-  const [replyText, setReplyText] = useState<string>('');
+  const [replyText, setReplyText] = useState<string>(question.answer || '');
   const [loading, setLoading] = useState<boolean>(false);
 
   const typeAnswerHandler = (e: React.ChangeEvent<EventTarget>) => {
@@ -24,11 +24,13 @@ const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
   const showFormHandler = () => {
     setShowReplyForm(prevValue => !prevValue);
   };
+
   const submitAnswerHandler = async (e: React.MouseEvent<EventTarget>) => {
     setLoading(true);
     const answeredQuestion = await answerQuestion({ id: question.id, answer: replyText });
     onQuestionAnswered(answeredQuestion);
     setLoading(false);
+    setShowReplyForm(false);
   };
 
   return (
@@ -41,21 +43,12 @@ const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
             answer={question.answer}
             questionId={question.id}
             showForm={showReplyForm}
-            showFormHandler={showFormHandler}
             replyText={replyText}
+            loading={loading}
+            showFormHandler={showFormHandler}
             typeAnswerHandler={typeAnswerHandler}
+            submitAnswerHandler={submitAnswerHandler}
           />
-          {showReplyForm && !question.answer ? (
-            <button
-              className={`bg-transparent enabled:hover:bg-indigo-500 text-indigo-700 font-semibold enabled:hover:text-white py-2 px-4 border border-indigo-500 enabled:hover:border-transparent rounded text-xs w-full ${
-                loading ? '' : 'disabled:opacity-25'
-              }`}
-              onClick={submitAnswerHandler}
-              disabled={!replyText.length || loading}
-            >
-              {loading ? <LoadingSpinner /> : 'Submit your reply'}
-            </button>
-          ) : null}
           <div className="py-3">
             <p className="text-gray-600 text-xs my-2">Last updated {computeUpdateAt(question.updatedAt)}</p>
           </div>

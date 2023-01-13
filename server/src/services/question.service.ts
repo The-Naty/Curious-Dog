@@ -65,12 +65,18 @@ export class QuestionService implements IQuestionService {
     if (asked === 'true') {
       [count, questions] = await Promise.all([
         prisma.question.count({ where: { OR: [{ receiverId }, { askerId: receiverId }] } }),
-        prisma.question.findMany({ where: { OR: [{ receiverId }, { askerId: receiverId }] }, take: limit, skip: offset, include: { asker: true } }),
+        prisma.question.findMany({
+          where: { OR: [{ receiverId }, { askerId: receiverId }] },
+          take: limit,
+          skip: offset,
+          include: { asker: true },
+          orderBy: { updatedAt: 'desc' },
+        }),
       ]);
     } else {
       [count, questions] = await Promise.all([
         prisma.question.count({ where: { receiverId: receiverId } }),
-        prisma.question.findMany({ where: { receiverId: receiverId }, take: limit, skip: offset, include: { asker: true } }),
+        prisma.question.findMany({ where: { receiverId: receiverId }, take: limit, skip: offset, include: { asker: true }, orderBy: { updatedAt: 'desc' } }),
       ]);
     }
 

@@ -1,16 +1,19 @@
 import React from 'react';
 import { QuestionWithAsker } from '../../lib/types/question-with-user.type';
+import LoadingSpinner from './LoadingSpinner';
 
 interface Props {
   answer?: string;
   questionId: number;
   showForm: boolean;
   replyText: string;
+  loading: boolean;
   showFormHandler: () => void;
   typeAnswerHandler: (e: React.ChangeEvent<EventTarget>) => void;
+  submitAnswerHandler: (e: React.MouseEvent<EventTarget>) => void;
 }
 
-const QuestionCardAnswerContainer = ({ answer, questionId, showForm, showFormHandler, replyText, typeAnswerHandler }: Props) => {
+const QuestionCardAnswerContainer = ({ answer, questionId, showForm, replyText, loading, showFormHandler, typeAnswerHandler, submitAnswerHandler }: Props) => {
   return (
     <>
       {answer ? (
@@ -18,17 +21,16 @@ const QuestionCardAnswerContainer = ({ answer, questionId, showForm, showFormHan
           <p className="flex justify-center	border-t border-b border-indigo-500"> answer </p>
           <p className="mt-3">{answer}</p>
         </>
-      ) : (
-        <div className="flex justify-end">
-          <button
-            className="bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded text-xs"
-            onClick={showFormHandler}
-          >
-            Reply
-          </button>
-        </div>
-      )}
-      {showForm && !answer ? (
+      ) : null}
+      <div className="flex justify-end">
+        <button
+          className="bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded text-xs"
+          onClick={showFormHandler}
+        >
+          {answer ? 'edit' : 'reply'}
+        </button>
+      </div>
+      {showForm ? (
         <>
           <div className="mt-3 w-full">
             <div className="mb-3">
@@ -41,6 +43,15 @@ const QuestionCardAnswerContainer = ({ answer, questionId, showForm, showFormHan
                 onChange={typeAnswerHandler}
               />
             </div>
+            <button
+              className={`bg-transparent enabled:hover:bg-indigo-500 text-indigo-700 font-semibold enabled:hover:text-white py-2 px-4 border border-indigo-500 enabled:hover:border-transparent rounded text-xs w-full ${
+                loading ? '' : 'disabled:opacity-25'
+              }`}
+              onClick={submitAnswerHandler}
+              disabled={answer ? replyText.length === answer?.length : !replyText.length || loading}
+            >
+              {loading ? <LoadingSpinner /> : answer ? 'Update your reply' : 'Submit your reply'}
+            </button>
           </div>
         </>
       ) : null}
