@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { answerQuestion } from '../../lib/api/questions.api';
 import { Question } from '../../lib/interfaces/question.interface';
 import { QuestionWithAsker } from '../../lib/types/question-with-user.type';
 import { computeUpdateAt } from '../../util/utilities';
-import LoadingSpinner from './LoadingSpinner';
 import QuestionCardAnswerContainer from './QuestionCardAnswerContainer';
 import QuestionCardHeader from './QuestionCardHeader';
 
@@ -33,6 +32,8 @@ const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
     setShowReplyForm(false);
   };
 
+  const updatedAdd = useMemo(() => computeUpdateAt(question.updatedAt), [question.updatedAt]);
+
   return (
     <div className="flex justify-center my-4">
       <div className="flex flex-col  md:max-w-xl rounded-lg bg-white shadow-lg w-full border-solid border-l-2 border-indigo-400">
@@ -50,7 +51,7 @@ const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
             submitAnswerHandler={submitAnswerHandler}
           />
           <div className="py-3">
-            <p className="text-gray-600 text-xs my-2">Last updated {computeUpdateAt(question.updatedAt)}</p>
+            <p className="text-gray-600 text-xs my-2">Last updated {updatedAdd}</p>
           </div>
         </div>
         <hr className="w-full" />

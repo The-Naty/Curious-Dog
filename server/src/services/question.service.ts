@@ -70,13 +70,13 @@ export class QuestionService implements IQuestionService {
           take: limit,
           skip: offset,
           include: { asker: true },
-          orderBy: { updatedAt: 'desc' },
+          orderBy: { createdAt: 'desc' },
         }),
       ]);
     } else {
       [count, questions] = await Promise.all([
         prisma.question.count({ where: { receiverId: receiverId } }),
-        prisma.question.findMany({ where: { receiverId: receiverId }, take: limit, skip: offset, include: { asker: true }, orderBy: { updatedAt: 'desc' } }),
+        prisma.question.findMany({ where: { receiverId: receiverId }, take: limit, skip: offset, include: { asker: true }, orderBy: { createdAt: 'desc' } }),
       ]);
     }
 

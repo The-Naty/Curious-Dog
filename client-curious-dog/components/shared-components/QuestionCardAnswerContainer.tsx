@@ -14,6 +14,8 @@ interface Props {
 }
 
 const QuestionCardAnswerContainer = ({ answer, questionId, showForm, replyText, loading, showFormHandler, typeAnswerHandler, submitAnswerHandler }: Props) => {
+  const disableSubmit = answer ? replyText.length === answer?.length : !replyText.length;
+
   return (
     <>
       {answer ? (
@@ -48,7 +50,7 @@ const QuestionCardAnswerContainer = ({ answer, questionId, showForm, replyText, 
                 loading ? '' : 'disabled:opacity-25'
               }`}
               onClick={submitAnswerHandler}
-              disabled={answer ? replyText.length === answer?.length : !replyText.length || loading}
+              disabled={disableSubmit || loading}
             >
               {loading ? <LoadingSpinner /> : answer ? 'Update your reply' : 'Submit your reply'}
             </button>
