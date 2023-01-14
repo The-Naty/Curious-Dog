@@ -49,9 +49,17 @@ export class QuestionController implements IQuestionController {
 
   public fetchCurrentUserQuestions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const receiverId = req.user.id;
-    const { asked } = req.query;
+    const asked = req.query.asked as unknown as string;
+    const page = parseInt(req.query.PageParams as unknown as string);
+    const limit = parseInt(req.query.limit as unknown as string);
+
     try {
-      const questions = await this.questionService.gethCurrentUserQuestions(receiverId, asked as unknown as string);
+      const questions = await this.questionService.getCurrentUserQuestions({
+        receiverId,
+        asked,
+        limit,
+        page,
+      });
       res.status(200).send(questions);
     } catch (err) {
       next(err);
