@@ -36,3 +36,15 @@ export const fetchUserQuestions = async (
   });
   return response.data;
 };
+
+export const fetchAllQuestions = async (
+  PageParams: number,
+  params?: {
+    limit: number;
+  },
+): Promise<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }> => {
+  const response = await client.get<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }>(`questions`, {
+    params: { ...params, PageParams },
+  });
+  return response.data;
+};

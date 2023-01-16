@@ -5,7 +5,7 @@ import { prisma } from '../database';
 export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
   answerQuestion(questionData: { answer: string; questionId: number; receiverId: number }): Promise<Question>;
-  getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number }>;
+  getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number; limit: number }>;
   getCurrentUserQuestions(params: {
     receiverId: number;
     asked: string;
@@ -45,11 +45,14 @@ export class QuestionService implements IQuestionService {
     });
   }
 
-  public async getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number }> {
+  public async getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number; limit: number }> {
     const offset = limit * (page - 1);
-    const [count, questions] = await Promise.all([prisma.question.count(), prisma.question.findMany({ take: limit, skip: offset, include: { asker: true } })]);
+    const [count, questions] = await Promise.all([
+      prisma.question.count(),
+      prisma.question.findMany({ take: limit, skip: offset, include: { asker: true }, orderBy: { createdAt: 'desc' } }),
+    ]);
 
-    return { questions: questions.map(this.toDomain), count };
+    return { questions: questions.map(this.toDomain), count, limit };
   }
 
   public async getCurrentUserQuestions(params: {

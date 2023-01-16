@@ -1,5 +1,4 @@
 import React from 'react';
-import { QuestionWithAsker } from '../../lib/types/question-with-user.type';
 import LoadingSpinner from './LoadingSpinner';
 
 interface Props {

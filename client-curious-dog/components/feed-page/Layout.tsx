@@ -1,17 +1,15 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
-
-import { useQuestions } from '../../lib/hooks/question.hooks';
+import { useMyQuestions } from '../../lib/hooks/question.hooks';
 import { renderPlaceholders } from '../../util/utilities';
 import QuestionCard from '../shared-components/QuestionCard';
 import QuestionCardPlaceholder from '../shared-components/placeholders/QuestionCardPlaceholder';
 
 const Layout = () => {
   const limit = 3;
-  const { data: questionsData, isLoading: questionLoading, refetch: questionsRefetch, hasNextPage, fetchNextPage, isFetchingNextPage } = useQuestions({
+  const { data: questionsData, isLoading: questionLoading, refetch: questionsRefetch, hasNextPage, fetchNextPage, isFetchingNextPage } = useMyQuestions({
     asked: false,
     limit: limit,
-    page: 1,
   });
   useBottomScrollListener(
     useCallback(async () => {
