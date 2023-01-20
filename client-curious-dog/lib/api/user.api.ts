@@ -42,8 +42,8 @@ export const fetchAllQuestions = async (
   params?: {
     limit: number;
   },
-): Promise<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }> => {
-  const response = await client.get<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }>(`questions`, {
+): Promise<{ limit: number; count: number; questions: (Question & { asker: User | null } & { receiver: User })[] }> => {
+  const response = await client.get<{ limit: number; count: number; questions: (Question & { asker: User | null } & { receiver: User })[] }>(`questions`, {
     params: { ...params, PageParams },
   });
   return response.data;

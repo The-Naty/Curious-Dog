@@ -6,12 +6,11 @@ export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
   answerQuestion(questionData: { answer: string; questionId: number; receiverId: number }): Promise<Question>;
   getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number; limit: number }>;
-  getCurrentUserQuestions(params: {
-    receiverId: number;
-    asked: string;
+  getCurrentUserQuestions(params: { receiverId: number; asked: string; limit: number; page: number }): Promise<{
+    questions: Partial<Question & { asker: { username: string; email: string; profilePicture: string | null } | null }>[];
+    count: number;
     limit: number;
-    page: number;
-  }): Promise<{ questions: Partial<Question & { asker: User | null }>[]; count: number; limit: number }>;
+  }>;
 }
 
 export class QuestionService implements IQuestionService {
@@ -49,18 +48,25 @@ export class QuestionService implements IQuestionService {
     const offset = limit * (page - 1);
     const [count, questions] = await Promise.all([
       prisma.question.count(),
-      prisma.question.findMany({ take: limit, skip: offset, include: { asker: true }, orderBy: { createdAt: 'desc' } }),
+      prisma.question.findMany({
+        take: limit,
+        skip: offset,
+        include: {
+          asker: { select: { username: true, email: true, profilePicture: true } },
+          receiver: { select: { username: true, email: true, profilePicture: true } },
+        },
+        orderBy: { updatedAt: 'desc' },
+      }),
     ]);
 
     return { questions: questions.map(this.toDomain), count, limit };
   }
 
-  public async getCurrentUserQuestions(params: {
-    receiverId: number;
-    asked: string;
+  public async getCurrentUserQuestions(params: { receiverId: number; asked: string; limit: number; page: number }): Promise<{
+    questions: Partial<Question & { asker: { username: string; email: string; profilePicture: string | null } | null }>[];
+    count: number;
     limit: number;
-    page: number;
-  }): Promise<{ questions: Partial<Question & { asker: User | null }>[]; count: number; limit: number }> {
+  }> {
     const { limit, page, asked, receiverId } = params;
     const offset = limit * (page - 1);
     let questions;
@@ -72,21 +78,29 @@ export class QuestionService implements IQuestionService {
           where: { OR: [{ receiverId }, { askerId: receiverId }] },
           take: limit,
           skip: offset,
-          include: { asker: true },
+          include: { asker: { select: { username: true, email: true, profilePicture: true } } },
           orderBy: { createdAt: 'desc' },
         }),
       ]);
     } else {
       [count, questions] = await Promise.all([
         prisma.question.count({ where: { receiverId: receiverId } }),
-        prisma.question.findMany({ where: { receiverId: receiverId }, take: limit, skip: offset, include: { asker: true }, orderBy: { createdAt: 'desc' } }),
+        prisma.question.findMany({
+          where: { receiverId: receiverId },
+          take: limit,
+          skip: offset,
+          include: { asker: { select: { username: true, email: true, profilePicture: true } } },
+          orderBy: { createdAt: 'desc' },
+        }),
       ]);
     }
 
     return { questions: questions.map(this.toDomain), count, limit };
   }
 
-  private toDomain(question: Question & { asker: User | null }): Question & { asker: User | null } {
+  private toDomain(
+    question: Question & { asker: { username: string; email: string; profilePicture: string | null } | null },
+  ): Question & { asker: { username: string; email: string; profilePicture: string | null } | null } {
     return question.isAnonymous ? { ...question, askerId: null, asker: null } : question;
   }
 }
