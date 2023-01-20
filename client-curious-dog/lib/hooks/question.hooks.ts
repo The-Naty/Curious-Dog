@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from 'react-query';
-import { fetchAllQuestions, fetchUserQuestions } from '../api/user.api';
+import { fetchUserQuestions } from '../api/user.api';
+import { fetchAllQuestions } from '../api/questions.api';
 
 export const useMyQuestions = (params?: { asked: boolean; limit: number }) =>
   useInfiniteQuery(['user', 'questions', params], ({ pageParam = 1 }) => fetchUserQuestions(pageParam, params), {

@@ -20,7 +20,7 @@ const QuestionCardAnswerContainer = ({ answer, questionId, showForm, replyText, 
       {answer ? (
         <>
           <p className="flex justify-center	border-t border-b border-indigo-500"> answer </p>
-          <p className="mt-3">{answer}</p>
+          <p className="my-3 break-all">{answer}</p>
         </>
       ) : null}
       <div className="flex justify-end">

@@ -57,10 +57,10 @@ const GlobalQuestionCard = ({ question, onQuestionAnswered }: Props) => {
               submitAnswerHandler={submitAnswerHandler}
             />
           ) : question.answer ? (
-            <>
+            <div className="mb-3">
               <p className="flex justify-center	border-t border-b border-indigo-500"> answer </p>
-              <p className="mt-3">{question.answer}</p>
-            </>
+              <p className="break-all my-3">{question.answer}</p>
+            </div>
           ) : null}
 
           <div className="py-3">

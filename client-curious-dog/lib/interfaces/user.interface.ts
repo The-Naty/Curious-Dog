@@ -4,4 +4,5 @@ export interface User {
   email: string;
   profilePicture?: string;
   token?: string;
+  _count?: { receivedQuestions: number };
 }

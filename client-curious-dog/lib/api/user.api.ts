@@ -37,14 +37,7 @@ export const fetchUserQuestions = async (
   return response.data;
 };
 
-export const fetchAllQuestions = async (
-  PageParams: number,
-  params?: {
-    limit: number;
-  },
-): Promise<{ limit: number; count: number; questions: (Question & { asker: User | null } & { receiver: User })[] }> => {
-  const response = await client.get<{ limit: number; count: number; questions: (Question & { asker: User | null } & { receiver: User })[] }>(`questions`, {
-    params: { ...params, PageParams },
-  });
+export const fetchFeaturedUsers = async (): Promise<Partial<User>[]> => {
+  const response = await client.get<Partial<User>[]>(`users/featured`, {});
   return response.data;
 };

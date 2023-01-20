@@ -2,7 +2,7 @@ import React from 'react';
 import { User } from '../../lib/interfaces/user.interface';
 
 interface Props {
-  receiver?: User | null;
+  receiver: User | null;
 }
 const ReceiverHeader = ({ receiver }: Props) => {
   return (

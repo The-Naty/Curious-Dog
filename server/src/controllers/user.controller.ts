@@ -2,10 +2,12 @@ import { NotFoundError } from '@prisma/client/runtime';
 import { NextFunction, Request, Response } from 'express';
 import { FileService, IFileService } from '../services/file.service';
 import { IUserService, UserService } from '../services/user.service';
+import { User } from '@prisma/client';
 
 export interface IUserController {
   uploadPicture(req: Request, res: Response, next: NextFunction): Promise<void>;
   fetchUser(req: Request, res: Response, next: NextFunction): Promise<void>;
+  fetchFeatuedUsers(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 
 export class UserController implements IUserController {
@@ -26,5 +28,10 @@ export class UserController implements IUserController {
       throw NotFoundError;
     }
     res.status(200).json({ id: user.id, username: user.username, email: user.email, profilePicture: user.profilePicture });
+  };
+
+  public fetchFeatuedUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const featuredUsers = await this.userService.getFeaturedUsers();
+    res.status(200).json(featuredUsers);
   };
 }
