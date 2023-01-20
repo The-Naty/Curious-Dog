@@ -20,7 +20,7 @@ export class UserService implements IUserService {
     return prisma.user.findMany({
       select: { username: true, email: true, profilePicture: true, _count: { select: { receivedQuestions: true } } },
       orderBy: { receivedQuestions: { _count: 'desc' } },
-      take: 10,
+      take: 8,
     });
   }
 }

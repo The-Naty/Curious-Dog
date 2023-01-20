@@ -6,15 +6,19 @@ interface Props {
   featuredUsers?: Partial<User>[];
 }
 const FeaturedList = ({ featuredUsers }: Props) => {
-  console.log(featuredUsers);
   return (
-    <div className="overflow-x-auto m-4 scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded ">
-      <div className="flex ">
-        {featuredUsers?.map(user => {
-          return <FeaturedListItem key={user.username} featuredUser={user} />;
-        })}
+    <>
+      <h2 className="text-center">Checek out our users with the most question</h2>
+      <div className="grid grid-rows-1 grid-cols-12 w-full ">
+        <div className="col-start-3 col-end-11 mb-4 mt-8 w-full pb-2 overflow-x-auto overflow-y-none m-4 mb-0 scrollbar-thin scrollbar-thumb-indigo-400 scrollbar-rounded">
+          <div className="flex ">
+            {featuredUsers?.map(user => {
+              return <FeaturedListItem key={user.username} featuredUser={user} />;
+            })}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
