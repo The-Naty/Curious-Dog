@@ -6,6 +6,7 @@ import GlobalQuestionCard from '../shared-components/GlobalQuestionCard';
 import QuestionCardPlaceholder from '../shared-components/placeholders/QuestionCardPlaceholder';
 import FeaturedList from '../shared-components/FeaturedList';
 import { useFeaturedUsers } from '../../lib/hooks/user.hooks';
+import FeaturedListItemPlaceHolder from '../shared-components/placeholders/FeaturedListItemPlaceHolder';
 
 const Layout = () => {
   const limit = 5;
@@ -33,7 +34,7 @@ const Layout = () => {
 
   return (
     <>
-      {featuredUsersLoading ? renderPlaceholders(1, <QuestionCardPlaceholder />) : <FeaturedList featuredUsers={featuredUsersData} />}
+      {featuredUsersLoading ? renderPlaceholders(1, <FeaturedListItemPlaceHolder />) : <FeaturedList featuredUsers={featuredUsersData} />}
 
       {globalQuestionsLoading
         ? renderPlaceholders(limit, <QuestionCardPlaceholder />)
