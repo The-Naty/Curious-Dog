@@ -29,6 +29,8 @@ export const fetchUserQuestions = async (
   params?: {
     asked: boolean;
     limit: number;
+    followingRecived: boolean;
+    followingAsked: boolean;
   },
 ): Promise<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }> => {
   const response = await client.get<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }>(`user/questions`, {

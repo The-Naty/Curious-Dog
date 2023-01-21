@@ -45,23 +45,18 @@ const GlobalQuestionCard = ({ question, onQuestionAnswered }: Props) => {
           <QuestionCardHeader question={question} />
 
           <p className="text-gray-700 text-base my-4">{question.body}</p>
-          {question.receiverId === user?.id ? (
-            <QuestionCardAnswerContainer
-              answer={question.answer}
-              questionId={question.id}
-              showForm={showReplyForm}
-              replyText={replyText}
-              loading={loading}
-              showFormHandler={showFormHandler}
-              typeAnswerHandler={typeAnswerHandler}
-              submitAnswerHandler={submitAnswerHandler}
-            />
-          ) : question.answer ? (
-            <div className="mb-3">
-              <p className="flex justify-center	border-t border-b border-indigo-500"> answer </p>
-              <p className="break-all my-3">{question.answer}</p>
-            </div>
-          ) : null}
+
+          <QuestionCardAnswerContainer
+            answer={question.answer}
+            questionId={question.id}
+            reciverId={question.receiverId}
+            showForm={showReplyForm}
+            replyText={replyText}
+            loading={loading}
+            showFormHandler={showFormHandler}
+            typeAnswerHandler={typeAnswerHandler}
+            submitAnswerHandler={submitAnswerHandler}
+          />
 
           <div className="py-3">
             <p className="text-gray-600 text-xs my-2">Last updated {updatedAdd}</p>

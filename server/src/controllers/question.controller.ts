@@ -53,6 +53,8 @@ export class QuestionController implements IQuestionController {
     const asked = req.query.asked as unknown as string;
     const page = parseInt(req.query.PageParams as unknown as string);
     const limit = parseInt(req.query.limit as unknown as string);
+    const followingRecived = req.query.followingRecived as unknown as string;
+    const followingAsked = req.query.followingAsked as unknown as string;
 
     try {
       const questions = await this.questionService.getCurrentUserQuestions({
@@ -60,6 +62,8 @@ export class QuestionController implements IQuestionController {
         asked,
         limit,
         page,
+        followingAsked,
+        followingRecived,
       });
       res.status(200).send(questions);
     } catch (err) {

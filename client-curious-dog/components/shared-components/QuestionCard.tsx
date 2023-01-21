@@ -43,6 +43,7 @@ const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
           <QuestionCardAnswerContainer
             answer={question.answer}
             questionId={question.id}
+            reciverId={question.receiverId}
             showForm={showReplyForm}
             replyText={replyText}
             loading={loading}
