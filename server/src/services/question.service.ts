@@ -1,6 +1,7 @@
 import { Question, User } from '@prisma/client';
 import { UnauthorizedError } from '../common/errors';
 import { prisma } from '../database';
+import { publishNotification } from './mail-sender.service';
 
 export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
@@ -18,7 +19,7 @@ export class QuestionService implements IQuestionService {
   public async createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question> {
     const { body, isAnonymous, receiverId, askerId } = questionData;
 
-    return prisma.question.create({
+    let newQuestion = await prisma.question.create({
       data: {
         body,
         isAnonymous,
@@ -26,6 +27,15 @@ export class QuestionService implements IQuestionService {
         receiverId,
       } as Question,
     });
+
+    let receiverInfo = await prisma.user.findUnique({ where: { id: receiverId } });
+
+    if (newQuestion && receiverInfo) {
+      const messageType = 'QuestionCreated';
+      publishNotification(newQuestion, messageType, receiverInfo);
+    }
+
+    return newQuestion;
   }
 
   public async answerQuestion(answerData: { answer: string; questionId: number; receiverId: number }): Promise<Question> {
@@ -35,7 +45,7 @@ export class QuestionService implements IQuestionService {
     if (question.receiverId !== receiverId) {
       throw new UnauthorizedError('User not allowed to answer this');
     }
-    return prisma.question.update({
+    let newAnswer = await prisma.question.update({
       where: {
         id: questionId,
       },
@@ -43,6 +53,16 @@ export class QuestionService implements IQuestionService {
         answer,
       } as Question,
     });
+
+    if (question.askerId && newAnswer) {
+      let receiverInfo = await prisma.user.findUnique({ where: { id: question.askerId } });
+      const messageType = 'QuestionAnswered';
+      publishNotification(newAnswer, messageType, receiverInfo);
+    } else {
+      throw 'Error: User id not found.';
+    }
+
+    return newAnswer;
   }
 
   public async getQuestions(limit: number, page: number): Promise<{ questions: Question[]; count: number; limit: number }> {
