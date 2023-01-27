@@ -84,7 +84,6 @@ export class QuestionService implements IQuestionService {
     limit: number;
   }> {
     const { limit, page, asked, recived, receiverId, followingRecived, followingAsked } = params;
-    console.log(asked, followingAsked, followingRecived);
     const offset = limit * (page - 1);
 
     const baseWhere = recived === 'true' ? { receiverId } : {};
