@@ -37,7 +37,7 @@ const Layout = () => {
     if (!checkAsked && !checkFollowingAskedQuestions && !checFollowingRecivedQuestions) {
       setCheckRecived(true);
     }
-  }, [checFollowingRecivedQuestions, checkAsked, checkFollowingAskedQuestions]);
+  }, [checFollowingRecivedQuestions, checkAsked, checkFollowingAskedQuestions, checkRecived]);
 
   return (
     <>
