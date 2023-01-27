@@ -27,6 +27,7 @@ export const fetchUser = async (): Promise<User> => {
 export const fetchUserQuestions = async (
   PageParams: number,
   params?: {
+    recived: boolean;
     asked: boolean;
     limit: number;
     followingRecived: boolean;

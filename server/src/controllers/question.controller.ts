@@ -51,6 +51,7 @@ export class QuestionController implements IQuestionController {
   public fetchCurrentUserQuestions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const receiverId = req.user.id;
     const asked = req.query.asked as unknown as string;
+    const recived = req.query.recived as unknown as string;
     const page = parseInt(req.query.PageParams as unknown as string);
     const limit = parseInt(req.query.limit as unknown as string);
     const followingRecived = req.query.followingRecived as unknown as string;
@@ -60,6 +61,7 @@ export class QuestionController implements IQuestionController {
       const questions = await this.questionService.getCurrentUserQuestions({
         receiverId,
         asked,
+        recived,
         limit,
         page,
         followingAsked,

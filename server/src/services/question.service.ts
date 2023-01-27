@@ -9,6 +9,7 @@ export interface IQuestionService {
   getCurrentUserQuestions(params: {
     receiverId: number;
     asked: string;
+    recived: string;
     limit: number;
     page: number;
     followingRecived: string;
@@ -72,6 +73,7 @@ export class QuestionService implements IQuestionService {
   public async getCurrentUserQuestions(params: {
     receiverId: number;
     asked: string;
+    recived: string;
     limit: number;
     page: number;
     followingRecived: string;
@@ -81,11 +83,11 @@ export class QuestionService implements IQuestionService {
     count: number;
     limit: number;
   }> {
-    const { limit, page, asked, receiverId, followingRecived, followingAsked } = params;
+    const { limit, page, asked, recived, receiverId, followingRecived, followingAsked } = params;
     console.log(asked, followingAsked, followingRecived);
     const offset = limit * (page - 1);
 
-    const baseWhere = { receiverId };
+    const baseWhere = recived === 'true' ? { receiverId } : {};
     const whereAsked = asked === 'true' ? { askerId: receiverId } : {};
     const whereFollowingAsked = followingAsked === 'true' ? { asker: { following: { some: { followerId: { equals: receiverId } } } } } : {};
     const whereFollowingReceived = followingRecived === 'true' ? { receiver: { following: { some: { followerId: { equals: receiverId } } } } } : {};
