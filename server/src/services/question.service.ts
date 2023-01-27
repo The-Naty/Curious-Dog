@@ -9,9 +9,16 @@ export interface IQuestionService {
   getCurrentUserQuestions(params: {
     receiverId: number;
     asked: string;
+    recived: string;
     limit: number;
     page: number;
-  }): Promise<{ questions: Partial<Question & { asker: User | null }>[]; count: number; limit: number }>;
+    followingRecived: string;
+    followingAsked: string;
+  }): Promise<{
+    questions: Partial<Question & { asker: { username: string; email: string; profilePicture: string | null } | null }>[];
+    count: number;
+    limit: number;
+  }>;
 }
 
 export class QuestionService implements IQuestionService {
@@ -49,7 +56,15 @@ export class QuestionService implements IQuestionService {
     const offset = limit * (page - 1);
     const [count, questions] = await Promise.all([
       prisma.question.count(),
-      prisma.question.findMany({ take: limit, skip: offset, include: { asker: true }, orderBy: { createdAt: 'desc' } }),
+      prisma.question.findMany({
+        take: limit,
+        skip: offset,
+        include: {
+          asker: { select: { username: true, email: true, profilePicture: true } },
+          receiver: { select: { username: true, email: true, profilePicture: true } },
+        },
+        orderBy: { updatedAt: 'desc' },
+      }),
     ]);
 
     return { questions: questions.map(this.toDomain), count, limit };
@@ -58,35 +73,59 @@ export class QuestionService implements IQuestionService {
   public async getCurrentUserQuestions(params: {
     receiverId: number;
     asked: string;
+    recived: string;
     limit: number;
     page: number;
-  }): Promise<{ questions: Partial<Question & { asker: User | null }>[]; count: number; limit: number }> {
-    const { limit, page, asked, receiverId } = params;
+    followingRecived: string;
+    followingAsked: string;
+  }): Promise<{
+    questions: Partial<Question & { asker: { username: string; email: string; profilePicture: string | null } | null }>[];
+    count: number;
+    limit: number;
+  }> {
+    const { limit, page, asked, recived, receiverId, followingRecived, followingAsked } = params;
     const offset = limit * (page - 1);
-    let questions;
-    let count;
-    if (asked === 'true') {
-      [count, questions] = await Promise.all([
-        prisma.question.count({ where: { OR: [{ receiverId }, { askerId: receiverId }] } }),
-        prisma.question.findMany({
-          where: { OR: [{ receiverId }, { askerId: receiverId }] },
-          take: limit,
-          skip: offset,
-          include: { asker: true },
-          orderBy: { createdAt: 'desc' },
-        }),
-      ]);
-    } else {
-      [count, questions] = await Promise.all([
-        prisma.question.count({ where: { receiverId: receiverId } }),
-        prisma.question.findMany({ where: { receiverId: receiverId }, take: limit, skip: offset, include: { asker: true }, orderBy: { createdAt: 'desc' } }),
-      ]);
-    }
+
+    const baseWhere = recived === 'true' ? { receiverId } : {};
+    const whereAsked = asked === 'true' ? { askerId: receiverId } : {};
+    const whereFollowingAsked = followingAsked === 'true' ? { asker: { following: { some: { followerId: { equals: receiverId } } } } } : {};
+    const whereFollowingReceived = followingRecived === 'true' ? { receiver: { following: { some: { followerId: { equals: receiverId } } } } } : {};
+
+    const [count, questions] = await Promise.all([
+      prisma.question.count({ where: { OR: [baseWhere, whereAsked, whereFollowingAsked, whereFollowingReceived] } }),
+      prisma.question.findMany({
+        where: { OR: [baseWhere, whereAsked, whereFollowingAsked, whereFollowingReceived] },
+        take: limit,
+        skip: offset,
+        include: { asker: { select: { username: true, email: true, profilePicture: true } } },
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
 
     return { questions: questions.map(this.toDomain), count, limit };
   }
 
-  private toDomain(question: Question & { asker: User | null }): Question & { asker: User | null } {
+  private toDomain(
+    question: Question & { asker: { username: string; email: string; profilePicture: string | null } | null },
+  ): Question & { asker: { username: string; email: string; profilePicture: string | null } | null } {
     return question.isAnonymous ? { ...question, askerId: null, asker: null } : question;
   }
 }
+
+// followingAsked
+// prisma.question.findMany({
+//   where: { asker: { following: { some: { followerId: { equals: receiverId } } } } },
+//   take: limit,
+//   skip: offset,
+//   include: { asker: { select: { username: true, email: true, profilePicture: true } } },
+//   orderBy: { createdAt: 'desc' },
+// }),
+
+// followingRecived
+// prisma.question.findMany({
+//   where: { receiver: { following: { some: { followerId: { equals: receiverId } } } } },
+//   take: limit,
+//   skip: offset,
+//   include: { asker: { select: { username: true, email: true, profilePicture: true } } },
+//   orderBy: { createdAt: 'desc' },
+// }),

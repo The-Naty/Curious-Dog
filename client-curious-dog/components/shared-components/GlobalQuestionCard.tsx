@@ -1,17 +1,20 @@
-import React, { useState, useMemo } from 'react';
-import { answerQuestion } from '../../lib/api/questions.api';
+import React, { useMemo, useState } from 'react';
 import { Question } from '../../lib/interfaces/question.interface';
-import { QuestionWithAsker } from '../../lib/types/question-with-user.type';
+import { QuestionWithAskerAndReciver } from '../../lib/types/question-with-user.type';
 import { computeUpdateAt } from '../../util/utilities';
-import QuestionCardAnswerContainer from './QuestionCardAnswerContainer';
 import QuestionCardHeader from './QuestionCardHeader';
+import RecieverHeader from './ReceiverHeader';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../lib/atoms/user.atom';
+import QuestionCardAnswerContainer from './QuestionCardAnswerContainer';
+import { answerQuestion } from '../../lib/api/questions.api';
 
 interface Props {
-  question: QuestionWithAsker;
+  question: QuestionWithAskerAndReciver;
   onQuestionAnswered: (question: Question) => void;
 }
-
-const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
+const GlobalQuestionCard = ({ question, onQuestionAnswered }: Props) => {
+  const [user, setUser] = useAtom(userAtom);
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false);
   const [replyText, setReplyText] = useState<string>(question.answer || '');
   const [loading, setLoading] = useState<boolean>(false);
@@ -38,8 +41,11 @@ const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
     <div className="flex justify-center my-4">
       <div className="flex flex-col  md:max-w-xl rounded-lg bg-white shadow-lg w-full border-solid border-l-2 border-indigo-400">
         <div className="p-6 flex flex-col justify-start ">
+          <RecieverHeader receiver={question.receiver} />
           <QuestionCardHeader question={question} />
+
           <p className="text-gray-700 text-base my-4">{question.body}</p>
+
           <QuestionCardAnswerContainer
             answer={question.answer}
             questionId={question.id}
@@ -51,6 +57,7 @@ const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
             typeAnswerHandler={typeAnswerHandler}
             submitAnswerHandler={submitAnswerHandler}
           />
+
           <div className="py-3">
             <p className="text-gray-600 text-xs my-2">Last updated {updatedAdd}</p>
           </div>
@@ -61,4 +68,4 @@ const QuestionCard = ({ question, onQuestionAnswered }: Props) => {
   );
 };
 
-export default QuestionCard;
+export default GlobalQuestionCard;

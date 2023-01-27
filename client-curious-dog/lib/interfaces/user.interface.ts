@@ -1,7 +1,8 @@
 export interface User {
-  id: number;
+  id?: number;
   username: string;
   email: string;
   profilePicture?: string;
-  token: string;
+  token?: string;
+  _count?: { receivedQuestions: number };
 }

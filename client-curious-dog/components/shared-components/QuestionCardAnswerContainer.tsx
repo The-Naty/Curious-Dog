@@ -1,5 +1,7 @@
 import React from 'react';
 import LoadingSpinner from './LoadingSpinner';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../lib/atoms/user.atom';
 
 interface Props {
   answer?: string;
@@ -7,30 +9,45 @@ interface Props {
   showForm: boolean;
   replyText: string;
   loading: boolean;
+  reciverId: number;
   showFormHandler: () => void;
   typeAnswerHandler: (e: React.ChangeEvent<EventTarget>) => void;
   submitAnswerHandler: (e: React.MouseEvent<EventTarget>) => void;
 }
 
-const QuestionCardAnswerContainer = ({ answer, questionId, showForm, replyText, loading, showFormHandler, typeAnswerHandler, submitAnswerHandler }: Props) => {
+const QuestionCardAnswerContainer = ({
+  answer,
+  questionId,
+  reciverId,
+  showForm,
+  replyText,
+  loading,
+  showFormHandler,
+  typeAnswerHandler,
+  submitAnswerHandler,
+}: Props) => {
   const disableSubmit = answer ? replyText.length === answer?.length : !replyText.length;
+  const [user, setUser] = useAtom(userAtom);
 
   return (
     <>
       {answer ? (
         <>
           <p className="flex justify-center	border-t border-b border-indigo-500"> answer </p>
-          <p className="mt-3">{answer}</p>
+          <p className="my-3 break-all">{answer}</p>
         </>
       ) : null}
-      <div className="flex justify-end">
-        <button
-          className="bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded text-xs"
-          onClick={showFormHandler}
-        >
-          {answer ? 'edit' : 'reply'}
-        </button>
-      </div>
+      {reciverId === user?.id ? (
+        <div className="flex justify-end">
+          <button
+            className="bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded text-xs"
+            onClick={showFormHandler}
+          >
+            {answer ? 'edit' : 'reply'}
+          </button>
+        </div>
+      ) : null}
+
       {showForm ? (
         <>
           <div className="mt-3 w-full">
