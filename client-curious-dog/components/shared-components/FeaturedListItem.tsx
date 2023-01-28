@@ -1,10 +1,41 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { User } from '../../lib/interfaces/user.interface';
+import { followUser, unfollowUser } from '../../lib/api/following.api';
+import LoadingSpinner from './LoadingSpinner';
+import { isFollower } from '../../util/utilities';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../lib/atoms/user.atom';
 
 interface Props {
   featuredUser: Partial<User>;
 }
+
+const onClickHandler = async (e: React.MouseEvent<EventTarget>, state: string = 'follow', loadingState: Dispatch<SetStateAction<boolean>>, userId?: number) => {
+  if (userId) {
+    loadingState(true);
+    if (state === 'follow') {
+      await followUser(userId);
+    } else if (state === 'unfollow') {
+      await unfollowUser(userId);
+    }
+    loadingState(false);
+  }
+};
+
 const FeaturedListItem = ({ featuredUser }: Props) => {
+  const [user, setUser] = useAtom(userAtom);
+  const [loadClick, setLoadClick] = useState(false);
+  const isFollwoingState = useMemo(() => {
+    return isFollower(
+      user?.followers?.map(({ followingId }) => {
+        return followingId;
+      }),
+      featuredUser?.id,
+    );
+  }, [user?.followers, featuredUser?.id]);
+
+  const follwoingState = isFollwoingState ? 'unfollow' : 'follow';
+
   return (
     <div
       style={{ minWidth: '200px' }}
@@ -17,15 +48,19 @@ const FeaturedListItem = ({ featuredUser }: Props) => {
           alt="Bonnie image"
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{featuredUser.username}</h5>
-        <span className="text-sm text-gray-500 dark:text-gray-400">Quesitions {featuredUser._count?.receivedQuestions}</span>
-        <div className="flex mt-4 space-x-3 md:mt-6">
-          <a
-            href="#"
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            follow
-          </a>
-        </div>
+        <span className="text-sm text-gray-500 dark:text-gray-400">Questions {featuredUser._count?.receivedQuestions}</span>
+        {featuredUser.id === user?.id ? null : (
+          <div className="flex mt-4 space-x-3 md:mt-6">
+            <button
+              className={`flex content-center bg-transparent enabled:hover:bg-indigo-500 text-indigo-700 font-semibold enabled:hover:text-white py-2 px-4 border border-indigo-500 enabled:hover:border-transparent rounded text-xs w-full ${
+                loadClick ? '' : 'disabled:opacity-25'
+              }`}
+              onClick={e => onClickHandler(e, follwoingState, setLoadClick, featuredUser?.id)}
+            >
+              <span className="p-1">{loadClick ? <LoadingSpinner /> : follwoingState}</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -5,4 +5,6 @@ export interface User {
   profilePicture?: string;
   token?: string;
   _count?: { receivedQuestions: number };
+  followers?: [];
+  following?: [];
 }

@@ -11,4 +11,9 @@ const computeUpdateAt = (updatedAt: string): string => {
   return `${moment(updatedAt).fromNow()}`;
 };
 
-export { renderPlaceholders, computeUpdateAt };
+const isFollower = (following: any, userId?: number) => {
+  console.log(following, userId);
+  return following.length ? (following?.findIndex((id: any) => id === userId) > -1 ? true : false) : false;
+};
+
+export { renderPlaceholders, computeUpdateAt, isFollower };
