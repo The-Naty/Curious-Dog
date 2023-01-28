@@ -26,7 +26,7 @@ export class FollowController implements IFollowController {
     const followerId = req.user.id;
     try {
       await this.followService.unfollow(followerId, toBeUnfollowedId);
-      res.status(204).send('');
+      res.sendStatus(204);
     } catch (err) {
       next(err);
     }

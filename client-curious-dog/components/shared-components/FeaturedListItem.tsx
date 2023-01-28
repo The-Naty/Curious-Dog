@@ -7,34 +7,31 @@ import { useAtom } from 'jotai';
 import { userAtom } from '../../lib/atoms/user.atom';
 
 interface Props {
-  featuredUser: Partial<User>;
+  featuredUser: User;
 }
-
-const onClickHandler = async (e: React.MouseEvent<EventTarget>, state: string = 'follow', loadingState: Dispatch<SetStateAction<boolean>>, userId?: number) => {
-  if (userId) {
-    loadingState(true);
-    if (state === 'follow') {
-      await followUser(userId);
-    } else if (state === 'unfollow') {
-      await unfollowUser(userId);
-    }
-    loadingState(false);
-  }
-};
 
 const FeaturedListItem = ({ featuredUser }: Props) => {
   const [user, setUser] = useAtom(userAtom);
   const [loadClick, setLoadClick] = useState(false);
   const isFollwoingState = useMemo(() => {
-    return isFollower(
-      user?.followers?.map(({ followingId }) => {
-        return followingId;
-      }),
-      featuredUser?.id,
-    );
-  }, [user?.followers, featuredUser?.id]);
+    return isFollower(user, featuredUser);
+  }, [user, featuredUser]);
 
-  const follwoingState = isFollwoingState ? 'unfollow' : 'follow';
+  const handleFollow = async (userId?: number) => {
+    if (userId) {
+      setLoadClick(true);
+      await followUser(userId);
+      setLoadClick(false);
+    }
+  };
+
+  const handleUnfollow = async (userId?: number) => {
+    if (userId) {
+      setLoadClick(true);
+      await unfollowUser(userId);
+      setLoadClick(false);
+    }
+  };
 
   return (
     <div
@@ -55,9 +52,15 @@ const FeaturedListItem = ({ featuredUser }: Props) => {
               className={`flex content-center bg-transparent enabled:hover:bg-indigo-500 text-indigo-700 font-semibold enabled:hover:text-white py-2 px-4 border border-indigo-500 enabled:hover:border-transparent rounded text-xs w-full ${
                 loadClick ? '' : 'disabled:opacity-25'
               }`}
-              onClick={e => onClickHandler(e, follwoingState, setLoadClick, featuredUser?.id)}
+              onClick={() => {
+                if (isFollwoingState) {
+                  handleUnfollow(featuredUser?.id);
+                } else {
+                  handleFollow(featuredUser?.id);
+                }
+              }}
             >
-              <span className="p-1">{loadClick ? <LoadingSpinner /> : follwoingState}</span>
+              <span className="p-1">{loadClick ? <LoadingSpinner /> : isFollwoingState ? 'unfollow' : 'follow'}</span>
             </button>
           </div>
         )}

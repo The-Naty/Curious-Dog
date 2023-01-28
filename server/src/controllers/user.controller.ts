@@ -2,7 +2,6 @@ import { NotFoundError } from '@prisma/client/runtime';
 import { NextFunction, Request, Response } from 'express';
 import { FileService, IFileService } from '../services/file.service';
 import { IUserService, UserService } from '../services/user.service';
-import { User } from '@prisma/client';
 
 export interface IUserController {
   uploadPicture(req: Request, res: Response, next: NextFunction): Promise<void>;

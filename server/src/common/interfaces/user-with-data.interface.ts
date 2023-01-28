@@ -1,9 +1,8 @@
 import { Follows } from '@prisma/client';
 
-export interface userWithInfo {
+export interface UserWithInfo {
   id: number;
   email: string;
-  password?: string;
   username: string;
   profilePicture: string | null;
   createdAt?: Date;

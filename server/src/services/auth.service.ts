@@ -3,11 +3,11 @@ import { prisma } from '../database';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from '../common/errors';
-import { userWithInfo } from '../common/interfaces/user-with-data.interface';
+import { UserWithInfo } from '../common/interfaces/user-with-data.interface';
 
 export interface IAuthService {
   registerUserAndSignToken(userData: Partial<User>): Promise<{ token: string; newUser: User }>;
-  loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: userWithInfo; token: string }>;
+  loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: UserWithInfo; token: string }>;
 }
 
 export class AuthService implements IAuthService {
@@ -30,7 +30,7 @@ export class AuthService implements IAuthService {
     return { token, newUser };
   }
 
-  public async loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: userWithInfo; token: string }> {
+  public async loginUserAndSignToken(userData: { email?: string; username?: string; password: string }): Promise<{ user: UserWithInfo; token: string }> {
     const { email, password, username } = userData;
 
     const user = await prisma.user.findUniqueOrThrow({
