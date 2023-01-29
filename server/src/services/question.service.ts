@@ -61,7 +61,7 @@ export class QuestionService implements IQuestionService {
         skip: offset,
         include: {
           asker: { select: { username: true, email: true, profilePicture: true } },
-          receiver: { select: { username: true, email: true, profilePicture: true } },
+          receiver: { select: { id: true, username: true, email: true, profilePicture: true } },
         },
         orderBy: { updatedAt: 'desc' },
       }),
@@ -111,21 +111,3 @@ export class QuestionService implements IQuestionService {
     return question.isAnonymous ? { ...question, askerId: null, asker: null } : question;
   }
 }
-
-// followingAsked
-// prisma.question.findMany({
-//   where: { asker: { following: { some: { followerId: { equals: receiverId } } } } },
-//   take: limit,
-//   skip: offset,
-//   include: { asker: { select: { username: true, email: true, profilePicture: true } } },
-//   orderBy: { createdAt: 'desc' },
-// }),
-
-// followingRecived
-// prisma.question.findMany({
-//   where: { receiver: { following: { some: { followerId: { equals: receiverId } } } } },
-//   take: limit,
-//   skip: offset,
-//   include: { asker: { select: { username: true, email: true, profilePicture: true } } },
-//   orderBy: { createdAt: 'desc' },
-// }),

@@ -13,7 +13,7 @@ const Layout = () => {
   const [checkFollowingAskedQuestions, setChecFollowingAskedQuestions] = useState<boolean>(false);
   const [checFollowingRecivedQuestions, setChecFollowingRecivedQuestions] = useState<boolean>(false);
 
-  const limit = 3;
+  const limit = 5;
   const { data: questionsData, isLoading: questionLoading, refetch: questionsRefetch, hasNextPage, fetchNextPage, isFetchingNextPage } = useMyQuestions({
     asked: checkAsked,
     recived: checkRecived,
