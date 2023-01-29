@@ -8,11 +8,12 @@ import Toggler from '../shared-components/Toggler';
 
 const Layout = () => {
   const [checkRecived, setCheckRecived] = useState<boolean>(true);
+  const [lockRecived, setlockRecived] = useState<boolean>(true);
   const [checkAsked, setCheckAsked] = useState<boolean>(false);
   const [checkFollowingAskedQuestions, setChecFollowingAskedQuestions] = useState<boolean>(false);
   const [checFollowingRecivedQuestions, setChecFollowingRecivedQuestions] = useState<boolean>(false);
 
-  const limit = 3;
+  const limit = 5;
   const { data: questionsData, isLoading: questionLoading, refetch: questionsRefetch, hasNextPage, fetchNextPage, isFetchingNextPage } = useMyQuestions({
     asked: checkAsked,
     recived: checkRecived,
@@ -36,6 +37,9 @@ const Layout = () => {
   useEffect(() => {
     if (!checkAsked && !checkFollowingAskedQuestions && !checFollowingRecivedQuestions) {
       setCheckRecived(true);
+      setlockRecived(true);
+    } else {
+      setlockRecived(false);
     }
   }, [checFollowingRecivedQuestions, checkAsked, checkFollowingAskedQuestions, checkRecived]);
 
@@ -43,18 +47,23 @@ const Layout = () => {
     <>
       <div className="xl:flex flex-row-reverse justify-center justify-between items-start my-4">
         <div className="flex flex-col justify-center">
-          <Toggler checkedState={checkRecived} updateStateHandler={() => updateToggler(setCheckRecived)} togglerText={'display recived questions'} />
+          <Toggler
+            checkedState={checkRecived}
+            updateStateHandler={() => updateToggler(setCheckRecived)}
+            togglerText={'Recived questions'}
+            disabled={lockRecived}
+          />
 
-          <Toggler checkedState={checkAsked} updateStateHandler={() => updateToggler(setCheckAsked)} togglerText={'display questions you asked'} />
+          <Toggler checkedState={checkAsked} updateStateHandler={() => updateToggler(setCheckAsked)} togglerText={'Asked questions'} />
           <Toggler
             checkedState={checkFollowingAskedQuestions}
             updateStateHandler={() => updateToggler(setChecFollowingAskedQuestions)}
-            togglerText={'display follwoing asked questions'}
+            togglerText={'Follwoing asked questions'}
           />
           <Toggler
             checkedState={checFollowingRecivedQuestions}
             updateStateHandler={() => updateToggler(setChecFollowingRecivedQuestions)}
-            togglerText={'display follwoing recived questions'}
+            togglerText={'Follwoing recived questions'}
           />
         </div>
         <div className="flex flex-col justify-center flex-grow">

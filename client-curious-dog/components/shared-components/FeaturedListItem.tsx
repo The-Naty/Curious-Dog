@@ -1,10 +1,15 @@
-import React from 'react';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../lib/atoms/user.atom';
 import { User } from '../../lib/interfaces/user.interface';
+import FollowButton from './FollowButton';
 
 interface Props {
-  featuredUser: Partial<User>;
+  featuredUser: User;
 }
+
 const FeaturedListItem = ({ featuredUser }: Props) => {
+  const [user, setUser] = useAtom(userAtom);
+
   return (
     <div
       style={{ minWidth: '200px' }}
@@ -17,15 +22,8 @@ const FeaturedListItem = ({ featuredUser }: Props) => {
           alt="Bonnie image"
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{featuredUser.username}</h5>
-        <span className="text-sm text-gray-500 dark:text-gray-400">Quesitions {featuredUser._count?.receivedQuestions}</span>
-        <div className="flex mt-4 space-x-3 md:mt-6">
-          <a
-            href="#"
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            follow
-          </a>
-        </div>
+        <span className="text-sm text-gray-500 dark:text-gray-400">Questions {featuredUser._count?.receivedQuestions}</span>
+        {featuredUser.id === user?.id ? null : <FollowButton actionedUser={featuredUser} style="mt-4 space-x-3 md:mt-6" />}
       </div>
     </div>
   );
