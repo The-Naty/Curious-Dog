@@ -1,22 +1,29 @@
 import { sendMail } from './nodemailer';
-import { html } from './html';
+import { getQuestionAnsweredTemplate, getQuestionCreatedTemplate } from './template.service';
 
-export const checkMailType = (message: string) => {
+export const handleEvent = async (message: string) => {
   const event = JSON.parse(message);
+  console.log(event);
 
-  switch (event.type) {
+  switch (event.eventType) {
     case 'QuestionCreated': {
-      const receiverEmail = event.receiverInfo.email;
-
-      sendMail(receiverEmail, 'Someone wants to know more about you!', 'You got new question', html);
+      if (event.receiver) {
+        const receiverEmail = event.receiver.email;
+        const html = getQuestionCreatedTemplate(event);
+        await sendMail(receiverEmail, 'Someone wants to know more about you!', 'You got new question', html);
+      }
 
       break;
     }
     case 'QuestionAnswered': {
-      const title = event.receiverInfo.username + ' answered your question!';
-      const receiverEmail = event.receiverInfo.email;
+      if (event.asker) {
+        const title = event.asker.username + ' answered your question!';
+        const askerEmail = event.asker.email;
+        const html = getQuestionAnsweredTemplate(event);
 
-      sendMail(receiverEmail, title, 'Your question answered', html);
+        await sendMail(askerEmail, title, 'Your question answered', html);
+      }
+
       break;
     }
     default: {

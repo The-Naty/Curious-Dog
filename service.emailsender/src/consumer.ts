@@ -1,5 +1,5 @@
 import { PubSub, Message } from '@google-cloud/pubsub';
-import { checkMailType } from './mail-sender.service';
+import { handleEvent } from './mail-sender.service';
 
 const main = async () => {
   const projectId = process.env.PROJECTID;
@@ -21,11 +21,15 @@ const main = async () => {
     console.log(`Subscription exists ${topicName}`);
   }
 
-  subscription.on('message', (message: Message) => {
+  subscription.on('message', async (message: Message) => {
     const data = message.data.toString();
 
-    checkMailType(data);
-    message.ack();
+    try {
+      await handleEvent(data);
+      message.ack();
+    } catch (err) {
+      message.nack();
+    }
   });
 
   subscription.on('error', error => {

@@ -1,7 +1,7 @@
 import { Question, User } from '@prisma/client';
 import { UnauthorizedError } from '../common/errors';
 import { prisma } from '../database';
-import { publishNotification } from './mail-sender.service';
+import { Event, publishNotification } from './pubsub.service';
 
 export interface IQuestionService {
   createQuestion(questionData: { body: string; isAnonymous: boolean; receiverId: number; askerId: number }): Promise<Question>;
@@ -28,11 +28,10 @@ export class QuestionService implements IQuestionService {
       } as Question,
     });
 
-    let receiverInfo = await prisma.user.findUnique({ where: { id: receiverId } });
+    let receiver = await prisma.user.findUnique({ where: { id: receiverId } });
 
-    if (newQuestion && receiverInfo) {
-      const messageType = 'QuestionCreated';
-      publishNotification(newQuestion, messageType, receiverInfo);
+    if (newQuestion && receiver) {
+      publishNotification(Event.QuestionCreated, { question: newQuestion, receiver });
     }
 
     return newQuestion;
@@ -54,13 +53,8 @@ export class QuestionService implements IQuestionService {
       } as Question,
     });
 
-    if (question.askerId && newAnswer) {
-      let receiverInfo = await prisma.user.findUnique({ where: { id: question.askerId } });
-      const messageType = 'QuestionAnswered';
-      publishNotification(newAnswer, messageType, receiverInfo);
-    } else {
-      throw 'Error: User id not found.';
-    }
+    const asker = question.askerId ? await prisma.user.findUniqueOrThrow({ where: { id: question.askerId } }) : null;
+    publishNotification(Event.QuestionAnswered, { question, asker });
 
     return newAnswer;
   }
