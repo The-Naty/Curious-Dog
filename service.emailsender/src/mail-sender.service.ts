@@ -1,3 +1,4 @@
+import { title } from 'process';
 import { sendMail } from './nodemailer';
 import { getQuestionAnsweredTemplate, getQuestionCreatedTemplate } from './template.service';
 
@@ -8,9 +9,10 @@ export const handleEvent = async (message: string) => {
   switch (event.eventType) {
     case 'QuestionCreated': {
       if (event.receiver) {
+        const title = 'Someone wants to know more about you!';
         const receiverEmail = event.receiver.email;
         const html = getQuestionCreatedTemplate(event);
-        await sendMail(receiverEmail, 'Someone wants to know more about you!', 'You got new question', html);
+        await sendMail(receiverEmail, title, html);
       }
 
       break;
@@ -21,7 +23,7 @@ export const handleEvent = async (message: string) => {
         const askerEmail = event.asker.email;
         const html = getQuestionAnsweredTemplate(event);
 
-        await sendMail(askerEmail, title, 'Your question answered', html);
+        await sendMail(askerEmail, title, html);
       }
 
       break;
