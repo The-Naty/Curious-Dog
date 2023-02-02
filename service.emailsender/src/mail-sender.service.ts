@@ -1,10 +1,8 @@
-import { title } from 'process';
 import { sendMail } from './nodemailer';
-import { getQuestionAnsweredTemplate, getQuestionCreatedTemplate } from './template.service';
+import { getQuestionAnsweredTemplate, getQuestionCreatedTemplate, getUserRegisterTemplate } from './template.service';
 
 export const handleEvent = async (message: string) => {
   const event = JSON.parse(message);
-  console.log(event);
 
   switch (event.eventType) {
     case 'QuestionCreated': {
@@ -17,6 +15,7 @@ export const handleEvent = async (message: string) => {
 
       break;
     }
+
     case 'QuestionAnswered': {
       if (event.asker) {
         const title = event.asker.username + ' answered your question!';
@@ -28,6 +27,19 @@ export const handleEvent = async (message: string) => {
 
       break;
     }
+
+    case 'UserRegister': {
+      if (event.user) {
+        const title = 'Welcome ' + event.user.username;
+        const userEmail = event.user.email;
+        const html = getUserRegisterTemplate(event);
+
+        await sendMail(userEmail, title, html);
+      }
+
+      break;
+    }
+
     default: {
       console.log('error while sending mail.');
 

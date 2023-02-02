@@ -3,6 +3,7 @@ import { prisma } from '../database';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from '../common/errors';
+import { Event, publishNotification } from './pubsub.service';
 
 export interface IAuthService {
   registerUserAndSignToken(userData: Partial<User>): Promise<{ token: string; newUser: User }>;
@@ -25,7 +26,7 @@ export class AuthService implements IAuthService {
     });
 
     const token = await this.generateSignedUserToken(newUser.id);
-
+    publishNotification(Event.UserRegister, { user: newUser });
     return { token, newUser };
   }
 

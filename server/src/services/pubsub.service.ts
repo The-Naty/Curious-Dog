@@ -11,14 +11,19 @@ export type QuestionAnswered = {
   asker: User | null;
 };
 
-export type QuestionEvents = QuestionCreated | QuestionAnswered;
+export type UserRegister = {
+  user: User;
+};
+
+export type Events = QuestionCreated | QuestionAnswered | UserRegister;
 
 export enum Event {
   QuestionCreated = 'QuestionCreated',
   QuestionAnswered = 'QuestionAnswered',
+  UserRegister = 'UserRegister',
 }
 
-export async function publishNotification(eventType: Event, payload: QuestionEvents) {
+export async function publishNotification(eventType: Event, payload: Events) {
   let topic = pubsub.topic(topicName);
 
   const data = Buffer.from(JSON.stringify({ eventType, ...payload }));
