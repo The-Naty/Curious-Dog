@@ -1,7 +1,8 @@
 import { useInfiniteQuery } from 'react-query';
-import { fetchAllQuestions, fetchUserQuestions } from '../api/user.api';
+import { fetchUserQuestions } from '../api/user.api';
+import { fetchAllQuestions } from '../api/questions.api';
 
-export const useMyQuestions = (params?: { asked: boolean; limit: number }) =>
+export const useMyQuestions = (params?: { recived: boolean; asked: boolean; limit: number; followingRecived: boolean; followingAsked: boolean }) =>
   useInfiniteQuery(['user', 'questions', params], ({ pageParam = 1 }) => fetchUserQuestions(pageParam, params), {
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < lastPage.count / lastPage.limit) {

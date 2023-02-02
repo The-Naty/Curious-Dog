@@ -27,8 +27,11 @@ export const fetchUser = async (): Promise<User> => {
 export const fetchUserQuestions = async (
   PageParams: number,
   params?: {
+    recived: boolean;
     asked: boolean;
     limit: number;
+    followingRecived: boolean;
+    followingAsked: boolean;
   },
 ): Promise<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }> => {
   const response = await client.get<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }>(`user/questions`, {
@@ -37,14 +40,7 @@ export const fetchUserQuestions = async (
   return response.data;
 };
 
-export const fetchAllQuestions = async (
-  PageParams: number,
-  params?: {
-    limit: number;
-  },
-): Promise<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }> => {
-  const response = await client.get<{ limit: number; count: number; questions: (Question & { asker: User | null })[] }>(`questions`, {
-    params: { ...params, PageParams },
-  });
+export const fetchFeaturedUsers = async (): Promise<Partial<User>[]> => {
+  const response = await client.get<Partial<User>[]>(`users/featured`, {});
   return response.data;
 };

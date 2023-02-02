@@ -11,7 +11,20 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY as string) as JwtPayload;
-    const user = await prisma.user.findUniqueOrThrow({ where: { id: decodedToken.id } });
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { id: decodedToken.id },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        username: true,
+        profilePicture: true,
+        createdAt: true,
+        updatedAt: true,
+        followers: true,
+        following: true,
+      },
+    });
 
     req.user = user;
     next();
