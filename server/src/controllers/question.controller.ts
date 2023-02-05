@@ -37,8 +37,8 @@ export class QuestionController implements IQuestionController {
   };
 
   public fetchAllQuestions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { limit, PageParams } = req.query;
-    const page = parseInt(req.query.PageParams as unknown as string);
+    const { limit, pageParams } = req.query;
+    const page = parseInt(req.query.pageParams as unknown as string);
 
     try {
       const questions = await this.questionService.getQuestions(parseInt(limit as unknown as string), parseInt(page as unknown as string));

@@ -1,7 +1,7 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getStorage } from 'firebase-admin/storage';
 import uuid from 'short-uuid';
-import serviceAccount from '../../../server/firebaseServiceAccount.json';
+import serviceAccount from '../../firebaseServiceAccount.json';
 import { Bucket } from '@google-cloud/storage';
 
 export interface ICloudStorage {
