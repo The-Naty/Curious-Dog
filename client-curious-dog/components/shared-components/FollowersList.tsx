@@ -29,17 +29,15 @@ const FollowersList = ({ userId, limit }: Props) => {
 
   return (
     <div className="px-4">
-      {isFollowersDataLoading
-        ? followersData?.pages.map((p: any) => {
-            return p.followedBy.length > 0 ? (
-              p.followedBy?.map((follower: any) => {
-                return <FollowerInfoCard key={follower.follower.id} user={follower} />;
-              })
-            ) : (
-              <div className="text-center p-4"> There are no followers found here</div>
-            );
+      {followersData?.pages.map((p: any) => {
+        return p.followedBy.length > 0 ? (
+          p.followedBy?.map((follower: any) => {
+            return <FollowerInfoCard key={follower.follower.id} user={follower} />;
           })
-        : null}
+        ) : (
+          <div className="text-center p-4"> There are no followers found here</div>
+        );
+      })}
     </div>
   );
 };
