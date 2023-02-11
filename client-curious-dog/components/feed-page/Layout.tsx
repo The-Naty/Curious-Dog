@@ -45,7 +45,7 @@ const Layout = () => {
 
   return (
     <>
-      <div className="xl:flex flex-row-reverse justify-center justify-between items-start my-4">
+      <div className="xl:flex flex-row-reverse justify-between items-start my-4">
         <div className="flex flex-col justify-center">
           <Toggler
             checkedState={checkRecived}

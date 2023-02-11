@@ -5,6 +5,7 @@ export interface IUserService {
   updateUser(userId: number, updatedData: Partial<User>): Promise<User>;
   getUser(userId: number): Promise<User | null>;
   getFeaturedUsers(): Promise<Partial<User>[]>;
+  getUserStats(userId: number): Promise<{ noQuestions: number; noFollowers: number; noFollowing: number }>;
 }
 
 export class UserService implements IUserService {
@@ -23,4 +24,13 @@ export class UserService implements IUserService {
       take: 8,
     });
   }
+
+  getUserStats = async (userId: number): Promise<{ noQuestions: number; noFollowers: number; noFollowing: number }> => {
+    const data = await prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: { _count: { select: { receivedQuestions: true, followers: true, following: true } } },
+    });
+
+    return { noQuestions: data?._count?.receivedQuestions, noFollowing: data?._count?.followers, noFollowers: data?._count?.following };
+  };
 }

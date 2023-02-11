@@ -7,6 +7,7 @@ export interface IUserController {
   uploadPicture(req: Request, res: Response, next: NextFunction): Promise<void>;
   fetchUser(req: Request, res: Response, next: NextFunction): Promise<void>;
   fetchFeatuedUsers(req: Request, res: Response, next: NextFunction): Promise<void>;
+  fetchUserStats(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 
 export class UserController implements IUserController {
@@ -41,5 +42,15 @@ export class UserController implements IUserController {
   public fetchFeatuedUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const featuredUsers = await this.userService.getFeaturedUsers();
     res.status(200).json(featuredUsers);
+  };
+
+  public fetchUserStats = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const userId = req.params.userId;
+    try {
+      const data = await this.userService.getUserStats(parseInt(userId as unknown as string));
+      res.status(200).json(data);
+    } catch (err) {
+      next(err);
+    }
   };
 }

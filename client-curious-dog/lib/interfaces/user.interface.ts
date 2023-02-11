@@ -4,7 +4,9 @@ export interface User {
   email: string;
   profilePicture?: string;
   token?: string;
-  _count?: { receivedQuestions: number };
+  _count?: { receivedQuestions: number; followers: number };
   followers?: [];
   following?: [];
+  follower: User;
+  folllowing: User;
 }

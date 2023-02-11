@@ -16,7 +16,7 @@ export class FollowRoute implements Route {
   private initializeRoutes() {
     this.router.post(`/users/:toBeFollowedId/follow`, auth, validate(followUserReqSchema), this.followController.followUser);
     this.router.delete(`/users/:toBeUnfollowedId/follow`, auth, validate(unfollowUserReqSchema), this.followController.unfollowUser);
-    this.router.get('/users/following', auth, this.followController.fetchFollowing);
-    this.router.get('/users/followers', auth, this.followController.fetchFollowers);
+    this.router.get('/users/:userId/following', auth, this.followController.fetchFollowing);
+    this.router.get('/users/:userId/followers', auth, this.followController.fetchFollowers);
   }
 }
