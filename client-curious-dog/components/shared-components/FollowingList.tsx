@@ -3,14 +3,25 @@ import { InfiniteData } from 'react-query';
 import { UserFollowingInfo } from '../../lib/interfaces/user.interface';
 import FollowingInfoCard from './FollowingInfoCard';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
+import { useFetchFollowing } from '../../lib/hooks/following.hooks';
 
 interface Props {
-  followingData: InfiniteData<{ pages: [{ limit: number; count: number; followedBy: UserFollowingInfo[] }] }> | undefined;
-  followingDataHasNextpage: boolean | undefined;
-  followingDataFetchNextPage: () => void;
+  userId: number;
+  limit: number;
 }
 
-const FollowingList = ({ followingData, followingDataHasNextpage, followingDataFetchNextPage }: Props) => {
+const FollowingList = ({ userId, limit }: Props) => {
+  const {
+    data: followingData,
+    isLoading: isFollowingDataLoading,
+    hasNextPage: followingDataHasNextpage,
+    fetchNextPage: followingDataFetchNextPage,
+    isFetchingNextPage: followingDataIsFetchingNextPage,
+  } = useFetchFollowing({
+    limit: limit,
+    userId: userId,
+  });
+
   useBottomScrollListener(
     useCallback(async () => {
       if (followingDataHasNextpage) {

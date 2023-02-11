@@ -1,15 +1,24 @@
-import React, { useCallback } from 'react';
-import FollowerInfoCard from './FollowerInfoCard';
-import { UserFollowerInfo } from '../../lib/interfaces/user.interface';
+import { useCallback } from 'react';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
-import { InfiniteData } from 'react-query';
+import { useFetchFollowers } from '../../lib/hooks/following.hooks';
+import FollowerInfoCard from './FollowerInfoCard';
 
 interface Props {
-  followersData: InfiniteData<{ pages: [{ limit: number; count: number; followedBy: UserFollowerInfo[] }] }> | undefined;
-  followersDataHasNextpage: boolean | undefined;
-  followersDataFetchNextpage: () => void;
+  userId: number;
+  limit: number;
 }
-const FollowersList = ({ followersData, followersDataHasNextpage, followersDataFetchNextpage }: Props) => {
+const FollowersList = ({ userId, limit }: Props) => {
+  const {
+    data: followersData,
+    isLoading: isFollowersDataLoading,
+    hasNextPage: followersDataHasNextpage,
+    fetchNextPage: followersDataFetchNextpage,
+    isFetchingNextPage: followersDataIsFetchingNextpage,
+  } = useFetchFollowers({
+    limit: limit,
+    userId: userId,
+  });
+
   useBottomScrollListener(
     useCallback(async () => {
       if (followersDataHasNextpage) {
@@ -20,15 +29,17 @@ const FollowersList = ({ followersData, followersDataHasNextpage, followersDataF
 
   return (
     <div className="px-4">
-      {followersData?.pages.map((p: any) => {
-        return p.followedBy.length > 0 ? (
-          p.followedBy?.map((follower: any) => {
-            return <FollowerInfoCard key={follower.follower.id} user={follower} />;
+      {isFollowersDataLoading
+        ? followersData?.pages.map((p: any) => {
+            return p.followedBy.length > 0 ? (
+              p.followedBy?.map((follower: any) => {
+                return <FollowerInfoCard key={follower.follower.id} user={follower} />;
+              })
+            ) : (
+              <div className="text-center p-4"> There are no followers found here</div>
+            );
           })
-        ) : (
-          <div className="text-center p-4"> There are no followers found here</div>
-        );
-      })}
+        : null}
     </div>
   );
 };
