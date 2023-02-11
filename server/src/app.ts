@@ -3,6 +3,7 @@ import { Route } from './common/interfaces/routes.interface';
 import cors from 'cors';
 import cookie from 'cookie-parser';
 import { errorMiddleware } from './middleware/error-handler.middleware';
+import { createTopicEvents } from './services/pubsub.service';
 
 class App {
   public app: express.Application;
@@ -19,6 +20,8 @@ class App {
     this.initializeMiddlewares();
     this.initializeRoutes(this.routes);
     this.initializeErrorHandling();
+
+    await createTopicEvents();
   }
   public listen() {
     this.app.listen(this.port, () => {
