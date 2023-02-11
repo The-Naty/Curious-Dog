@@ -3,9 +3,9 @@ import React from 'react';
 interface Props {
   tabs: string[];
   selected: number;
-  updateTab: (tab: number) => void;
+  onTabUpdated: (tab: number) => void;
 }
-const Tabslist = ({ tabs, selected = 0, updateTab }: Props) => {
+const Tabslist = ({ tabs, selected = 0, onTabUpdated }: Props) => {
   return (
     <div className="flex justify-around p-4 scrollbar-thin scrollbar-thumb-indigo-400 scrollbar-rounded overflow-x-auto border-b-2 border-indigo-300">
       {tabs.map((tab: string, index: number) => {
@@ -15,7 +15,7 @@ const Tabslist = ({ tabs, selected = 0, updateTab }: Props) => {
             className={`${
               selected === index ? 'bg-indigo-400 text-white border-indigo-50' : ''
             } m-2 bg-transparent enabled:hover:bg-indigo-500 text-indigo-700 font-semibold enabled:hover:text-white py-2 px-4 border border-indigo-500 enabled:hover:border-transparent rounded text-xs`}
-            onClick={() => updateTab(index)}
+            onClick={() => onTabUpdated(index)}
           >
             {tab}
           </button>

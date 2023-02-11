@@ -4,12 +4,11 @@ import { userAtom } from '../../lib/atoms/user.atom';
 import TextPlaceholder from './placeholders/TextPlaceholder';
 
 interface Props {
-  stats: { noQuestions: number; noFollowers: number; noFollowing: number } | undefined;
-  statsLoading: boolean;
+  stats: { numQuestions: number; numFollowers: number; numFollowing: number } | undefined;
+  isStatsLoading: boolean;
 }
-const UserHeader = ({ stats, statsLoading }: Props) => {
+const UserHeader = ({ stats, isStatsLoading }: Props) => {
   const [user, setUser] = useAtom(userAtom);
-
   return (
     <div className="px-6">
       <section className="bg-blueGray-50">
@@ -28,19 +27,19 @@ const UserHeader = ({ stats, statsLoading }: Props) => {
                   <div className="md:flex justify-center py-4 lg:pt-4 pt-8">
                     <div className="md:mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                        {statsLoading ? <TextPlaceholder /> : stats?.noQuestions}
+                        {isStatsLoading ? <TextPlaceholder /> : stats?.numQuestions}
                       </span>
                       <span className="text-sm text-blueGray-400">Questions</span>
                     </div>
                     <div className="md:mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                        {statsLoading ? <TextPlaceholder /> : stats?.noFollowers}
+                        {isStatsLoading ? <TextPlaceholder /> : stats?.numFollowers}
                       </span>
                       <span className="text-sm text-blueGray-400">Followers</span>
                     </div>
                     <div className="md:mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                        {statsLoading ? <TextPlaceholder /> : stats?.noFollowing}
+                        {isStatsLoading ? <TextPlaceholder /> : stats?.numFollowing}
                       </span>
                       <span className="text-sm text-blueGray-400">Following</span>
                     </div>

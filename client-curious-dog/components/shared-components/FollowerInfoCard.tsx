@@ -1,18 +1,17 @@
 import React from 'react';
-import { User } from '../../lib/interfaces/user.interface';
+import { UserFollowerInfo } from '../../lib/interfaces/user.interface';
 
 interface Props {
-  user: User;
+  user: UserFollowerInfo;
 }
-const FollowInfoCard = ({ user }: Props) => {
-  console.log(user);
+const FollowerInfoCard = ({ user }: Props) => {
   return (
     <div className="my-4  md:flex justify-center md:justify-start border border-rounded py-3 px-2 shadow">
       <div className="flex justify-center mr-4">
         <div className="rounded-full border-solid border-2 border-indigo-600">
           <img
             className="rounded-full"
-            src={`${user.profilePicture ? user.profilePicture : '/static/placeholder.jpeg'}`}
+            src={`${user.follower?.profilePicture ? user.follower?.profilePicture : '/static/placeholder.jpeg'}`}
             style={{ objectFit: 'contain' }}
             width={100}
             height={100}
@@ -20,17 +19,17 @@ const FollowInfoCard = ({ user }: Props) => {
         </div>
       </div>
       <div className="flex flex-col text-center md:text-left">
-        <span className="break-all">{user.username}</span>
-        <span className="break-all">{user.email}</span>
+        <span className="break-all">{user.follower?.username}</span>
+        <span className="break-all">{user.follower?.email}</span>
         <span className="break-all">
-          {user._count?.receivedQuestions} {user._count?.receivedQuestions === 1 ? 'question' : 'questions'} Recived
+          {user.follower?._count?.receivedQuestions} {user.follower?._count?.receivedQuestions === 1 ? 'question' : 'questions'} Recived
         </span>
         <span className="break-all">
-          {user._count?.followers} {user._count?.followers === 1 ? 'follower' : 'followers'}
+          {user.follower?._count?.followers} {user.follower?._count?.followers === 1 ? 'follower' : 'followers'}
         </span>
       </div>
     </div>
   );
 };
 
-export default FollowInfoCard;
+export default FollowerInfoCard;

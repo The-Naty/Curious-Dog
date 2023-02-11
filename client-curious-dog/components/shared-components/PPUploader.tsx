@@ -3,14 +3,14 @@ import LoadingSpinner from './LoadingSpinner';
 import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
-  displayUplaoder: boolean;
+  displayUploader: boolean;
   setDisplayUploader: Dispatch<SetStateAction<boolean>>;
   profilePicture: any;
   isUploading: boolean;
   uploadFiletoStorage: () => void;
-  handleFileChange: (e:any) => void;
+  handleFileChange: (e: any) => void;
 }
-const PPUploader = ({ displayUplaoder, setDisplayUploader, profilePicture, isUploading, uploadFiletoStorage, handleFileChange }: Props) => {
+const PPUploader = ({ displayUploader, setDisplayUploader, profilePicture, isUploading, uploadFiletoStorage, handleFileChange }: Props) => {
   return (
     <>
       <button
@@ -20,7 +20,7 @@ const PPUploader = ({ displayUplaoder, setDisplayUploader, profilePicture, isUpl
       >
         update profile picture
       </button>
-      {displayUplaoder ? (
+      {displayUploader ? (
         <>
           <div className="flex justify-between items-center w-full my-2">
             <label className="form-label" htmlFor="formFile" style={{ fontSize: '25px' }}>

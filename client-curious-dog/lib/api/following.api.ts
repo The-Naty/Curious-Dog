@@ -1,6 +1,6 @@
 import { number } from 'yup';
 import client from './client';
-import { User } from '../interfaces/user.interface';
+import { User, UserFollowerInfo, UserFollowingInfo } from '../interfaces/user.interface';
 
 export const followUser = async (userId: number): Promise<void> => {
   const response = await client.post<void>(`users/${userId}/follow`);
@@ -19,11 +19,15 @@ export const fetchUserFollowers = async (
     userId: number | undefined;
   },
 ): Promise<{
-  limit: number;
-  count: number;
-  followedBy: User[];
+  pages: [
+    {
+      limit: number;
+      count: number;
+      followedBy: UserFollowerInfo[];
+    },
+  ];
 }> => {
-  const response = await client.get<{ limit: number; count: number; followedBy: User[] }>(`users/${params?.userId}/followers`, {
+  const response = await client.get<{ pages: [{ limit: number; count: number; followedBy: UserFollowerInfo[] }] }>(`users/${params?.userId}/followers`, {
     params: { ...params, PageParams },
   });
   return response.data;
@@ -35,8 +39,24 @@ export const fetchUserFollowing = async (
     limit: number;
     userId: number | undefined;
   },
-): Promise<{ limit: number; count: number; following: User[] }> => {
-  const response = await client.get<{ limit: number; count: number; following: User[] }>(`users/${params?.userId}/following`, {
+): Promise<{
+  pages: [
+    {
+      limit: number;
+      count: number;
+      followedBy: UserFollowingInfo[];
+    },
+  ];
+}> => {
+  const response = await client.get<{
+    pages: [
+      {
+        limit: number;
+        count: number;
+        followedBy: UserFollowingInfo[];
+      },
+    ];
+  }>(`users/${params?.userId}/following`, {
     params: { ...params, PageParams },
   });
   return response.data;
