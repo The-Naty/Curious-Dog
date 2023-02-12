@@ -44,3 +44,22 @@ export const fetchFeaturedUsers = async (): Promise<Partial<User>[]> => {
   const response = await client.get<Partial<User>[]>(`users/featured`, {});
   return response.data;
 };
+
+export const uploadProfilePicture = async (profilePicture: any): Promise<any> => {
+  const formData = new FormData();
+  formData.append('profilePicture', profilePicture);
+
+  const response = await client.put<Partial<User>[]>(`users/profile-picture`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
+export const fetchUserStats = async (params?: {
+  userId: number | undefined;
+}): Promise<{ numQuestions: number; numFollowers: number; numFollowing: number }> => {
+  const response = await client.get<{ numQuestions: number; numFollowers: number; numFollowing: number }>(`user/${params?.userId}/stats`);
+  return response.data;
+};

@@ -33,11 +33,15 @@ export class FollowController implements IFollowController {
   };
 
   public fetchFollowers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const userId = req.user.id;
-    const { limit, page } = req.query;
+    const userId = req.params.userId;
+    const { limit, PageParams } = req.query;
 
     try {
-      const followers = await this.followService.getFollowers(userId, parseInt(limit as unknown as string), parseInt(page as unknown as string));
+      const followers = await this.followService.getFollowers(
+        parseInt(userId as unknown as string),
+        parseInt(limit as unknown as string),
+        parseInt(PageParams as unknown as string),
+      );
       res.status(200).send(followers);
     } catch (err) {
       next(err);
@@ -45,11 +49,15 @@ export class FollowController implements IFollowController {
   };
 
   public fetchFollowing = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const userId = req.user.id;
-    const { limit, page } = req.query;
+    const userId = req.params.userId;
+    const { limit, PageParams } = req.query;
 
     try {
-      const following = await this.followService.getFollowing(userId, parseInt(limit as unknown as string), parseInt(page as unknown as string));
+      const following = await this.followService.getFollowing(
+        parseInt(userId as unknown as string),
+        parseInt(limit as unknown as string),
+        parseInt(PageParams as unknown as string),
+      );
       res.status(200).send(following);
     } catch (err) {
       next(err);
