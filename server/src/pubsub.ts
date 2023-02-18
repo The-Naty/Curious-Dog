@@ -1,6 +1,6 @@
-import { PubSub } from '@google-cloud/pubsub';
+// import { PubSub } from '@google-cloud/pubsub';
 
-const projectId = process.env.PROJECTID;
+// const projectId = process.env.PROJECTID;
 
-export const topicName = 'curious-dog-dev-topic';
-export const pubsub = new PubSub({ projectId });
+// export const topicName = 'curious-dog-dev-topic';
+// export const pubsub = new PubSub({ projectId });

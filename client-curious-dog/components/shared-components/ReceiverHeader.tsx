@@ -13,7 +13,11 @@ const ReceiverHeader = ({ receiver }: Props) => {
   return (
     <div className="flex justify-between border-b-2 border-indigo-200 pb-2 mb-2">
       <div className="h-full">
-        <p>{receiver?.username}</p>
+        <p>
+          <a href={receiver?.id === user?.id ? '/me' : `/user/${receiver?.id}`}>
+            <span className="hover:underline">{receiver?.username}</span>
+          </a>
+        </p>
         <span className="text-xs"> was asked</span>
       </div>
       <div className="flex flex-col items-center">
