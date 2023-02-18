@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { SiDatadog } from 'react-icons/si';
 
 interface Props {
-  page: string;
+  page?: string;
 }
 
 const Header = ({ page }: Props) => {

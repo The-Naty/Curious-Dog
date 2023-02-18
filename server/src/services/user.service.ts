@@ -5,7 +5,7 @@ export interface IUserService {
   updateUser(userId: number, updatedData: Partial<User>): Promise<User>;
   getUser(userId: number): Promise<User | null>;
   getFeaturedUsers(): Promise<Partial<User>[]>;
-  getUserStats(userId: number): Promise<{ numQuestions: number; numFollowers: number; numFollowing: number }>;
+  getUserStats(userId: number): Promise<{ profilePicture: string | null; numQuestions: number; numFollowers: number; numFollowing: number }>;
 }
 
 export class UserService implements IUserService {
@@ -25,12 +25,17 @@ export class UserService implements IUserService {
     });
   }
 
-  getUserStats = async (userId: number): Promise<{ numQuestions: number; numFollowers: number; numFollowing: number }> => {
+  getUserStats = async (userId: number): Promise<{ profilePicture: string | null; numQuestions: number; numFollowers: number; numFollowing: number }> => {
     const data = await prisma.user.findUniqueOrThrow({
       where: { id: userId },
-      select: { _count: { select: { receivedQuestions: true, followers: true, following: true } } },
+      select: { profilePicture: true, _count: { select: { receivedQuestions: true, followers: true, following: true } } },
     });
 
-    return { numQuestions: data?._count?.receivedQuestions, numFollowing: data?._count?.followers, numFollowers: data?._count?.following };
+    return {
+      profilePicture: data.profilePicture,
+      numQuestions: data?._count?.receivedQuestions,
+      numFollowing: data?._count?.followers,
+      numFollowers: data?._count?.following,
+    };
   };
 }

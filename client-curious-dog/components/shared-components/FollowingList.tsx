@@ -1,9 +1,7 @@
-import React, { useCallback } from 'react';
-import { InfiniteData } from 'react-query';
-import { UserFollowingInfo } from '../../lib/interfaces/user.interface';
-import FollowingInfoCard from './FollowingInfoCard';
+import { useCallback } from 'react';
 import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { useFetchFollowing } from '../../lib/hooks/following.hooks';
+import FollowingInfoCard from './FollowingInfoCard';
 
 interface Props {
   userId: number;

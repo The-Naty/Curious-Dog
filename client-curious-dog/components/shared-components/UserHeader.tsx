@@ -1,14 +1,10 @@
-import { useAtom } from 'jotai';
-import React from 'react';
-import { userAtom } from '../../lib/atoms/user.atom';
 import TextPlaceholder from './placeholders/TextPlaceholder';
 
 interface Props {
-  stats: { numQuestions: number; numFollowers: number; numFollowing: number } | undefined;
+  stats: { profilePicture: string | null; numQuestions: number; numFollowers: number; numFollowing: number } | undefined;
   isStatsLoading: boolean;
 }
 const UserHeader = ({ stats, isStatsLoading }: Props) => {
-  const [user, setUser] = useAtom(userAtom);
   return (
     <div className="px-6">
       <section className="bg-blueGray-50">
@@ -18,10 +14,10 @@ const UserHeader = ({ stats, isStatsLoading }: Props) => {
               <div className="flex flex-wrap justify-center">
                 <img
                   className="rounded-full"
-                  src={`${user?.profilePicture ? user?.profilePicture : '/static/placeholder.jpeg'}`}
+                  src={`${stats?.profilePicture ? stats?.profilePicture : '/static/placeholder.jpeg'}`}
                   style={{ objectFit: 'contain' }}
-                  width={300}
-                  height={300}
+                  width={200}
+                  height={200}
                 />
                 <div className="w-full px-4 text-center mt-4">
                   <div className="md:flex justify-center py-4 lg:pt-4 pt-8">

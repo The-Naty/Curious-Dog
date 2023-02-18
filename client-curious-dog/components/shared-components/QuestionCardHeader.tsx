@@ -1,9 +1,12 @@
 import { QuestionWithAsker } from '../../lib/types/question-with-user.type';
 import QuestionCardBadgeWall from './QuestionCardBadgeWall';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../lib/atoms/user.atom';
 interface Props {
   question: QuestionWithAsker;
 }
 const QuestionCardHeader = ({ question }: Props) => {
+  const [user, setUser] = useAtom(userAtom);
   return (
     <>
       {question.asker ? (
@@ -19,7 +22,9 @@ const QuestionCardHeader = ({ question }: Props) => {
               />
             </div>
             <div className="flex flex-col ml-2 justify-end h-full">
-              <p>{question.asker.username}</p>
+              <p>
+                <a href={question.askerId === user?.id ? '/me' : `/user/${question.askerId}`}><span className="hover:underline">{question.asker.username}</span></a>
+              </p>
               <span className="text-xs"> was curious about ..</span>
             </div>
           </div>
