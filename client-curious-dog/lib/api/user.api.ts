@@ -40,8 +40,8 @@ export const fetchUserQuestions = async (
   return response.data;
 };
 
-export const fetchFeaturedUsers = async (): Promise<Partial<User>[]> => {
-  const response = await client.get<Partial<User>[]>(`users/featured`, {});
+export const fetchFeaturedUsers = async (): Promise<User[]> => {
+  const response = await client.get<User[]>(`users/featured`, {});
   return response.data;
 };
 

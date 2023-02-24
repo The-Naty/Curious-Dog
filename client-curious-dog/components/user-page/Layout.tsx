@@ -14,7 +14,7 @@ const Layout = ({ userId }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (isStatsError && statsError?.response?.status === 404) {
+    if (isStatsError) {
       router.push('/');
     }
   }, [isStatsError, router, statsError]);

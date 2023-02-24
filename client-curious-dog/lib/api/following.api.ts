@@ -19,15 +19,11 @@ export const fetchUserFollowers = async (
     userId: number | undefined;
   },
 ): Promise<{
-  pages: [
-    {
-      limit: number;
-      count: number;
-      followedBy: UserFollowerInfo[];
-    },
-  ];
+  limit: number;
+  count: number;
+  followedBy: UserFollowerInfo[];
 }> => {
-  const response = await client.get<{ pages: [{ limit: number; count: number; followedBy: UserFollowerInfo[] }] }>(`users/${params?.userId}/followers`, {
+  const response = await client.get<{ limit: number; count: number; followedBy: UserFollowerInfo[] }>(`users/${params?.userId}/followers`, {
     params: { ...params, PageParams },
   });
   return response.data;
@@ -40,22 +36,14 @@ export const fetchUserFollowing = async (
     userId: number | undefined;
   },
 ): Promise<{
-  pages: [
-    {
-      limit: number;
-      count: number;
-      followedBy: UserFollowingInfo[];
-    },
-  ];
+  limit: number;
+  count: number;
+  followedBy: UserFollowingInfo[];
 }> => {
   const response = await client.get<{
-    pages: [
-      {
-        limit: number;
-        count: number;
-        followedBy: UserFollowingInfo[];
-      },
-    ];
+    limit: number;
+    count: number;
+    followedBy: UserFollowingInfo[];
   }>(`users/${params?.userId}/following`, {
     params: { ...params, PageParams },
   });

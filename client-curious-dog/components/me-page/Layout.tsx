@@ -7,8 +7,11 @@ import UserFollowDetailsTabs from '../shared-components/UserFollowDetailsTabs';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { fetchUser, uploadProfilePicture } from '../../lib/api/user.api';
+import { clearAuthToken, getAuthToken } from '../../util/token-storage';
+import { useRouter } from 'next/router';
 
 const Layout = () => {
+  const router = useRouter();
   const [user, setUser] = useAtom(userAtom);
   const [displayUploader, setDisplayUploader] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
@@ -32,7 +35,15 @@ const Layout = () => {
   };
 
   const handleFileChange = (e: any) => {
-    setProfilePicture(...e.target.files);
+    const image = { ...e.target.files };
+    setProfilePicture(image[0]);
+  };
+
+  const handleLogout = () => {
+    clearAuthToken();
+    if (!getAuthToken()) {
+      router.reload();
+    }
   };
 
   return (
@@ -47,6 +58,13 @@ const Layout = () => {
             uploadFiletoStorage={uploadFiletoStorage}
             handleFileChange={handleFileChange}
           />
+          <button
+            className={`bg-transparent enabled:hover:bg-indigo-500 text-indigo-700 font-semibold enabled:hover:text-white py-2 px-4 border border-indigo-500 enabled:hover:border-transparent rounded text-xs mt-2`}
+            onClick={handleLogout}
+            disabled={isUploading}
+          >
+            Log out
+          </button>
         </div>
         <div className="flex flex-col justify-center flex-grow px-4">
           <UserHeader stats={statsData} isStatsLoading={isStatsLoading} />

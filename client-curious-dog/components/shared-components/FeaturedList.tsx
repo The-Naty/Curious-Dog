@@ -3,7 +3,7 @@ import { User } from '../../lib/interfaces/user.interface';
 import FeaturedListItem from './FeaturedListItem';
 
 interface Props {
-  featuredUsers?: Partial<User>[];
+  featuredUsers?: User[];
 }
 const FeaturedList = ({ featuredUsers }: Props) => {
   return (
