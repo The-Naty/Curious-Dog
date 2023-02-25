@@ -44,7 +44,9 @@ const Layout = () => {
             });
           })}
       {isFetchingNextPage ? renderPlaceholders(limit, <QuestionCardPlaceholder />) : null}
-      {hasNextPage ? null : <span className="text-center flex justify-center my-4">Seems like we are out of question to show ..</span>}
+      {hasNextPage || globalQuestionsLoading ? null : (
+        <span className="text-center flex justify-center my-4">Seems like we are out of question to show ..</span>
+      )}
     </>
   );
 };
