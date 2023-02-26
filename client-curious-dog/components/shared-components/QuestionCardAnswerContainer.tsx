@@ -33,8 +33,8 @@ const QuestionCardAnswerContainer = ({
     <>
       {answer ? (
         <>
-          <p className="flex justify-center	border-t border-b border-indigo-500"> answer </p>
-          <p className="my-3 break-all">{answer}</p>
+          <p className="flex justify-center	border-t border-b border-indigo-500 text-black"> answer </p>
+          <p className="my-3 break-all text-black">{answer}</p>
         </>
       ) : null}
       {reciverId === user?.id ? (
