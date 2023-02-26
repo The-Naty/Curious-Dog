@@ -19,7 +19,7 @@ const AskQuestionContainer = ({ questionText, isAnonymous, loading, typeQuestion
           <p className="text-gray-700 text-base my-4 text-center">would you like to ask him something ...</p>
           <textarea
             value={questionText}
-            className="w-full px-3 py-1.5 text-base font-normal text-gray-700 border border-solid border-gray-300 rounded m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none"
+            className="w-full px-3 py-1.5 text-base font-normal text-gray-700 border border-solid border-gray-300 rounded m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none bg-white"
             rows={4}
             placeholder="Your question"
             onChange={typeQuestionHandler}

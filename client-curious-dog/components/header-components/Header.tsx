@@ -19,7 +19,7 @@ const Header = ({ page }: Props) => {
     <div className="w-full bg-zinc-200 h-18 lg:px-16">
       <div className="flex justify-between lg:px-16 lg:mx-16 mx-10">
         <Link href={user ? '/feed' : '/'}>
-          <h1 className="text-5xl mt-3 mb-2">
+          <h1 className="text-5xl mt-3 mb-2 text-black">
             Curious
             <SiDatadog style={{ fontSize: '2.2rem', display: 'inline-block' }} />
             Dog

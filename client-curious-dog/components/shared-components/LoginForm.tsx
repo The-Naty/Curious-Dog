@@ -6,6 +6,9 @@ import { logInUser } from '../../lib/api/user.api';
 import { userAtom } from '../../lib/atoms/user.atom';
 import { setAuthToken } from '../../util/token-storage';
 import ValidationError from './ValidationError';
+import { useState } from 'react';
+import LoadingSpinner from './LoadingSpinner';
+import { toast } from 'react-toastify';
 
 interface Props {
   openRegisterationForm: () => void;
@@ -13,6 +16,7 @@ interface Props {
 
 const LoginForm = ({ openRegisterationForm }: Props) => {
   const [user, setUser] = useAtom(userAtom);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const schema = yup.object().shape({
     email: yup.string().required('email is required.'),
@@ -33,9 +37,16 @@ const LoginForm = ({ openRegisterationForm }: Props) => {
   });
 
   const loginHandler = async (formData: { email: string; password: string }): Promise<void> => {
-    const resData = await logInUser(formData.email, formData.password);
-    setUser(resData);
-    setAuthToken(resData.token);
+    setLoading(true);
+    try {
+      const resData = await logInUser(formData.email, formData.password);
+      setUser(resData);
+      setAuthToken(resData.token);
+    } catch (e) {
+      toast('Log in failed', { type: 'error' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,13 +63,14 @@ const LoginForm = ({ openRegisterationForm }: Props) => {
                 <input
                   id="email"
                   type="text"
-                  className="peer text-sm placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
+                  className="peer text-sm placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600 bg-slate-50"
                   placeholder="Email address"
+                  disabled={loading}
                   {...register('email')}
                 />
                 <label
                   htmlFor="email"
-                  className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
+                  className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm "
                 >
                   Email Address
                 </label>
@@ -70,8 +82,9 @@ const LoginForm = ({ openRegisterationForm }: Props) => {
                   id="password"
                   {...register('password')}
                   type="password"
-                  className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
+                  className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600 bg-slate-50"
                   placeholder="Password"
+                  disabled={loading}
                 />
                 <label
                   htmlFor="password"
@@ -85,8 +98,9 @@ const LoginForm = ({ openRegisterationForm }: Props) => {
                 <button
                   type="submit"
                   className="w-full px-6 py-2.5 bg-purple-100 text-black font-medium text-xs leading-tight rounded shadow-md hover:bg-purple-300 hover:shadow-lg focus:bg-purple-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-400 active:shadow-lg transition duration-150 ease-in-out"
+                  disabled={loading}
                 >
-                  Log in
+                  {loading ? <LoadingSpinner /> : 'Log in'}
                 </button>
               </div>
               <p className="text-center text-sm">

@@ -14,7 +14,7 @@ const Explore: NextPage = () => {
       <AuthGuard loggedOutRedirectUrl={'/'}>
         {user ? (
           <div className="flex items-center justify-center w-full">
-            <div className="grid grid-rows-1 grid-cols-12 w-full ">
+            <div className="grid grid-rows-1 grid-cols-12 w-full bg-white	">
               <div className="col-start-3 col-end-11 mb-4 mt-8 w-full">
                 <Layout />
               </div>

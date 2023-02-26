@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { registerUser } from '../../lib/api/user.api';
@@ -9,6 +9,8 @@ import { userAtom } from '../../lib/atoms/user.atom';
 import { emailValidationObj, passwordValidationObj, userNameValidationObj } from '../../lib/validation/shared-validation';
 import { setAuthToken } from '../../util/token-storage';
 import ValidationError from './ValidationError';
+import { toast } from 'react-toastify';
+import LoadingSpinner from './LoadingSpinner';
 
 interface Props {
   openLoginForm: () => void;
@@ -16,6 +18,8 @@ interface Props {
 
 const LoginForm = ({ openLoginForm }: Props) => {
   const [user, setUser] = useAtom(userAtom);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const router = useRouter();
 
   const schema = yup.object().shape({
@@ -39,9 +43,16 @@ const LoginForm = ({ openLoginForm }: Props) => {
   });
 
   const registerHandler = async (formData: { email: string; password: string; username: string }): Promise<void> => {
-    const resData = await registerUser(formData.email, formData.password, formData.username);
-    setAuthToken(resData.token);
-    setUser(resData);
+    setLoading(true);
+    try {
+      const resData = await registerUser(formData.email, formData.password, formData.username);
+      setAuthToken(resData.token);
+      setUser(resData);
+    } catch (e) {
+      toast('Registeration failed', { type: 'error' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -64,9 +75,10 @@ const LoginForm = ({ openLoginForm }: Props) => {
                 <input
                   id="username"
                   type="text"
-                  className="peer text-sm placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
+                  className="peer text-sm bg-slate-50 placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
                   placeholder="User Name"
                   {...register('username')}
+                  disabled={loading}
                 />
                 <label
                   htmlFor="username"
@@ -81,9 +93,10 @@ const LoginForm = ({ openLoginForm }: Props) => {
                 <input
                   id="email"
                   type="text"
-                  className="peer text-sm placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
+                  className="peer text-sm bg-slate-50 placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
                   placeholder="Email address"
                   {...register('email')}
+                  disabled={loading}
                 />
                 <label
                   htmlFor="email"
@@ -99,8 +112,9 @@ const LoginForm = ({ openLoginForm }: Props) => {
                   id="password"
                   {...register('password')}
                   type="password"
-                  className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
+                  className="peer bg-slate-50 placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
                   placeholder="Password"
+                  disabled={loading}
                 />
                 <label
                   htmlFor="password"
@@ -115,7 +129,7 @@ const LoginForm = ({ openLoginForm }: Props) => {
                   type="submit"
                   className="w-full px-6 py-2.5 bg-purple-100 text-black font-medium text-xs leading-tight rounded shadow-md hover:bg-purple-300 hover:shadow-lg focus:bg-purple-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-400 active:shadow-lg transition duration-150 ease-in-out"
                 >
-                  Register
+                  {loading ? <LoadingSpinner /> : 'Register'}
                 </button>
               </div>
               <p className="text-center text-sm">
