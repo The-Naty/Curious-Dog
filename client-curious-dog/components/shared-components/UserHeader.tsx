@@ -22,19 +22,19 @@ const UserHeader = ({ stats, isStatsLoading }: Props) => {
                 <div className="w-full px-4 text-center mt-4">
                   <div className="md:flex justify-center py-4 lg:pt-4 pt-8">
                     <div className="md:mr-4 p-3 text-center">
-                      <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                      <span className="text-xl font-bold block uppercase tracking-wide text-black">
                         {isStatsLoading ? <TextPlaceholder /> : stats?.numQuestions}
                       </span>
                       <span className="text-sm text-blueGray-400">Questions</span>
                     </div>
                     <div className="md:mr-4 p-3 text-center">
-                      <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                      <span className="text-xl font-bold block uppercase tracking-wide text-black">
                         {isStatsLoading ? <TextPlaceholder /> : stats?.numFollowers}
                       </span>
                       <span className="text-sm text-blueGray-400">Followers</span>
                     </div>
                     <div className="md:mr-4 p-3 text-center">
-                      <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                      <span className="text-xl font-bold block uppercase tracking-wide text-black">
                         {isStatsLoading ? <TextPlaceholder /> : stats?.numFollowing}
                       </span>
                       <span className="text-sm text-blueGray-400">Following</span>
