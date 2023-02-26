@@ -18,10 +18,10 @@ const FeaturedListItem = ({ featuredUser }: Props) => {
           src={`${featuredUser.profilePicture ? featuredUser.profilePicture : '/static/placeholder.jpeg'}`}
           alt="Bonnie image"
         />
-        <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+        <h5 className="mb-1 text-xl font-medium text-gray-900">
           <a href={featuredUser?.id === user?.id ? '/me' : `/user/${featuredUser?.id}`}>{featuredUser.username}</a>
         </h5>
-        <span className="text-sm text-gray-500 dark:text-gray-400">Questions {featuredUser._count?.receivedQuestions}</span>
+        <span className="text-sm text-gray-500 ">Questions {featuredUser._count?.receivedQuestions}</span>
         {featuredUser.id === user?.id ? null : <FollowButton actionedUser={featuredUser} style="mt-4 space-x-3 md:mt-6" />}
       </div>
     </div>
