@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       <AuthGuard loggedInRedirectUrl="/feed">
         {user || userLoading ? null : (
           <div className="flex items-center justify-center w-full">
-            <div className=" w-full bg-white">
+            <div className=" w-full bg-white" style={{ height: '100vh' }}>
               <div className="mb-4 mt-8 mx-auto">
                 <LandingLayout />
               </div>
