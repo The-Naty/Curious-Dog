@@ -11,10 +11,7 @@ const FeaturedListItem = ({ featuredUser }: Props) => {
   const [user, setUser] = useAtom(userAtom);
 
   return (
-    <div
-      style={{ minWidth: '200px' }}
-      className="w-full hover:shadow-indigo-500/40 max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 m-2 "
-    >
+    <div style={{ minWidth: '200px' }} className="w-full hover:shadow-indigo-500/40 max-w-sm bg-white border border-gray-200 rounded-lg shadow-md m-2 ">
       <div className="flex flex-col items-center pb-10 p-2">
         <img
           className="w-24 h-24 mb-3 rounded-full shadow-lg"

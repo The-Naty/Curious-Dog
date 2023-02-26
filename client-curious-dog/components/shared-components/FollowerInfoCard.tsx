@@ -7,7 +7,7 @@ interface Props {
 const FollowerInfoCard = ({ user }: Props) => {
   return (
     <a href={`/user/${user.followerId}`}>
-      <div className="my-4  md:flex justify-center md:justify-start border border-rounded py-3 px-2 shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+      <div className="my-4  md:flex justify-center md:justify-start border border-rounded py-3 px-2 shadow hover:bg-gray-100">
         <div className="flex justify-center mr-4">
           <div className="rounded-full border-solid border-2 border-indigo-600">
             <img
@@ -20,14 +20,14 @@ const FollowerInfoCard = ({ user }: Props) => {
           </div>
         </div>
         <div className="flex flex-col text-center md:text-left">
-          <span className="break-all">
+          <span className="break-all text-black">
             <a href={`/user/${user.followerId}`}>{user.follower?.username}</a>
           </span>
-          <span className="break-all">{user.follower?.email}</span>
-          <span className="break-all">
+          <span className="break-all text-black">{user.follower?.email}</span>
+          <span className="break-all text-black">
             {user.follower?._count?.receivedQuestions} {user.follower?._count?.receivedQuestions === 1 ? 'question' : 'questions'} Recived
           </span>
-          <span className="break-all">
+          <span className="break-all text-black">
             {user.follower?._count?.followers} {user.follower?._count?.followers === 1 ? 'follower' : 'followers'}
           </span>
         </div>
