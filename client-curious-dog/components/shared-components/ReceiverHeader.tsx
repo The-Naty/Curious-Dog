@@ -15,10 +15,10 @@ const ReceiverHeader = ({ receiver }: Props) => {
       <div className="h-full">
         <p>
           <a href={receiver?.id === user?.id ? '/me' : `/user/${receiver?.id}`}>
-            <span className="hover:underline">{receiver?.username}</span>
+            <span className="hover:underline text-black">{receiver?.username}</span>
           </a>
         </p>
-        <span className="text-xs"> was asked</span>
+        <span className="text-xs text-black"> was asked</span>
       </div>
       <div className="flex flex-col items-center">
         <div className="rounded-full border-solid border-2 border-indigo-600">

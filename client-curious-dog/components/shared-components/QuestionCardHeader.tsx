@@ -23,9 +23,11 @@ const QuestionCardHeader = ({ question }: Props) => {
             </div>
             <div className="flex flex-col ml-2 justify-end h-full">
               <p>
-                <a href={question.askerId === user?.id ? '/me' : `/user/${question.askerId}`}><span className="hover:underline">{question.asker.username}</span></a>
+                <a href={question.askerId === user?.id ? '/me' : `/user/${question.askerId}`}>
+                  <span className="hover:underline text-black">{question.asker.username}</span>
+                </a>
               </p>
-              <span className="text-xs"> was curious about ..</span>
+              <span className="text-xs text-black"> was curious about ..</span>
             </div>
           </div>
           <QuestionCardBadgeWall question={question} />
@@ -35,7 +37,7 @@ const QuestionCardHeader = ({ question }: Props) => {
           <div className="rounded-full border-solid border-2 border-indigo-600">
             <img className="rounded-full" src={'/static/curious_dog_temp.jpg'} style={{ objectFit: 'contain' }} width={50} height={50} alt="ananomys temp" />
           </div>
-          <div className="flex flex-col ml-2 mb-4 justify-end h-full text-xs">was ananomusly asking ..</div>
+          <div className="flex flex-col ml-2 mb-4 justify-end h-full text-xs text-black">was ananomusly asking ..</div>
         </div>
       )}
     </>
