@@ -10,14 +10,11 @@ const passwordValidationObj = yup
     'Must contain at least one uppercase letter, one lowercase letter, one number and one special character (! @ # $ % ^ & * () - _ = + ` ~ \' " , < . > / ? [ { } ] |  ; :).',
   );
 
-const emailValidationObj = yup
-  .string()
-  .required('Email is required.')
-  .email('Invalid email format.');
+const emailValidationObj = yup.string().required('Email is required.').email('Invalid email format.');
 
 const userNameValidationObj = yup
   .string()
-  .required('Password is required.')
+  .required('Username is required.')
   .min(4, 'Minimum username length must be 4 (up to 20).')
   .max(20, "username length can't exceed 20 charecthers.");
 

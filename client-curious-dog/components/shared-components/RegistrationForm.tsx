@@ -11,6 +11,7 @@ import { setAuthToken } from '../../util/token-storage';
 import ValidationError from './ValidationError';
 import { toast } from 'react-toastify';
 import LoadingSpinner from './LoadingSpinner';
+import BadgeChecker from './BadgeChecker';
 
 interface Props {
   openLoginForm: () => void;
@@ -32,6 +33,7 @@ const LoginForm = ({ openLoginForm }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm({
     shouldFocusError: false,
     resolver: yupResolver(schema),
@@ -41,7 +43,7 @@ const LoginForm = ({ openLoginForm }: Props) => {
       password: '',
     },
   });
-
+  const typedPasssword = watch('password');
   const registerHandler = async (formData: { email: string; password: string; username: string }): Promise<void> => {
     setLoading(true);
     try {
@@ -122,6 +124,12 @@ const LoginForm = ({ openLoginForm }: Props) => {
                 >
                   Password
                 </label>
+              </div>
+              <div className="relative flex flex-wrap">
+                <BadgeChecker text="8 character min" condition={typedPasssword.length > 7} />
+                <BadgeChecker text="A capital letter" condition={/[A-Z]/.test(typedPasssword)} />
+                <BadgeChecker text="A small letter" condition={/[a-z]/.test(typedPasssword)} />
+                <BadgeChecker text="A special character" condition={/[\-_\=.#^()+`~'",<.>/[\]{};:|\\@$!%*?&]/.test(typedPasssword)} />
               </div>
               {errors.password ? <ValidationError msg={errors.password.message} /> : null}
               <div className="relative">
