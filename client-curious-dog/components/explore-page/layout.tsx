@@ -45,7 +45,7 @@ const Layout = () => {
           })}
       {isFetchingNextPage ? renderPlaceholders(limit, <QuestionCardPlaceholder />) : null}
       {hasNextPage || globalQuestionsLoading ? null : (
-        <span className="text-center flex justify-center my-4">Seems like we are out of question to show ..</span>
+        <span className="text-center flex justify-center my-4 text-black">Seems like we are out of question to show ..</span>
       )}
     </>
   );

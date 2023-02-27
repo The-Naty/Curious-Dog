@@ -35,7 +35,7 @@ const FollowersList = ({ userId, limit }: Props) => {
             return <FollowerInfoCard key={follower.follower.id} user={follower} />;
           })
         ) : (
-          <div className="text-center p-4"> There are no followers found here</div>
+          <div className="text-center p-4 text-black"> There are no followers found here</div>
         );
       })}
     </div>

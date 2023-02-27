@@ -14,7 +14,14 @@ const Layout = () => {
   const [checFollowingRecivedQuestions, setChecFollowingRecivedQuestions] = useState<boolean>(false);
 
   const limit = 5;
-  const { data: questionsData, isLoading: questionLoading, refetch: questionsRefetch, hasNextPage, fetchNextPage, isFetchingNextPage } = useMyQuestions({
+  const {
+    data: questionsData,
+    isLoading: questionLoading,
+    refetch: questionsRefetch,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useMyQuestions({
     asked: checkAsked,
     recived: checkRecived,
     followingAsked: checkFollowingAskedQuestions,
@@ -75,7 +82,7 @@ const Layout = () => {
                 });
               })}
           {isFetchingNextPage ? renderPlaceholders(limit, <QuestionCardPlaceholder />) : null}
-          {hasNextPage ? null : <span className="text-center flex justify-center my-4">Seems there are no more questions on your feed</span>}
+          {hasNextPage ? null : <span className="text-center flex justify-center my-4 text-black">Seems there are no more questions on your feed</span>}
         </div>
       </div>
     </>

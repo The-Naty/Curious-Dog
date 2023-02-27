@@ -36,7 +36,7 @@ const FollowingList = ({ userId, limit }: Props) => {
             return <FollowingInfoCard key={followe.folllowing.id} user={followe} />;
           })
         ) : (
-          <div className="text-center p-4"> There are no follwings found here</div>
+          <div className="text-center p-4 text-black"> There are no follwings found here</div>
         );
       })}
     </div>
