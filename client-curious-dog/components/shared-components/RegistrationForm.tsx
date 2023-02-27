@@ -12,6 +12,7 @@ import ValidationError from './ValidationError';
 import { toast } from 'react-toastify';
 import LoadingSpinner from './LoadingSpinner';
 import BadgeChecker from './BadgeChecker';
+import { FaEyeSlash, FaEye } from 'react-icons/fa';
 
 interface Props {
   openLoginForm: () => void;
@@ -20,6 +21,7 @@ interface Props {
 const LoginForm = ({ openLoginForm }: Props) => {
   const [user, setUser] = useAtom(userAtom);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -113,8 +115,8 @@ const LoginForm = ({ openLoginForm }: Props) => {
                 <input
                   id="password"
                   {...register('password')}
-                  type="password"
-                  className="peer bg-slate-50 placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
+                  type={showPassword ? 'text' : 'password'}
+                  className="peer text-sm bg-slate-50 placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
                   placeholder="Password"
                   disabled={loading}
                 />
@@ -124,6 +126,9 @@ const LoginForm = ({ openLoginForm }: Props) => {
                 >
                   Password
                 </label>
+              </div>
+              <div className="relative flex justify-center">
+                {showPassword ? <FaEye onClick={() => setShowPassword(!showPassword)} /> : <FaEyeSlash onClick={() => setShowPassword(!showPassword)} />}
               </div>
               <div className="relative flex flex-wrap">
                 <BadgeChecker text="8 character min" condition={typedPasssword.length > 7} />

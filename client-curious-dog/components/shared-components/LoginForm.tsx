@@ -9,6 +9,7 @@ import ValidationError from './ValidationError';
 import { useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import { toast } from 'react-toastify';
+import { FaEyeSlash, FaEye } from 'react-icons/fa';
 
 interface Props {
   openRegisterationForm: () => void;
@@ -17,6 +18,7 @@ interface Props {
 const LoginForm = ({ openRegisterationForm }: Props) => {
   const [user, setUser] = useAtom(userAtom);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const schema = yup.object().shape({
     email: yup.string().required('email is required.'),
@@ -81,8 +83,8 @@ const LoginForm = ({ openRegisterationForm }: Props) => {
                 <input
                   id="password"
                   {...register('password')}
-                  type="password"
-                  className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600 bg-slate-50"
+                  type={showPassword ? 'text' : 'password'}
+                  className="peer text-sm placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600 bg-slate-50"
                   placeholder="Password"
                   disabled={loading}
                 />
@@ -92,6 +94,9 @@ const LoginForm = ({ openRegisterationForm }: Props) => {
                 >
                   Password
                 </label>
+              </div>
+              <div className="relative flex justify-center">
+                {showPassword ? <FaEye onClick={() => setShowPassword(!showPassword)} /> : <FaEyeSlash onClick={() => setShowPassword(!showPassword)} />}
               </div>
               {errors.password ? <ValidationError msg={errors.password.message} /> : null}
               <div className="relative">
