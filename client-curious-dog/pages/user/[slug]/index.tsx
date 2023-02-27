@@ -1,14 +1,17 @@
 import { NextPage } from 'next';
 import Header from '../../../components/header-components/Header';
 import AuthGuard from '../../../components/shared-components/AuthGuard';
-import { userAtom } from '../../../lib/atoms/user.atom';
+import { userAtom, userLoadingAtom } from '../../../lib/atoms/user.atom';
 import { useAtom } from 'jotai';
 import Layout from '../../../components/user-page/Layout';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import GenericLoading from '../../../components/shared-components/GenericLoading';
 
 const UserPage: NextPage = () => {
   const [user, setUser] = useAtom(userAtom);
+  const [userLoading, setUserLoading] = useAtom(userLoadingAtom);
+
   const router = useRouter();
   const { slug } = router.query;
 
@@ -27,6 +30,8 @@ const UserPage: NextPage = () => {
               <div className="col-start-3 col-end-11 mb-4 mt-8 w-full">{slug && typeof slug === 'string' ? <Layout userId={parseInt(slug)} /> : null}</div>
             </div>
           </div>
+        ) : userLoading ? (
+          <GenericLoading />
         ) : null}
       </AuthGuard>
     </div>

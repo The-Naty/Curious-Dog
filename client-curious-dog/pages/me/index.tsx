@@ -1,12 +1,14 @@
 import { NextPage } from 'next';
 import Header from '../../components/header-components/Header';
 import AuthGuard from '../../components/shared-components/AuthGuard';
-import { userAtom } from '../../lib/atoms/user.atom';
+import { userAtom, userLoadingAtom } from '../../lib/atoms/user.atom';
 import { useAtom } from 'jotai';
 import Layout from '../../components/me-page/Layout';
+import GenericLoading from '../../components/shared-components/GenericLoading';
 
 const Profile: NextPage = () => {
   const [user, setUser] = useAtom(userAtom);
+  const [userLoading, setUserLoading] = useAtom(userLoadingAtom);
 
   return (
     <div className="flex flex-col items-center">
@@ -20,6 +22,8 @@ const Profile: NextPage = () => {
               </div>
             </div>
           </div>
+        ) : userLoading ? (
+          <GenericLoading />
         ) : null}
       </AuthGuard>
     </div>

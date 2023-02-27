@@ -2,12 +2,15 @@ import { NextPage } from 'next';
 import Header from '../../components/header-components/Header';
 import AuthGuard from '../../components/shared-components/AuthGuard';
 import { useAtom } from 'jotai';
-import { userAtom } from '../../lib/atoms/user.atom';
+import { userAtom, userLoadingAtom } from '../../lib/atoms/user.atom';
 import Layout from '../../components/explore-page/layout';
+import GenericLoading from '../../components/shared-components/GenericLoading';
 
 const Explore: NextPage = () => {
   const [user, setUser] = useAtom(userAtom);
+  const [userLoading, setUserLoading] = useAtom(userLoadingAtom);
 
+  console.log(user);
   return (
     <div className="flex flex-col items-center">
       <Header page="explore" />
@@ -20,6 +23,8 @@ const Explore: NextPage = () => {
               </div>
             </div>
           </div>
+        ) : userLoading ? (
+          <GenericLoading />
         ) : null}
       </AuthGuard>
     </div>

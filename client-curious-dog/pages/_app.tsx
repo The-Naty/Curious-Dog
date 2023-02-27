@@ -8,6 +8,7 @@ import { userAtom, userLoadingAtom } from '../lib/atoms/user.atom';
 import { fetchUser } from '../lib/api/user.api';
 import '../styles/globals.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import GenericLoading from '../components/shared-components/GenericLoading';
 
 const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: AppProps) {
@@ -36,7 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {userLoading ? null : <Component {...pageProps} />}
+      {userLoading ? <GenericLoading /> : <Component {...pageProps} />}
       <ToastContainer />
     </QueryClientProvider>
   );

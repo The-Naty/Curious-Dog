@@ -128,7 +128,11 @@ const LoginForm = ({ openLoginForm }: Props) => {
                 </label>
               </div>
               <div className="relative flex justify-center">
-                {showPassword ? <FaEye onClick={() => setShowPassword(!showPassword)} /> : <FaEyeSlash onClick={() => setShowPassword(!showPassword)} />}
+                {showPassword ? (
+                  <FaEye onClick={() => setShowPassword(!showPassword)} className="hover:cursor-pointer" />
+                ) : (
+                  <FaEyeSlash onClick={() => setShowPassword(!showPassword)} className="hover:cursor-pointer" />
+                )}
               </div>
               <div className="relative flex flex-wrap">
                 <BadgeChecker text="8 character min" condition={typedPasssword.length > 7} />
