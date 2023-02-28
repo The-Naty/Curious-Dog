@@ -59,8 +59,8 @@ export const uploadProfilePicture = async (profilePicture: any): Promise<any> =>
 
 export const fetchUserStats = async (params?: {
   userId: number | undefined;
-}): Promise<{ profilePicture: string | null; numQuestions: number; numFollowers: number; numFollowing: number }> => {
-  const response = await client.get<{ profilePicture: string | null; numQuestions: number; numFollowers: number; numFollowing: number }>(
+}): Promise<{ username: string; profilePicture: string | null; numQuestions: number; numFollowers: number; numFollowing: number }> => {
+  const response = await client.get<{ username: string; profilePicture: string | null; numQuestions: number; numFollowers: number; numFollowing: number }>(
     `user/${params?.userId}/stats`,
   );
   return response.data;

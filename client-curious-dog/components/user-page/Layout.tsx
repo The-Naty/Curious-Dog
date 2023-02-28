@@ -11,7 +11,12 @@ interface Props {
   userId?: number;
 }
 const Layout = ({ userId }: Props) => {
-  const { data: statsData, isLoading: isStatsLoading, isError: isStatsError, error: statsError } = useUserStats({
+  const {
+    data: statsData,
+    isLoading: isStatsLoading,
+    isError: isStatsError,
+    error: statsError,
+  } = useUserStats({
     userId: userId,
   });
   const router = useRouter();
@@ -53,14 +58,17 @@ const Layout = ({ userId }: Props) => {
         <div className="flex flex-col justify-center"></div>
         <div className="flex flex-col justify-center flex-grow px-4">
           <UserHeader stats={statsData} isStatsLoading={isStatsLoading} />
-          <AskQuestionContainer
-            questionText={questionText}
-            isAnonymous={isAnonymous}
-            loading={loading}
-            typeQuestionHandler={typeQuestionHandler}
-            updateTogglerHandler={updateToggler}
-            submitQuestionHandler={submitQuestionHandler}
-          />
+          {isStatsLoading ? null : (
+            <AskQuestionContainer
+              questionText={questionText}
+              isAnonymous={isAnonymous}
+              loading={loading}
+              typeQuestionHandler={typeQuestionHandler}
+              updateTogglerHandler={updateToggler}
+              submitQuestionHandler={submitQuestionHandler}
+            />
+          )}
+
           <UserFollowDetailsTabs userId={userId} />
         </div>
       </div>

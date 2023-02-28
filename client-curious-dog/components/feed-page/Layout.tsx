@@ -82,7 +82,9 @@ const Layout = () => {
                 });
               })}
           {isFetchingNextPage ? renderPlaceholders(limit, <QuestionCardPlaceholder />) : null}
-          {hasNextPage ? null : <span className="text-center flex justify-center my-4 text-black">Seems there are no more questions on your feed</span>}
+          {hasNextPage || questionLoading ? null : (
+            <span className="text-center flex justify-center my-4 text-black">Seems there are no more questions on your feed</span>
+          )}
         </div>
       </div>
     </>

@@ -1,7 +1,7 @@
 import TextPlaceholder from './placeholders/TextPlaceholder';
 
 interface Props {
-  stats: { profilePicture: string | null; numQuestions: number; numFollowers: number; numFollowing: number } | undefined;
+  stats: { username: string; profilePicture: string | null; numQuestions: number; numFollowers: number; numFollowing: number } | undefined;
   isStatsLoading: boolean;
 }
 const UserHeader = ({ stats, isStatsLoading }: Props) => {
@@ -20,6 +20,7 @@ const UserHeader = ({ stats, isStatsLoading }: Props) => {
                   height={200}
                 />
                 <div className="w-full px-4 text-center mt-4">
+                  {isStatsLoading ? <TextPlaceholder /> : <span className="text-xl font-bold block uppercase tracking-wide text-black">{stats?.username}</span>}
                   <div className="md:flex justify-center py-4 lg:pt-4 pt-8">
                     <div className="md:mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-black">

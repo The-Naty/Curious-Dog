@@ -19,9 +19,8 @@ const FollowingInfoCard = ({ user }: Props) => {
             />
           </div>
         </div>
-        <div className="flex flex-col text-center md:text-left">
+        <div className="flex flex-col text-center md:text-left justify-center">
           <span className="break-all text-black">{user.folllowing?.username}</span>
-          <span className="break-all text-black">{user.folllowing?.email}</span>
           <span className="break-all text-black">
             {user.folllowing?._count?.receivedQuestions} {user.folllowing?._count?.receivedQuestions === 1 ? 'question' : 'questions'} Recived
           </span>

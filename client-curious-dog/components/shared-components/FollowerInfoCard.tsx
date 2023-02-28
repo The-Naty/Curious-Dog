@@ -19,11 +19,8 @@ const FollowerInfoCard = ({ user }: Props) => {
             />
           </div>
         </div>
-        <div className="flex flex-col text-center md:text-left">
-          <span className="break-all text-black">
-            <a href={`/user/${user.followerId}`}>{user.follower?.username}</a>
-          </span>
-          <span className="break-all text-black">{user.follower?.email}</span>
+        <div className="flex flex-col text-center md:text-left justify-center">
+          <span className="break-all text-black">{user.follower?.username}</span>
           <span className="break-all text-black">
             {user.follower?._count?.receivedQuestions} {user.follower?._count?.receivedQuestions === 1 ? 'question' : 'questions'} Recived
           </span>
