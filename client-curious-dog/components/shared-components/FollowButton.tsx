@@ -52,6 +52,7 @@ const FollowButton = ({ actionedUser, style }: Props) => {
             handleFollow(actionedUser?.id);
           }
         }}
+        disabled={loadClick}
       >
         <span className="p-1">{loadClick ? <LoadingSpinner /> : isFollwoingState ? 'unfollow' : 'follow'}</span>
       </button>
