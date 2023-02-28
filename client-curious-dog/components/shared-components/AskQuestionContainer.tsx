@@ -16,7 +16,7 @@ const AskQuestionContainer = ({ questionText, isAnonymous, loading, typeQuestion
     <div className="flex justify-center my-4 w-full flex-grow">
       <div className="flex flex-col  md:max-w-xl rounded-lg bg-white shadow-lg w-full">
         <div className="p-6 flex flex-col justify-start ">
-          <p className="text-gray-700 text-base my-4 text-center">would you like to ask him something ...</p>
+          <p className="text-gray-700 text-base my-4 text-center">would you like to ask something ...</p>
           <textarea
             value={questionText}
             className="w-full px-3 py-1.5 text-base font-normal text-gray-700 border border-solid border-gray-300 rounded m-0 focus:text-gray-700 focus:bg-white focus:border-indigo-600 focus:outline-none bg-white"

@@ -71,7 +71,7 @@ const LoginForm = ({ openLoginForm }: Props) => {
       <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
         <div className="max-w mx-auto">
           <div>
-            <h1 className="text-2xl font-semibold text-center">Welcom Aboard</h1>
+            <h1 className="text-2xl font-semibold text-center">Welcome Aboard</h1>
           </div>
           <div className="divide-y divide-gray-200">
             <form className="py-8 text-sm  w-full space-y-6 text-gray-700 sm:text-lg sm:leading-10 " onSubmit={handleSubmit(registerHandler)}>
