@@ -12,6 +12,7 @@ const UserFollowDetailsTabs = ({ userId }: Props) => {
   const [limit, setLimti] = useState(4);
 
   const updateTabHandler = (tabIndex: number) => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     setSelected(tabIndex);
   };
 
