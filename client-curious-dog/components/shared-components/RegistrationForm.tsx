@@ -135,10 +135,11 @@ const LoginForm = ({ openLoginForm }: Props) => {
                 )}
               </div>
               <div className="relative flex flex-wrap">
-                <BadgeChecker text="8 character min" condition={typedPasssword.length > 7} />
-                <BadgeChecker text="A capital letter" condition={/[A-Z]/.test(typedPasssword)} />
                 <BadgeChecker text="A small letter" condition={/[a-z]/.test(typedPasssword)} />
+                <BadgeChecker text="A capital letter" condition={/[A-Z]/.test(typedPasssword)} />
                 <BadgeChecker text="A special character" condition={/[\-_\=.#^()+`~'",<.>/[\]{};:|\\@$!%*?&]/.test(typedPasssword)} />
+                <BadgeChecker text="A number" condition={/\d/.test(typedPasssword)} />
+                <BadgeChecker text="8 character min" condition={typedPasssword.length > 7} />
               </div>
               {errors.password ? <ValidationError msg={errors.password.message} /> : null}
               <div className="relative">

@@ -10,7 +10,6 @@ const Explore: NextPage = () => {
   const [user, setUser] = useAtom(userAtom);
   const [userLoading, setUserLoading] = useAtom(userLoadingAtom);
 
-  console.log(user);
   return (
     <div className="flex flex-col items-center">
       <Header page="explore" />
